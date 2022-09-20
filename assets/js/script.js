@@ -32,7 +32,7 @@ $(document).ready(function ($) {
             console.log(text.text());
 
             // Temporarily use the text from random users and replace texts
-            text.text(randomUser.results[0].name.title + " " + randomUser.results[0].name.first + " " + randomUser.results[0].name.last);
+            text.append("<br />" + randomUser.results[0].name.title + " " + randomUser.results[0].name.first + " " + randomUser.results[0].name.last + "<br /> <br />");
 
           }
         });
