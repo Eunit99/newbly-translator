@@ -32,7 +32,7 @@ $(document).ready(function ($) {
             console.log(text.text());
 
             // Temporarily use the text from random users and replace texts
-            text.append("<br />" + randomUser.results[0].name.title + " " + randomUser.results[0].name.first + " " + randomUser.results[0].name.last + "<br /> <br />");
+            text.append("<br /> Random user:" + randomUser.results[0].name.title + " " + randomUser.results[0].name.first + " " + randomUser.results[0].name.last + "<br /> <br />");
 
           }
         });
@@ -44,6 +44,8 @@ $(document).ready(function ($) {
 
     replaceText();
     // console.log(getText)
+
+
 
 
 
@@ -114,4 +116,4 @@ $(document).ready(function ($) {
 
   // call the newbly function
   $("div").newbly()
-});
+}(jQuery));
