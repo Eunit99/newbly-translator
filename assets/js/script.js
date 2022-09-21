@@ -44,6 +44,12 @@ $(document).ready(function ($) {
 
   var fetchArticleTitleTranslated = function (data) {
     console.log(data);
+
+    var translatedContent = function (data) {
+      return data;
+    }
+
+
     return data;
   }
 
@@ -128,17 +134,22 @@ $(document).ready(function ($) {
   var searchIfTextExist = function (data) {
 
     if (document.body.textContent.includes(data)) {
+      console.info("Text exist on page: " + data);
+
+
+      // call the appendText function then pass in data
       appendText(data);
     } else {
-      console.error('text does not exist on page');
+      console.error("Text does not exist on page: " + data );
     }
 
   }
 
 
   var appendText = function (data) {
-    // TODO FIND THE PARENT where data is coming from and append it to the documentElement
-    document.innerText = data;
+    // TODO FIND THE PARENT where data is coming from and append it to the translatedContent
+    // data.parentNode.append("Lower Austria: Fake mails in the name of ÖVP members");
+    console.log(data.parentNode);
   }
 
 
