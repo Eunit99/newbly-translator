@@ -17,16 +17,55 @@ $(document).ready(function ($) {
 
   // Set the fetch data
   var fetchArticleCategory = function (data) {
-    fetchArticleTitle(data.articleTitle);
-    fetchArticleContent(data.articleContent);
+
+    /* We only need to call the function `displayContentsFromBackendOnPage` because we do * not have the backend API on our index.html page
+    */
+
+    displayContentsFromBackendOnPage(data.articleTitle, data.articleContent)
 
 
+    /** Call the functions `fetchArticleTitle` and `fetchArticleContent`
+    * in 2s to allows time for the function `displayContentsFromBackendOnPage` to run
+    */
 
+    setTimeout(() => {
+      fetchArticleTitle(data.articleTitle);
+      fetchArticleContent(data.articleContent);
+    }, 2000);
 
 
     return data;
 
   }
+
+
+
+
+  var displayContentsFromBackendOnPage = function (articleTitle, articleContent) {
+
+
+    var titleContainer = $("#article-title");
+    titleContainer.append("<p class=''>" + articleTitle + "</p>");
+
+
+    // Loop through the articleContent and append each item on the page
+    for (let i = 0; i < articleContent.length; i++) {
+      var articleContainer = $("#article-content");
+      articleContainer.append("<p class=''>" + articleContent[i] + "</p>")
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -123,11 +162,12 @@ $(document).ready(function ($) {
   var searchIfTextExist = function (searchString) {
 
     if (document.body.textContent.includes(searchString)) {
-      console.info("Text exist on page: " + searchString);
+      console.info("Texts exist on page: " + searchString);
 
       return true;
     } else {
-      console.error("Text does not exist on page: " + searchString);
+      console.error("Texts do not exist on page: " + searchString);
+
       return false;
 
     }
@@ -158,10 +198,13 @@ $(document).ready(function ($) {
       container = matches[matches.length - 1];
 
 
-      // Call these function to append the translations of articleTitleTranslated and articleContentTranslated to the container element
+
+
+      // Call these function in 2s to append the translations of articleTitleTranslated and articleContentTranslated to the container element
 
       appendTitleTranslation(container, container.innerTex);
       appendContentTranslation(container, container.innerTex);
+
     }
 
 
@@ -188,19 +231,14 @@ $(document).ready(function ($) {
           var articleTitleTranslated = result.articleTitleTranslated;
           var articleTitle = result.articleTitle;
 
-
-          console.log(articleTitleTranslated);
-          console.log(articleTitle);
-          console.log(container.innerText);
-          console.log(container);
-
+          // If the container innerText of the document matches with articleTitle, the append articleTitleTranslated
 
           if (container.innerText === articleTitle) {
 
-            // TODO Write actual logic to append text
-            console.log("We are going to append text here");
+            // Use insertAdjacentHTML to insert the articleTitleTranslated using HTML format right a the articleTitle
 
-            container.append("<div class='translated'>" + articleTitleTranslated + "</div>");
+            container.insertAdjacentHTML("beforeend", "<p class='newbly-translated'>" + articleTitleTranslated + "</p>");
+
           }
 
 
@@ -235,21 +273,21 @@ $(document).ready(function ($) {
           var articleContent = result.articleContent;
 
 
-          console.log(articleContentTranslated);
-          console.log(articleContent);
-          console.log(container.innerText);
-          console.log(container);
 
-          // TODO Loop through array of articles and  replace thee article one by one
+          // Loop through array of articleContent and replace them article one by one with the respective translated version
 
           for (let i = 0; i < articleContent.length; i++) {
 
+
+
+            // If the container innerText  of the document matches with articleContent[i], the append articleContentTranslated[i]
+
+
             if (container.innerText === articleContent[i]) {
 
-              // TODO Write actual logic to append text
-              console.log("We are going to append text here");
+              // Use insertAdjacentHTML to insert the articleContentTranslated[i] using HTML format right a the articleTitle
 
-              container.append("<div class='translated'>" + articleContentTranslated + "</div>");
+              container.insertAdjacentHTML("beforeend", "<p class='newbly-translated'>" + articleContentTranslated[i] + "</p>");
             }
           }
 
