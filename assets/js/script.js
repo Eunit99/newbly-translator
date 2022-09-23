@@ -43,7 +43,6 @@ $(document).ready(function ($) {
 
   var displayContentsFromBackendOnPage = function (articleTitle, articleContent) {
 
-
     var titleContainer = $("#article-title");
     titleContainer.append("<p class=''>" + articleTitle + "</p>");
 
@@ -54,19 +53,6 @@ $(document).ready(function ($) {
       articleContainer.append("<p class=''>" + articleContent[i] + "</p>")
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -100,62 +86,6 @@ $(document).ready(function ($) {
 
     return articleContent;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -261,8 +191,6 @@ $(document).ready(function ($) {
 
     var fetchArticleContentTranslated = function () {
 
-
-
       var newblyBackendAPI = "https://api.newb.ly/articles/gVe8WHhm?language=english&country=austria&fbclid=IwAR3IA_dgK8W_kakCh44PUJv3lMajeJWYqIotGcSdlSMFnFRKGS3yeceZp3o";
 
       $.ajax({
@@ -302,60 +230,8 @@ $(document).ready(function ($) {
     }
 
 
-
-
     fetchArticleContentTranslated();
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
