@@ -19,7 +19,6 @@ $(document).ready(function ($) {
   var fetchArticleCategory = function (data) {
     fetchArticleTitle(data.articleTitle);
     fetchArticleContent(data.articleContent);
-    fetchArticleContentTranslated(data.articleContentTranslated);
 
 
 
@@ -50,22 +49,17 @@ $(document).ready(function ($) {
 
 
   var fetchArticleContent = function (articleContent) {
-    console.log(articleContent);
-
-    // TODO Loop the array of articleContent and call searchIfTextExist(data)
+    // console.log(articleContent);
 
 
-    searchIfTextExist(articleContent);
+    for (let i = 0; i < articleContent.length; i++) {
+      if (searchIfTextExist(articleContent[i])) {
+        findContainerElement(articleContent[i]);
+      }
+    }
+
 
     return articleContent;
-  }
-
-  var fetchArticleContentTranslated = function (articleContentTranslated) {
-    console.log(articleContentTranslated);
-
-    // TODO Loop the array of articleContentTranslated and call replaceText(articleContentTranslated) ?
-
-    return articleContentTranslated;
   }
 
 
@@ -163,7 +157,11 @@ $(document).ready(function ($) {
       }
       container = matches[matches.length - 1];
 
+
+      // Call these function to append the translations of articleTitleTranslated and articleContentTranslated to the container element
+
       appendTitleTranslation(container, container.innerTex);
+      appendContentTranslation(container, container.innerTex);
     }
 
 
@@ -175,8 +173,6 @@ $(document).ready(function ($) {
 
 
   var appendTitleTranslation = function (container) {
-
-
 
 
     var fetchArticleTitleTranslated = function () {
@@ -216,17 +212,62 @@ $(document).ready(function ($) {
     }
 
 
-    // console.log(container);
-    // console.log(container.innerText);
-
-
 
     fetchArticleTitleTranslated();
   }
 
 
 
+  var appendContentTranslation = function (container) {
 
+
+    var fetchArticleContentTranslated = function () {
+
+
+
+      var newblyBackendAPI = "https://api.newb.ly/articles/gVe8WHhm?language=english&country=austria&fbclid=IwAR3IA_dgK8W_kakCh44PUJv3lMajeJWYqIotGcSdlSMFnFRKGS3yeceZp3o";
+
+      $.ajax({
+        url: newblyBackendAPI,
+        dataType: "json",
+        success: function (result) {
+          var articleContentTranslated = result.articleContentTranslated;
+          var articleContent = result.articleContent;
+
+
+          console.log(articleContentTranslated);
+          console.log(articleContent);
+          console.log(container.innerText);
+          console.log(container);
+
+          // TODO Loop through array of articles and  replace thee article one by one
+
+          for (let i = 0; i < articleContent.length; i++) {
+
+            if (container.innerText === articleContent[i]) {
+
+              // TODO Write actual logic to append text
+              console.log("We are going to append text here");
+
+              container.append("<div class='translated'>" + articleContentTranslated + "</div>");
+            }
+          }
+
+
+
+
+        },
+        error: function (xhr) {
+          console.error("An error occurred: " + xhr.status + " " + xhr.statusText);
+        }
+      });
+    }
+
+
+
+
+    fetchArticleContentTranslated();
+  }
 
 
 
