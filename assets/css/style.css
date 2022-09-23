@@ -1,5 +1,20 @@
-.translated {
-  display: block;
-  color: chocolate;
+@import url("https://fonts.googleapis.com/css?family=Muli");
 
+
+body {
+  background-color: #f5f5f5;
+  color: #4e4e4e;
+  font-family: "Muli", sans-serif;
+  padding: 1rem;
+}
+
+.article-title,
+.article-content {
+  font-weight: 500;
+}
+
+.newbly-translated {
+  display: block;
+  color: rgb(172, 171, 171);
+  margin-top: 12px;
 }
