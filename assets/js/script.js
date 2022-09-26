@@ -1,7 +1,11 @@
 $(document).ready(function ($) {
 
+  // This refers to the Newbly backend API URL for a specific article
+
+  var newblyBackendAPI = "https://api.newb.ly/articles/gVe8WHhm?language=english&country=austria&fbclid=IwAR3IA_dgK8W_kakCh44PUJv3lMajeJWYqIotGcSdlSMFnFRKGS3yeceZp3o";
+
+
   var fetchArticleFromBackend = function () {
-    var newblyBackendAPI = "https://api.newb.ly/articles/gVe8WHhm?language=english&country=austria&fbclid=IwAR3IA_dgK8W_kakCh44PUJv3lMajeJWYqIotGcSdlSMFnFRKGS3yeceZp3o";
 
     $.ajax({
       url: newblyBackendAPI,
@@ -18,7 +22,8 @@ $(document).ready(function ($) {
   // Set the fetch data
   var fetchArticleCategory = function (data) {
 
-    /* We only need to call the function `displayContentsFromBackendOnPage` because we do * not have the backend API on our index.html page
+    /** We only need to call the function `displayContentsFromBackendOnPage` because we do
+    * not have the backend API on our index.html page
     */
 
     displayContentsFromBackendOnPage(data.articleTitle, data.articleContent)
@@ -74,7 +79,6 @@ $(document).ready(function ($) {
 
 
   var fetchArticleContent = function (articleContent) {
-    // console.log(articleContent);
 
 
     for (let i = 0; i < articleContent.length; i++) {
@@ -150,10 +154,6 @@ $(document).ready(function ($) {
 
     var fetchArticleTitleTranslated = function () {
 
-
-
-      var newblyBackendAPI = "https://api.newb.ly/articles/gVe8WHhm?language=english&country=austria&fbclid=IwAR3IA_dgK8W_kakCh44PUJv3lMajeJWYqIotGcSdlSMFnFRKGS3yeceZp3o";
-
       $.ajax({
         url: newblyBackendAPI,
         dataType: "json",
@@ -190,8 +190,6 @@ $(document).ready(function ($) {
 
 
     var fetchArticleContentTranslated = function () {
-
-      var newblyBackendAPI = "https://api.newb.ly/articles/gVe8WHhm?language=english&country=austria&fbclid=IwAR3IA_dgK8W_kakCh44PUJv3lMajeJWYqIotGcSdlSMFnFRKGS3yeceZp3o";
 
       $.ajax({
         url: newblyBackendAPI,
