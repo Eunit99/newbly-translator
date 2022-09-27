@@ -1,4 +1,4 @@
-$(document).ready(function ($) {
+document.ready(function ($) {
 
   // This refers to the Newbly backend API URL for a specific article
 
@@ -212,5 +212,5 @@ $(document).ready(function ($) {
 
   fetchArticleFromBackend();
 
-}(jQuery));
+}());
 
