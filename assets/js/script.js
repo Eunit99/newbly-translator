@@ -68,7 +68,7 @@ $(document).ready(function ($) {
 
   var fetchArticleTitle = function (articleTitle) {
 
-    if (searchIfTextExist(articleTitle)) {
+    if (doesTextExist(articleTitle)) {
       findContainerElement(articleTitle);
     }
 
@@ -81,7 +81,7 @@ $(document).ready(function ($) {
 
 
     for (let i = 0; i < articleContent.length; i++) {
-      if (searchIfTextExist(articleContent[i])) {
+      if (doesTextExist(articleContent[i])) {
         findContainerElement(articleContent[i]);
       }
     }
@@ -92,7 +92,7 @@ $(document).ready(function ($) {
 
 
 
-  var searchIfTextExist = function (searchString) {
+  var doesTextExist = function (searchString) {
 
     if (document.body.textContent.includes(searchString)) {
       console.info("Texts exist on page: " + searchString);
