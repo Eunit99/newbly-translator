@@ -23,10 +23,10 @@ $(document).ready(function ($) {
   var fetchArticleCategory = function (data) {
 
     /** We only need to call the function `displayContentsFromBackendOnPage` because we do
-    * not have the backend API on our index.html page
+    * not have the backend API on our index.html page which will provide the the articles in array format
     */
 
-    displayContentsFromBackendOnPage(data.articleTitle, data.articleContent)
+    // displayContentsFromBackendOnPage(data.articleTitle, data.articleContent)
 
 
     /** Call the functions `fetchArticleTitle` and `fetchArticleContent`
@@ -45,7 +45,7 @@ $(document).ready(function ($) {
 
 
 
-
+  // This function is only needed because we did not have the backend API running on the page
   var displayContentsFromBackendOnPage = function (articleTitle, articleContent) {
 
     var titleContainer = $("#article-title");
@@ -67,7 +67,6 @@ $(document).ready(function ($) {
 
 
   var fetchArticleTitle = function (articleTitle) {
-    // console.log(articleTitle);
 
     if (searchIfTextExist(articleTitle)) {
       findContainerElement(articleTitle);
