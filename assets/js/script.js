@@ -1,4 +1,14 @@
-document.ready(function ($) {
+function newblyFnc(fn) {
+  // see if DOM is already available
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    // call on next available tick
+    setTimeout(fn, 1);
+  } else {
+    document.addEventListener("DOMContentLoaded", fn);
+  }
+}
+
+newblyFnc(function () {
 
   // This refers to the Newbly backend API URL for a specific article
 
@@ -7,17 +17,17 @@ document.ready(function ($) {
 
   var fetchArticleFromBackend = function () {
 
-    $.ajax({
-      url: newblyBackendAPI,
-      dataType: "json",
-      success: function (result) {
+    fetch(newblyBackendAPI)
+      // Handle success
+      .then(response => response.json())  // convert to json
+      .then(result => {
         fetchArticleCategory(result);
-      },
-      error: function (xhr) {
-        console.error("An error occurred: " + xhr.status + " " + xhr.statusText);
-      }
-    });
+        // console.log(result);
+      })
+      .catch(err => console.log('Request Failed', err)); // Catch errors
   }
+
+
 
   // Set the fetch data
   var fetchArticleCategory = function (data) {
@@ -111,8 +121,8 @@ document.ready(function ($) {
 
       // Call these function in 2s to append the translations of articleTitleTranslated and articleContentTranslated to the container element
 
-      appendTitleTranslation(container, container.innerTex);
-      appendContentTranslation(container, container.innerTex);
+      appendTitleTranslation(container, container.innerText);
+      appendContentTranslation(container, container.innerText);
 
     }
 
@@ -129,10 +139,13 @@ document.ready(function ($) {
 
     var fetchArticleTitleTranslated = function () {
 
-      $.ajax({
-        url: newblyBackendAPI,
-        dataType: "json",
-        success: function (result) {
+
+
+      fetch(newblyBackendAPI)
+        // Handle success
+        .then(response => response.json())  // convert to json
+        .then(result => {
+
           var articleTitleTranslated = result.articleTitleTranslated;
           var articleTitle = result.articleTitle;
 
@@ -145,13 +158,10 @@ document.ready(function ($) {
             container.insertAdjacentHTML("beforeend", "<p class='newbly-translated'>" + articleTitleTranslated + "</p>");
 
           }
+          // console.log(result);
+        })
+        .catch(err => console.log('Request Failed', err)); // Catch errors
 
-
-        },
-        error: function (xhr) {
-          console.error("An error occurred: " + xhr.status + " " + xhr.statusText);
-        }
-      });
     }
 
 
@@ -166,10 +176,12 @@ document.ready(function ($) {
 
     var fetchArticleContentTranslated = function () {
 
-      $.ajax({
-        url: newblyBackendAPI,
-        dataType: "json",
-        success: function (result) {
+
+      fetch(newblyBackendAPI)
+        // Handle success
+        .then(response => response.json())  // convert to json
+        .then(result => {
+
           var articleContentTranslated = result.articleContentTranslated;
           var articleContent = result.articleContent;
 
@@ -190,16 +202,14 @@ document.ready(function ($) {
 
               container.insertAdjacentHTML("beforeend", "<p class='newbly-translated'>" + articleContentTranslated[i] + "</p>");
             }
+
           }
 
+          // console.log(result);
+        })
+        .catch(err => console.log('Request Failed', err)); // Catch errors
 
 
-
-        },
-        error: function (xhr) {
-          console.error("An error occurred: " + xhr.status + " " + xhr.statusText);
-        }
-      });
     }
 
 
@@ -212,5 +222,5 @@ document.ready(function ($) {
 
   fetchArticleFromBackend();
 
-}());
+});
 
