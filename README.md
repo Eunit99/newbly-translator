@@ -13,4 +13,3 @@ In the end, all paragraphs of an article have the translated version of it under
 ## How to use
 
 - Put the link to the script (`/js/script.min.js`) on the Newbly partner page.
-- Supply the `newblyBackendAPI` with the accurate API URL, example: `"https://api.newb.ly/articles/gVe8WHhm?language=english&country=austria&fbclid=IwAR3IA_dgK8W_kakCh44PUJv3lMajeJWYqIotGcSdlSMFnFRKGS3yeceZp3o"`
