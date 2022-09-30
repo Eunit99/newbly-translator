@@ -1,3 +1,10 @@
+var pageURL = window.location.href;
+var targetLanguage = "english";
+
+// This refers to the Newbly backend API URL for a specific article gotten through the pageURL
+var newblyBackendAPI = "https://api.newb.ly/articles/?language=" + targetLanguage + "&url=" + pageURL;
+
+
 function newblyFnc(fn) {
   // see if DOM is already available
   if (document.readyState === "complete" || document.readyState === "interactive") {
@@ -10,11 +17,8 @@ function newblyFnc(fn) {
 
 newblyFnc(function () {
 
-  // This refers to the Newbly backend API URL for a specific article
 
-  var newblyBackendAPI = "https://api.newb.ly/articles/gVe8WHhm?language=english&country=austria&fbclid=IwAR3IA_dgK8W_kakCh44PUJv3lMajeJWYqIotGcSdlSMFnFRKGS3yeceZp3o";
-
-
+  // Function to fetch articles from the backendAPI
   var fetchArticleFromBackend = function () {
 
     fetch(newblyBackendAPI)
@@ -98,7 +102,7 @@ newblyFnc(function () {
     // Find the container element where data is coming from and pass the text
 
     // The possible tags which can contain the text to be appended the newly translatedContent
-    const elements = [
+    var elements = [
       "a",
       "abbr",
       "acronym",
@@ -237,7 +241,7 @@ newblyFnc(function () {
       "xmp"
     ];
 
-    const matches = [];
+    var matches = [];
     var container;
 
     for (let i = 0; i < elements.length; i++) {
