@@ -12,4 +12,31 @@ In the end, all paragraphs of an article have the translated version of it under
 
 ## How to use
 
-- Put the link to the script (`/js/script.min.js`) on the Newbly partner page.
+- Run `npm i` to install all dependencies
+- When you make modifications, run `npm run build` to create a minified version of the scripts and also, ES5 compatible codes
+- All files under the `lib/js/` are ES5 compatible
+- Put the link to the script (`lib/js/script.min.js`) on the Newbly partner page.
+
+## Example usage
+
+```html
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample website</title>
+  </head>
+
+  <body>
+
+    <!-- Link to Newbly Translator script -->
+    <script src="lib/js/script.min.js"></script>t
+  </body>
+
+</html>
+
+```
