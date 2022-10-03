@@ -5,8 +5,7 @@ var targetLanguage = "english";
 var newblyBackendAPI = "https://api.newb.ly/articles/?language=" + targetLanguage + "&url=" + pageURL;
 
 // Support for IE
-if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent))
-  document.write('<script src="lib/js/script.js"><\/script>');
+if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="lib/js/script.js"><\/script>');
 
 function newblyFnc(fn) {
   // see if DOM is already available
@@ -20,20 +19,21 @@ function newblyFnc(fn) {
 
 newblyFnc(function () {
 
+  let result = "";
 
-  // Function to fetch articles from the backendAPI
-  var fetchArticleFromBackend = function () {
-
-    fetch(newblyBackendAPI)
-      // Handle success
-      .then(response => response.json())  // convert to json
-      .then(result => {
-        fetchArticleCategory(result);
-        // console.log(result);
-      })
-      .catch(err => console.log('Request Failed', err)); // Catch errors
+  async function fetchArticleFromBackend(newblyBackendAPI) {
+    let response = await fetch(newblyBackendAPI);
+    let data = await response.json()
+    return data;
   }
 
+
+  async function main() {
+    result = await fetchArticleFromBackend(newblyBackendAPI);
+    fetchArticleCategory(result);
+  }
+
+  main();
 
 
   // Set the fetch data
@@ -166,60 +166,52 @@ newblyFnc(function () {
 
     var fetchArticleTranslated = function () {
 
+      // console.log(result.articleTitle)
 
-      fetch(newblyBackendAPI)
-        // Handle success
-        .then(response => response.json())
-        .then(result => {
+      // For article Title
 
-          // For article Title
+      var articleTitleTranslated = result.articleTitleTranslated;
+      var articleTitle = result.articleTitle;
 
-          var articleTitleTranslated = result.articleTitleTranslated;
-          var articleTitle = result.articleTitle;
+      // If the container innerText of the document matches with articleTitle, the append articleTitleTranslated
 
-          // If the container innerText of the document matches with articleTitle, the append articleTitleTranslated
+      if (container.innerText === articleTitle) {
 
-          if (container.innerText === articleTitle) {
+        // Use insertAdjacentHTML to insert the articleTitleTranslated using HTML format right a the articleTitle
 
-            // Use insertAdjacentHTML to insert the articleTitleTranslated using HTML format right a the articleTitle
+        container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171);'>" + articleTitleTranslated + "</p>");
 
-            container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171);'>" + articleTitleTranslated + "</p>");
-
-          }
+      }
 
 
 
-          // For article Content
+      // For article Content
 
-          var articleContentTranslated = result.articleContentTranslated;
-          var articleContent = result.articleContent;
-
-
-
-          // Loop through array of articleContent and replace them article one by one with the respective translated version
-
-          for (let i = 0; i < articleContent.length; i++) {
+      var articleContentTranslated = result.articleContentTranslated;
+      var articleContent = result.articleContent;
 
 
 
-            // If the container innerText  of the document matches with articleContent[i], the append articleContentTranslated[i]
+      // Loop through array of articleContent and replace them article one by one with the respective translated version
 
-
-            if (container.innerText === articleContent[i]) {
-
-              // Use insertAdjacentHTML to insert the articleContentTranslated[i] using HTML format right a the articleTitle
-
-              container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171);'>" + articleContentTranslated[i] + "</p>");
-            }
-
-          }
+      for (let i = 0; i < articleContent.length; i++) {
 
 
 
+        // If the container innerText  of the document matches with articleContent[i], the append articleContentTranslated[i]
 
-          // console.log(result);
-        })
-        .catch(err => console.log('Request Failed', err)); // Catch errors
+
+        if (container.innerText === articleContent[i]) {
+
+          // Use insertAdjacentHTML to insert the articleContentTranslated[i] using HTML format right a the articleTitle
+
+          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171);'>" + articleContentTranslated[i] + "</p>");
+        }
+
+      }
+
+
+
 
     }
 
