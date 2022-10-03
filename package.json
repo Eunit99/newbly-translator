@@ -1,0 +1,25 @@
+{
+  "name": "newbly_translator",
+  "version": "1.0.0",
+  "description": "This is a JavaScript based plugin that shall be included into any Newbly partner website, and the plugin will insert translations of the main content (article) into the webpage.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel js/script.js -d lib && minify js/script.js > js/script.min.js && cp ./js/script.min.js ./lib/js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eunit99/newbly_jquery.git"
+  },
+  "author": "Eunit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Eunit99/newbly_jquery/issues"
+  },
+  "homepage": "https://github.com/Eunit99/newbly_jquery#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "minify": "^9.1.0"
+  }
+}
