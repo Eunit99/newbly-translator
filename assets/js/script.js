@@ -102,24 +102,38 @@ newblyFnc(function () {
     // Find the container element where data is coming from and pass the text
 
     // The possible tags which can contain the text to be appended the newly translatedContent
-    var elements = [
+
+    const elements = [
       "a",
-      "b",
       "article",
+      "aside",
+      "b",
       "blockquote",
+      "content",
       "div",
+      "em",
       "h1",
       "h2",
       "h3",
       "h4",
       "h5",
       "h6",
+      "i",
+      "li",
       "main",
+      "mark",
+      "nav",
+      "ol",
       "p",
+      "pre",
+      "q",
       "section",
       "span",
       "strong",
-      // Add others as you may need
+      "summary",
+      "u",
+      "ul",
+      "video",
     ];
 
     var matches = [];
