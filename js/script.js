@@ -9,7 +9,7 @@ function getTargetLanguage() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
 
-  // Check if the target language is available in
+  // Check if the target language is available in URL params
 
   if ((urlParams.has("nLang"))) {
 
@@ -28,7 +28,7 @@ function getTargetLanguage() {
 var newblyBackendAPI = "https://api.newb.ly/articles/?language=" + getTargetLanguage() + "&url=" + getPageURL();
 
 // Support for IE
-if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="lib/js/script.js"><\/script>');
+if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="lib/js/script.min.js"><\/script>');
 
 function newblyFnc(fn) {
   // see if DOM is already available
