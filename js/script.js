@@ -239,12 +239,12 @@ newblyFnc(function () {
     }
 
 
-    // fetchArticleTranslated();
+    fetchArticleTranslated();
   }
 
 
 
-  // fetchArticleFromBackend();
+  fetchArticleFromBackend();
 
 });
 
