@@ -47,7 +47,6 @@
           "So etwas ist kein Kavaliersdelikt und wird jedes Mal von uns zur Anzeige gebracht, Behörden wie der Verfassungsschutz ermitteln", hielt Ebner fest. Die Volkspartei Niederösterreich lehne solche Methoden ab, unterstrich der Parteimanager.
         </p>
 
-
       </div>
     </div>
 
@@ -61,11 +60,15 @@
     <!-- Custom script -->
 
     <script>
-      const pageURL = "https://www.diepresse.com/6191779/Recherche_Niederoesterreich_FakeMails-im-Namen-von-OeVPMitgliedern?from=rss";
+      function getPageURL() {
+        const pageURL = "https://www.diepresse.com/6191779/Recherche_Niederoesterreich_FakeMails-im-Namen-von-OeVPMitgliedern?from=rss&nLang=english";
+        return pageURL;
+      }
     </script>
 
     <!-- Newbly script -->
-    <script src="lib/js/script.min.js"></script>
+    <script src="/js/script.js"></script>
+    <!-- <script src="/lib/js/script.min.js"></script> -->
 
   </body>
 
