@@ -1,8 +1,31 @@
-var pageURL = window.location.href;
-var targetLanguage = "english";
+function getPageURL() {
+  let pageURL = window.location.href;
+  return pageURL;
+}
+
+function getTargetLanguage() {
+
+  let targetLanguage;
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+
+  // Check if the target language is available in
+
+  if ((urlParams.has("nLang"))) {
+
+    // Assign targetLanguage to "nLang" from the URL params if it exists
+    targetLanguage = urlParams.get("nLang");
+  } else {
+    targetLanguage = "english";
+  }
+
+  return targetLanguage;
+}
+
+
 
 // This refers to the Newbly backend API URL for a specific article gotten through the pageURL
-var newblyBackendAPI = "https://api.newb.ly/articles/?language=" + targetLanguage + "&url=" + pageURL;
+var newblyBackendAPI = "https://api.newb.ly/articles/?language=" + getTargetLanguage() + "&url=" + getPageURL();
 
 // Support for IE
 if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="lib/js/script.js"><\/script>');
@@ -28,12 +51,12 @@ newblyFnc(function () {
   }
 
 
-  async function main() {
+  async function fetchFnc() {
     result = await fetchArticleFromBackend(newblyBackendAPI);
     fetchArticleCategory(result);
   }
 
-  main();
+  fetchFnc();
 
 
   // Set the fetch data
@@ -216,12 +239,12 @@ newblyFnc(function () {
     }
 
 
-    fetchArticleTranslated();
+    // fetchArticleTranslated();
   }
 
 
 
-  fetchArticleFromBackend();
+  // fetchArticleFromBackend();
 
 });
 
