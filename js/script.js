@@ -1,8 +1,3 @@
-function getPageURL() {
-  let pageURL = window.location.href;
-  return pageURL;
-}
-
 function getTargetLanguage() {
 
   let targetLanguage;
@@ -21,6 +16,36 @@ function getTargetLanguage() {
 
   return targetLanguage;
 }
+
+
+
+
+function getPageURL() {
+  // let pageURL = window.location.href;
+  let pageURL = "https://www.diepresse.com/6191779/Recherche_Niederoesterreich_FakeMails-im-Namen-von-OeVPMitgliedern?from=rss&nLang=english";
+  return pageURL;
+}
+
+function removeNLangParamsFromURL() {
+
+  let strippedURL;
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+
+
+  // Check if nLang parameter is available in URL params
+  if ((urlParams.has("nLang"))) {
+
+    // Delete the nLang parameter.
+    strippedURL = urlParams.delete("nLang");
+  }
+
+  return strippedURL;
+};
+
+
+removeNLangParamsFromURL()
+
 
 
 
