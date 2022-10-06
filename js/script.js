@@ -21,8 +21,7 @@ function getTargetLanguage() {
 
 
 function getPageURL() {
-  // let pageURL = window.location.href;
-  let pageURL = "https://www.diepresse.com/6191779/Recherche_Niederoesterreich_FakeMails-im-Namen-von-OeVPMitgliedern?from=rss&nLang=english";
+  let pageURL = window.location.href;
   return pageURL;
 }
 
