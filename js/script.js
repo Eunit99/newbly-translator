@@ -227,8 +227,14 @@ newblyFnc(function () {
 
         // Use insertAdjacentHTML to insert the articleTitleTranslated using HTML format right a the articleTitle
 
-        container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171);'>" + articleTitleTranslated + "</p>");
+        if (getTargetLanguage() === "arabic") {
+          //  Add RTL stylings if translation target language is arabic
+          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171); direction: rtl;'>" + articleTitleTranslated + "</p>");
+        } else {
 
+          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171);'>" + articleTitleTranslated + "</p>");
+
+        }
       }
 
 
@@ -253,7 +259,16 @@ newblyFnc(function () {
 
           // Use insertAdjacentHTML to insert the articleContentTranslated[i] using HTML format right a the articleTitle
 
-          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171);'>" + articleContentTranslated[i] + "</p>");
+          if (getTargetLanguage() === "arabic") {
+            //  Add RTL stylings if translation target language is arabic
+            container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171); direction: rtl;'>" + articleContentTranslated[i] + "</p>");
+          } else {
+
+            container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171);'>" + articleContentTranslated[i] + "</p>");
+
+          }
+
+
         }
 
       }
