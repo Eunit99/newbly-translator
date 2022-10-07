@@ -48,11 +48,11 @@ function getURLToBackend() {
 
       // Query string specified in URL
 
-      if ((nLangContainedURL.includes(`&nLang=${targetLanguage}`))) {
-        strippedURL = nLangContainedURL.replace(`&nLang=${targetLanguage}`, '');
-      } else if ((nLangContainedURL.includes(`?nLang=${targetLanguage}`))) {
-        strippedURL = nLangContainedURL.replace(`?nLang=${targetLanguage}`, '');
-      } else if (nLangContainedURL === `nLang=${targetLanguage}`) {
+      if ((nLangContainedURL.includes(`&nLang=${getTargetLanguage()}`))) {
+        strippedURL = nLangContainedURL.replace(`&nLang=${getTargetLanguage()}`, '');
+      } else if ((nLangContainedURL.includes(`?nLang=${getTargetLanguage()}`))) {
+        strippedURL = nLangContainedURL.replace(`?nLang=${getTargetLanguage()}`, '');
+      } else if (nLangContainedURL === `nLang=${getTargetLanguage()}`) {
         strippedURL = "";
       } else {
         strippedURL = nLangContainedURL;
