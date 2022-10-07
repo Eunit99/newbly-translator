@@ -25,31 +25,79 @@ function getPageURL() {
   return pageURL;
 }
 
-function removeNLangParamsFromURL() {
+function getURLToBackend() {
 
-  let strippedURL;
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
+  // URL to be appended to the backend API
+  let URLToBackend;
+  let URLArray = getPageURL().split('?');
+  let nonQueryURLPart = URLArray[0];
+  let queryPart = URLArray[1];
 
 
-  // Check if nLang parameter is available in URL params
-  if ((urlParams.has("nLang"))) {
+  // If no query string (?...) is provided, then assign nLangContainedURL to the first part of the URLArray
+  if (!queryPart) {
 
-    // Delete the nLang parameter.
-    strippedURL = urlParams.delete("nLang");
+    // No query string specified in URL
+    URLToBackend = URLArray[0];
+  } else {
+
+    function removeNLangParamsFromURL() {
+      // URL returned after checks for nLang query string params
+      let nLangContainedURL = URLArray[1];
+      var strippedURL;
+
+      // Query string specified in URL
+
+      if ((nLangContainedURL.includes(`&nLang=${targetLanguage}`))) {
+        strippedURL = nLangContainedURL.replace(`&nLang=${targetLanguage}`, '');
+      } else if ((nLangContainedURL.includes(`?nLang=${targetLanguage}`))) {
+        strippedURL = nLangContainedURL.replace(`?nLang=${targetLanguage}`, '');
+      } else if (nLangContainedURL === `nLang=${targetLanguage}`) {
+        strippedURL = "";
+      } else {
+        strippedURL = nLangContainedURL;
+      }
+
+
+      return strippedURL
+    }
+
+
+
+    function joinURLParts() {
+      // If NLangParams === ""
+      if (!removeNLangParamsFromURL()) {
+
+        return nonQueryURLPart
+
+      } else {
+
+        return nonQueryURLPart + "?" + removeNLangParamsFromURL()
+      }
+    }
+
+
+
+
+
+    URLToBackend = joinURLParts();
   }
 
-  return strippedURL;
-};
+
+  // console.log("URLToBackend: " + URLToBackend);
+  return URLToBackend
+}
 
 
-removeNLangParamsFromURL()
+
+
+
 
 
 
 
 // This refers to the Newbly backend API URL for a specific article gotten through the pageURL
-var newblyBackendAPI = "https://api.newb.ly/articles/?language=" + getTargetLanguage() + "&url=" + getPageURL();
+var newblyBackendAPI = "https://api.newb.ly/articles/?language=" + getTargetLanguage() + "&url=" + getURLToBackend();
 
 // Support for IE
 if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="lib/js/script.min.js"><\/script>');
