@@ -30,12 +30,12 @@ function getURLToBackend() {
   // URL to be appended to the backend API
   let URLToBackend;
   let URLArray = getPageURL().split('?');
-  let nonQueryURLPart = URLArray[0];
-  let queryPart = URLArray[1];
+  let nonQueryPartURL = URLArray[0];
+  let queryPartURL = URLArray[1];
 
 
-  // If no query string (?...) is provided, then assign nLangContainedURL to the first part of the URLArray
-  if (!queryPart) {
+  // If no query string (?...) is provided, then assign URLToBackend to the first part of the URLArray
+  if (!queryPartURL) {
 
     // No query string specified in URL
     URLToBackend = URLArray[0];
@@ -44,7 +44,7 @@ function getURLToBackend() {
     function removeNLangParamsFromURL() {
       // URL returned after checks for nLang query string params
       let nLangContainedURL = URLArray[1];
-      var strippedURL;
+      let strippedURL;
 
       // Query string specified in URL
 
@@ -64,15 +64,15 @@ function getURLToBackend() {
 
 
 
-    function joinURLParts() {
+    function actualURLToBackend() {
       // If NLangParams === ""
       if (!removeNLangParamsFromURL()) {
 
-        return nonQueryURLPart
+        return nonQueryPartURL
 
       } else {
 
-        return nonQueryURLPart + "?" + removeNLangParamsFromURL()
+        return nonQueryPartURL + "?" + removeNLangParamsFromURL()
       }
     }
 
@@ -80,7 +80,7 @@ function getURLToBackend() {
 
 
 
-    URLToBackend = joinURLParts();
+    URLToBackend = actualURLToBackend();
   }
 
 
@@ -97,7 +97,7 @@ function getURLToBackend() {
 
 
 // This refers to the Newbly backend API URL for a specific article gotten through the pageURL
-var newblyBackendAPI = "https://api.newb.ly/articles/?language=" + getTargetLanguage() + "&url=" + getURLToBackend();
+let newblyBackendAPI = "https://api.newb.ly/articles/?language=" + getTargetLanguage() + "&url=" + getURLToBackend();
 
 // Support for IE
 if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="lib/js/script.min.js"><\/script>');
@@ -132,7 +132,7 @@ newblyFnc(function () {
 
 
   // Set the fetch data
-  var fetchArticleCategory = function (data) {
+  let fetchArticleCategory = function (data) {
 
     /** We only need to call the function `displayContentsFromBackendOnPage` because we do
     * not have the backend API on our index.html page which will provide the the articles in array format
@@ -151,7 +151,7 @@ newblyFnc(function () {
 
 
 
-  var fetchArticleTitle = function (articleTitle) {
+  let fetchArticleTitle = function (articleTitle) {
 
     if (doesTextExist(articleTitle)) {
       findContainerElement(articleTitle);
@@ -162,7 +162,7 @@ newblyFnc(function () {
 
 
 
-  var fetchArticleContent = function (articleContent) {
+  let fetchArticleContent = function (articleContent) {
 
     for (let i = 0; i < articleContent.length; i++) {
       if (doesTextExist(articleContent[i])) {
@@ -175,7 +175,7 @@ newblyFnc(function () {
 
 
 
-  var doesTextExist = function (searchString) {
+  let doesTextExist = function (searchString) {
 
     if (document.body.textContent.includes(searchString)) {
       console.info("Texts exist on page: " + searchString);
@@ -191,7 +191,7 @@ newblyFnc(function () {
   }
 
 
-  var findContainerElement = function (searchString) {
+  let findContainerElement = function (searchString) {
     // Find the container element where data is coming from and pass the text
 
     // The possible tags which can contain the text to be appended the newly translatedContent
@@ -221,13 +221,13 @@ newblyFnc(function () {
       "ul",
     ];
 
-    var matches = [];
-    var container;
+    let matches = [];
+    let container;
 
     for (let i = 0; i < elements.length; i++) {
-      var element = elements[i];
+      let element = elements[i];
 
-      for (var element of document.querySelectorAll(element)) {
+      for (let element of document.querySelectorAll(element)) {
         if (element.textContent.includes(searchString)) {
           matches.push(element);
           container = matches[matches.length - 1];
@@ -256,17 +256,17 @@ newblyFnc(function () {
 
 
 
-  var appendTranslation = function (container) {
+  let appendTranslation = function (container) {
 
 
-    var fetchArticleTranslated = function () {
+    let fetchArticleTranslated = function () {
 
       // console.log(result.articleTitle)
 
       // For article Title
 
-      var articleTitleTranslated = result.articleTitleTranslated;
-      var articleTitle = result.articleTitle;
+      let articleTitleTranslated = result.articleTitleTranslated;
+      let articleTitle = result.articleTitle;
 
       // If the container innerText of the document matches with articleTitle, the append articleTitleTranslated
 
@@ -288,8 +288,8 @@ newblyFnc(function () {
 
       // For article Content
 
-      var articleContentTranslated = result.articleContentTranslated;
-      var articleContent = result.articleContent;
+      let articleContentTranslated = result.articleContentTranslated;
+      let articleContent = result.articleContent;
 
 
 
