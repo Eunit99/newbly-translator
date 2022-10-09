@@ -132,7 +132,7 @@ newblyFnc(function () {
 
 
   // Set the fetch data
-  let fetchArticleCategory = function (data) {
+  var fetchArticleCategory = function (data) {
 
     /** We only need to call the function `displayContentsFromBackendOnPage` because we do
     * not have the backend API on our index.html page which will provide the the articles in array format
@@ -151,7 +151,7 @@ newblyFnc(function () {
 
 
 
-  let fetchArticleTitle = function (articleTitle) {
+  var fetchArticleTitle = function (articleTitle) {
 
     if (doesTextExist(articleTitle)) {
       findContainerElement(articleTitle);
@@ -162,7 +162,7 @@ newblyFnc(function () {
 
 
 
-  let fetchArticleContent = function (articleContent) {
+  var fetchArticleContent = function (articleContent) {
 
     for (let i = 0; i < articleContent.length; i++) {
       if (doesTextExist(articleContent[i])) {
@@ -175,7 +175,7 @@ newblyFnc(function () {
 
 
 
-  let doesTextExist = function (searchString) {
+  var doesTextExist = function (searchString) {
 
     if (document.body.textContent.includes(searchString)) {
       console.info("Texts exist on page: " + searchString);
@@ -191,7 +191,7 @@ newblyFnc(function () {
   }
 
 
-  let findContainerElement = function (searchString) {
+  var findContainerElement = function (searchString) {
     // Find the container element where data is coming from and pass the text
 
     // The possible tags which can contain the text to be appended the newly translatedContent
@@ -221,13 +221,13 @@ newblyFnc(function () {
       "ul",
     ];
 
-    let matches = [];
-    let container;
+    var matches = [];
+    var container;
 
     for (let i = 0; i < elements.length; i++) {
-      let element = elements[i];
+      var element = elements[i];
 
-      for (let element of document.querySelectorAll(element)) {
+      for (var element of document.querySelectorAll(element)) {
         if (element.textContent.includes(searchString)) {
           matches.push(element);
           container = matches[matches.length - 1];
@@ -256,17 +256,17 @@ newblyFnc(function () {
 
 
 
-  let appendTranslation = function (container) {
+  var appendTranslation = function (container) {
 
 
-    let fetchArticleTranslated = function () {
+    var fetchArticleTranslated = function () {
 
       // console.log(result.articleTitle)
 
       // For article Title
 
-      let articleTitleTranslated = result.articleTitleTranslated;
-      let articleTitle = result.articleTitle;
+      var articleTitleTranslated = result.articleTitleTranslated;
+      var articleTitle = result.articleTitle;
 
       // If the container innerText of the document matches with articleTitle, the append articleTitleTranslated
 
@@ -288,8 +288,8 @@ newblyFnc(function () {
 
       // For article Content
 
-      let articleContentTranslated = result.articleContentTranslated;
-      let articleContent = result.articleContent;
+      var articleContentTranslated = result.articleContentTranslated;
+      var articleContent = result.articleContent;
 
 
 
