@@ -1,6 +1,12 @@
+
+// Include the stylesheet for in the head of the page
+document.head.innerHTML += '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.0/lib/css/style.min.css" type="text/css"/>';
+
+
 function getTargetLanguage() {
 
   let targetLanguage;
+  let URLHasNLangParam;
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
 
@@ -8,13 +14,26 @@ function getTargetLanguage() {
 
   if ((urlParams.has("nLang"))) {
 
+    // Call the function to start fetching translations from backend
+    fetchArticleFromBackend();
+
     // Assign targetLanguage to "nLang" from the URL params if it exists
     targetLanguage = urlParams.get("nLang");
+
+    // Set URLHasNLangParam to true since `nLang` exist in query string
+    URLHasNLangParam = true;
   } else {
+
+    // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
+    displayNewblyTranslatorUIModal()
+
     targetLanguage = "english";
+
+    // Set URLHasNLangParam to false since `nLang` does not exist in query string
+    URLHasNLangParam = false;
   }
 
-  return targetLanguage;
+  return { targetLanguage, URLHasNLangParam };
 }
 
 
@@ -48,11 +67,11 @@ function getURLToBackend() {
 
       // Query string specified in URL
 
-      if ((nLangContainedURL.includes(`&nLang=${getTargetLanguage()}`))) {
-        strippedURL = nLangContainedURL.replace(`&nLang=${getTargetLanguage()}`, '');
-      } else if ((nLangContainedURL.includes(`?nLang=${getTargetLanguage()}`))) {
-        strippedURL = nLangContainedURL.replace(`?nLang=${getTargetLanguage()}`, '');
-      } else if (nLangContainedURL === `nLang=${getTargetLanguage()}`) {
+      if ((nLangContainedURL.includes(`&nLang=${getTargetLanguage().targetLanguage}`))) {
+        strippedURL = nLangContainedURL.replace(`&nLang=${getTargetLanguage().targetLanguage}`, '');
+      } else if ((nLangContainedURL.includes(`?nLang=${getTargetLanguage().targetLanguage}`))) {
+        strippedURL = nLangContainedURL.replace(`?nLang=${getTargetLanguage().targetLanguage}`, '');
+      } else if (nLangContainedURL === `nLang=${getTargetLanguage().targetLanguage}`) {
         strippedURL = "";
       } else {
         strippedURL = nLangContainedURL;
@@ -97,7 +116,7 @@ function getURLToBackend() {
 
 
 // This refers to the Newbly backend API URL for a specific article gotten through the pageURL
-let newblyBackendAPI = "https://api.newb.ly/articles/?language=" + getTargetLanguage() + "&url=" + getURLToBackend();
+let newblyBackendAPI = "https://api.newb.ly/articles/?language=" + getTargetLanguage().targetLanguage + "&url=" + getURLToBackend();
 
 // Support for IE
 if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="lib/js/script.min.js"><\/script>');
@@ -274,12 +293,12 @@ newblyFnc(function () {
 
         // Use insertAdjacentHTML to insert the articleTitleTranslated using HTML format right a the articleTitle
 
-        if (getTargetLanguage() === "arabic") {
+        if (getTargetLanguage().targetLanguage === "arabic") {
           //  Add RTL stylings if translation target language is arabic
-          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171); direction: rtl;'>" + articleTitleTranslated + "</p>");
+          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + articleTitleTranslated + "</p>");
         } else {
 
-          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171);'>" + articleTitleTranslated + "</p>");
+          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + articleTitleTranslated + "</p>");
 
         }
       }
@@ -306,12 +325,12 @@ newblyFnc(function () {
 
           // Use insertAdjacentHTML to insert the articleContentTranslated[i] using HTML format right a the articleTitle
 
-          if (getTargetLanguage() === "arabic") {
+          if (getTargetLanguage().targetLanguage === "arabic") {
             //  Add RTL stylings if translation target language is arabic
-            container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171); direction: rtl;'>" + articleContentTranslated[i] + "</p>");
+            container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + articleContentTranslated[i] + "</p>");
           } else {
 
-            container.insertAdjacentHTML("beforeend", "<p class='newbly-translated' style='color: rgb(172, 171, 171);'>" + articleContentTranslated[i] + "</p>");
+            container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + articleContentTranslated[i] + "</p>");
 
           }
 
@@ -331,7 +350,6 @@ newblyFnc(function () {
 
 
 
-  fetchArticleFromBackend();
 
 });
 
