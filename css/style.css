@@ -1,20 +1,68 @@
-@import url("https://fonts.googleapis.com/css?family=Muli");
-
-
-body {
-  background-color: #f5f5f5;
-  color: #4e4e4e;
-  font-family: "Muli", sans-serif;
-  padding: 1rem;
-}
-
-.article-title,
-.article-content {
-  font-weight: 500;
-}
-
-.newbly-translated {
+.newbly-translated-text {
   display: block;
   color: rgb(172, 171, 171);
   margin-top: 12px;
+}
+
+.newbly-translated-text.arabic {
+  direction: rtl;
+}
+
+.newbly-translation--ui-modal {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 22;
+  border: 1px solid #747474;
+  color: #747474;
+  background-color: rgb(255, 255, 255);
+  -webkit-border-radius: 1rem;
+  -moz-border-radius: 1rem;
+  -ms-border-radius: 1rem;
+  -o-border-radius: 1rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin: 1rem;
+  max-width: 400px;
+  box-sizing: border-box;
+  font-size: 16px;
+
+  /* Hidden by default */
+  display: none;
+}
+
+.newbly-translation--ui-modal .newbly-translation--ui-modal__title {
+  font-weight: 700;
+  font-size: inherit;
+}
+
+.newbly-translation--ui-modal .newbly-translation--ui-modal__title,
+.newbly-translation--ui-modal .newbly-translation--ui-modal__text {
+  margin-bottom: 1rem;
+  color: inherit;
+  font-size: inherit;
+}
+
+.newbly-translation--ui-modal .newbly-translation--ui-modal__btn-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+.newbly-translation--ui-modal .newbly-translation--ui-modal__btn__btn {
+  width: 100%;
+  padding: 6px;
+  color: inherit;
+  cursor: pointer;
+  box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.2);
+  font-size: inherit;
+}
+
+.newbly-translation--ui-modal .newbly-translation--ui-modal__btn__btn:first-child {
+  margin-right: 8px;
+}
+
+.newbly-translation--ui-modal .newbly-translation--ui-modal__btn__btn:last-child {
+  margin-left: 8px;
 }
