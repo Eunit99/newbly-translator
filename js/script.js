@@ -2,7 +2,7 @@ var newbly = {
   init: function () {
 
     // Include the stylesheet for in the head of the page
-    document.head.innerHTML += '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.0/lib/css/style.min.css" type="text/css"/>';
+    document.head.innerHTML += '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.2/lib/css/style.min.css" type="text/css"/>';
 
 
     function appendNewblyPromptModal() {
