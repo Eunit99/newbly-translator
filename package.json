@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\"",
-    "build": "babel js/script.js -d lib && minify js/script.js > js/script.min.js && minify css/style.css > css/style.min.css && cp ./js/script.min.js ./lib/js && cp ./css/style.min.css ./lib/css",
+    "build": "babel js/script.js -d lib && minify js/script.js > js/script.min.js && minify css/style.css > css/style.min.css && cp ./js/script.min.js ./lib/js && cp ./css/style.min.css ./lib/css/",
     "np": "np"
   },
   "repository": {
