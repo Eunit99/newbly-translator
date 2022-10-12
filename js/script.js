@@ -2,19 +2,19 @@ var newbly = {
   init: function () {
 
     // Include the stylesheet for in the head of the page
-    document.head.innerHTML += '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.2/lib/css/style.min.css" type="text/css"/>';
+    document.head.innerHTML += '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.3/lib/css/style.min.css" type="text/css"/>';
 
 
     function appendNewblyPromptModal() {
       const newblyPromptModal = `
         <div class="newbly-translation--ui-modal" id="newbly-translation--ui-modal">
               <div class="newbly-translation--ui-modal__title" id="newbly-translation--ui-modal__title">
-                Translations available for this article!
+                Translations are available for this article!
               </div>
 
               <div class="newbly-translation--ui-modal__text" id="newbly-translation--ui-modal__text">
-                Your browser is in <span id="userBrowserLanguage"></span>
-                so we thought you might want to include translations in <span id="suggestedTranslation"></span> for this
+                Your browser is in <span id="userBrowserLanguage">English</span>
+                so we thought you might want to include translations in <span id="suggestedTranslation">English</span> for this
                 article.
               </div>
 
@@ -24,7 +24,7 @@ var newbly = {
                 </button>
 
                 <button id="cancel-translation" class="newbly-translation--ui-modal__btn__btn">
-                  Not this time
+                  Not this time.
                 </button>
               </div>
           </div>
@@ -88,44 +88,163 @@ var newbly = {
       "uk", //Ukrainian
     ];
 
+    var newblyUIModalLanguages = {
+      ar: {
+        "title": "الترجمات متوفرة لهذا المقال!",
+        "includeText": "تضمين الترجمة!",
+        "cancelText": "ليس هذه المرة.",
+        "translationConsentText": "متصفحك باللغة العربية لذلك اعتقدنا أنك قد ترغب في تضمين ترجمات باللغة العربية لهذه المقالة."
+      },
+      bh: {
+        "title": "इस लेख के लिए अनुवाद उपलब्ध हैं!",
+        "includeText": "अनुवाद शामिल करें!",
+        "cancelText": "इस समय नहीं।",
+        "translationConsentText": "आपका ब्राउज़र हिंदी में है इसलिए हमने सोचा कि आप इस लेख के लिए हिंदी में अनुवाद शामिल करना चाहेंगे।"
+      },
+      en: {
+        "title": "Translations available for this article!",
+        "includeText": "Include translation!",
+        "cancelText": "Not this time.",
+        "translationConsentText": "Your browser is in English so we thought you might want to include translations in English for this article."
+      },
+      fr: {
+        "title": "Des traductions sont disponibles pour cet article !",
+        "includeText": "Inclure la traduction !",
+        "cancelText": "Pas cette fois.",
+        "translationConsentText": "Votre navigateur est en français, nous avons donc pensé que vous voudriez peut-être inclure des traductions en français pour cet article."
+      },
+      hr: {
+        "title": "Prijevodi su dostupni za ovaj članak!",
+        "includeText": "Uključi prijevod!",
+        "cancelText": "Ne ovaj put.",
+        "translationConsentText": "Vaš preglednik je na hrvatskom pa smo mislili da biste mogli uključiti prijevode na hrvatski za ovaj članak."
+      },
+      ro: {
+        "title": "Sunt disponibile traduceri pentru acest articol!",
+        "includeText": "Includeți traducerea!",
+        "cancelText": "Nu de data asta.",
+        "translationConsentText": "Browserul dvs. este în limba română, așa că ne-am gândit că ați dori să includeți traduceri în limba română pentru acest articol."
+      },
+      ru: {
+        "title": "Для этой статьи доступны переводы!",
+        "includeText": "Включите перевод!",
+        "cancelText": "Не в этот раз.",
+        "translationConsentText": "Ваш браузер на русском языке, поэтому мы подумали, что вы, возможно, захотите включить русский перевод для этой статьи."
+      },
+      sr: {
+        "title": "Преводи су доступни за овај чланак!",
+        "includeText": "Укључи превод!",
+        "cancelText": "Не овог пута.",
+        "translationConsentText": "Ваш претраживач је на српском, па смо мислили да бисте могли да укључите преводе на српски за овај чланак."
+      },
+      tr: {
+        "title": "Bu makale için çeviriler mevcuttur!",
+        "includeText": "Çeviri dahil!",
+        "cancelText": "Bu sefer değil.",
+        "translationConsentText": "Tarayıcınız Türkçe olduğu için bu makaleye Türkçe çeviriler eklemek isteyebileceğinizi düşündük."
+      },
+      uk: {
+        "title": "Для цієї статті доступні переклади!",
+        "includeText": "Включіть переклад!",
+        "cancelText": "Не цього разу.",
+        "translationConsentText": "Ваш веб-переглядач україномовний, тому ми подумали, що ви можете включити переклад українською для цієї статті."
+      },
+    };
+
 
 
     function getLongBrowserLanguage() {
+
+      // This function provides translations of the Newbly Modal depending on the shortLang, like fr, en, sr, ru
+
+      let newblyUIModalLang = newblyUIModalLanguages,
+        newblyModalTitle,
+        newblyModalIncludeText,
+        newblyModalCancelText,
+        newblyTranslationConsentText;
+
       switch (getShortBrowserLanguage()) {
         case "ar":
           longLang = "Arabic";
+          newblyModalTitle = newblyUIModalLang.ar.title;
+          newblyModalIncludeText = newblyUIModalLang.ar.includeText;
+          newblyModalCancelText = newblyUIModalLang.ar.cancelText;
+          newblyTranslationConsentText = newblyUIModalLang.ar.translationConsentText;
           break;
         case "bh":
           longLang = "Bihari";
-          break;
-        case "hr":
-          longLang = "Croatian";
+          newblyModalTitle = newblyUIModalLang.bh.title;
+          newblyModalIncludeText = newblyUIModalLang.bh.includeText;
+          newblyModalCancelText = newblyUIModalLang.bh.cancelText;
+          newblyTranslationConsentText = newblyUIModalLang.bh.translationConsentText;
           break;
         case "en":
           longLang = "English";
+          newblyModalTitle = newblyUIModalLang.en.title;
+          newblyModalIncludeText = newblyUIModalLang.en.includeText;
+          newblyModalCancelText = newblyUIModalLang.en.cancelText;
+          newblyTranslationConsentText = newblyUIModalLang.en.translationConsentText;
           break;
         case "fr":
           longLang = "French";
+          newblyModalTitle = newblyUIModalLang.fr.title;
+          newblyModalIncludeText = newblyUIModalLang.fr.includeText;
+          newblyModalCancelText = newblyUIModalLang.fr.cancelText;
+          newblyTranslationConsentText = newblyUIModalLang.fr.translationConsentText;
+          break;
+        case "hr":
+          longLang = "Croatian";
+          newblyModalTitle = newblyUIModalLang.hr.title;
+          newblyModalIncludeText = newblyUIModalLang.hr.includeText;
+          newblyModalCancelText = newblyUIModalLang.hr.cancelText;
+          newblyTranslationConsentText = newblyUIModalLang.hr.translationConsentText;
           break;
         case "ro":
           longLang = "Romanian";
+          newblyModalTitle = newblyUIModalLang.ro.title;
+          newblyModalIncludeText = newblyUIModalLang.ro.includeText;
+          newblyModalCancelText = newblyUIModalLang.ro.cancelText;
+          newblyTranslationConsentText = newblyUIModalLang.ro.translationConsentText;
           break;
         case "ru":
           longLang = "Russian";
+          newblyModalTitle = newblyUIModalLang.ru.title;
+          newblyModalIncludeText = newblyUIModalLang.ru.includeText;
+          newblyModalCancelText = newblyUIModalLang.ru.cancelText;
+          newblyTranslationConsentText = newblyUIModalLang.ru.translationConsentText;
           break;
         case "sr":
           longLang = "Serbian";
+          newblyModalTitle = newblyUIModalLang.sr.title;
+          newblyModalIncludeText = newblyUIModalLang.sr.includeText;
+          newblyModalCancelText = newblyUIModalLang.sr.cancelText;
+          newblyTranslationConsentText = newblyUIModalLang.sr.translationConsentText;
           break;
         case "tr":
           longLang = "Turkish";
+          newblyModalTitle = newblyUIModalLang.tr.title;
+          newblyModalIncludeText = newblyUIModalLang.tr.includeText;
+          newblyModalCancelText = newblyUIModalLang.tr.cancelText;
+          newblyTranslationConsentText = newblyUIModalLang.tr.translationConsentText;
           break;
         case "uk":
           longLang = "Ukrainian";
+          newblyModalTitle = newblyUIModalLang.uk.title;
+          newblyModalIncludeText = newblyUIModalLang.uk.includeText;
+          newblyModalCancelText = newblyUIModalLang.uk.cancelText;
+          newblyTranslationConsentText = newblyUIModalLang.uk.translationConsentText;
           break;
         default:
           longLang = "English";
+          newblyModalTitle = newblyUIModalLang.en.title;
+          newblyModalIncludeText = newblyUIModalLang.en.includeText;
+          newblyModalCancelText = newblyUIModalLang.en.cancelText;
+          newblyTranslationConsentText = newblyUIModalLang.en.translationConsentText;
       }
-      return longLang;
+
+      newblyUIModalLang = longLang;
+
+      return { longLang, newblyUIModalLang, newblyModalTitle, newblyTranslationConsentText, newblyModalIncludeText, newblyModalCancelText };
     }
 
 
@@ -141,7 +260,7 @@ var newbly = {
         if (newBlyAvailableLanguageTranslations[i] === getShortBrowserLanguage()) {
 
           isTranslationAvailable = true;
-          console.log("Newbly translation is available for: " + getLongBrowserLanguage());
+          console.log("Newbly translation is available for: " + getLongBrowserLanguage().longLang);
         }
       }
 
@@ -218,13 +337,25 @@ var newbly = {
         // Set the display property of #newbly-translation--ui-modal to "block"
         document.getElementById("newbly-translation--ui-modal").style.display = "block";
 
+        // If shortBrowserLanguage is "ar", then add class ".arabic" to Newbly consent modal
+        if (getShortBrowserLanguage() === "ar") {
+          document.getElementById("newbly-translation--ui-modal").classList.add("arabic");
+        };
 
-        document.getElementById("userBrowserLanguage").innerText = getLongBrowserLanguage();
-        document.getElementById("suggestedTranslation").innerText = getLongBrowserLanguage();
+
+
+
+        // Display the translationConsentText depending on user's browser language
+        document.getElementById("newbly-translation--ui-modal__text").innerText = getLongBrowserLanguage().newblyTranslationConsentText;
+
+
+        document.getElementById("newbly-translation--ui-modal__title").innerText = getLongBrowserLanguage().newblyModalTitle;
+        document.getElementById("include-translation").innerText = getLongBrowserLanguage().newblyModalIncludeText;
+        document.getElementById("cancel-translation").innerText = getLongBrowserLanguage().newblyModalCancelText;
+
 
 
         // Initialize buttons on the Newbly translator prompt
-
         initNewblyTranslatorUIBtns.includeTranslation();
         initNewblyTranslatorUIBtns.cancelTranslations();
 
@@ -285,19 +416,6 @@ var newbly = {
 
 
       },
-    }
-
-
-    function setNewblyUIModalLang() {
-
-      // This function provides translations of the Newbly Modal depending on the getShortBrowserLanguage()
-
-
-      let newblyUIModalLang = getShortBrowserLanguage();
-
-
-      return { newblyUIModalLang }; // {newblyUIModalLang: 'fr'}
-
     }
 
 
@@ -370,8 +488,6 @@ var newbly = {
       // console.log("URLToBackend: " + URLToBackend);
       return URLToBackend
     }
-
-
 
 
 
@@ -519,9 +635,7 @@ var newbly = {
           }
 
 
-
         }
-
 
         return (container, container.innerText);
 
@@ -604,9 +718,6 @@ var newbly = {
 
     };
 
-
-
-
     console.log("Newbly translation initialized. Learn more here: https://newb.ly/")
     console.info("Ξunit");
 
@@ -620,8 +731,9 @@ var newbly = {
       // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
       displayNewblyTranslatorUIModal()
     }
-  }
 
+
+  }
 
 }
 
@@ -629,4 +741,3 @@ var newbly = {
 
 // Initialize Newbly translation
 newbly.init();
-
