@@ -37,7 +37,7 @@ In the end, all paragraphs of an article have the translated version of it under
     <script src="lib/js/script.min.js"></script>
 
     <!-- Link to Newbly Translator script (CDN) -->
-    <script src="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.2/lib/js/script.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.3/lib/js/script.min.js"></script>
   </body>
 
 </html>
