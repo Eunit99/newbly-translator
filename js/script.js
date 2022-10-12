@@ -48,15 +48,18 @@ var newbly = {
 
       if ((urlParams.has("nLang")) || (urlParams.has("nlang"))) {
 
-        startNewblyTranslation();
-
 
         // Assign targetLanguage to "nLang" from the URL params if it exists
-        targetLanguage = urlParams.get("nLang") || (urlParams.has("nlang"));
+        targetLanguage = urlParams.get("nLang") || urlParams.has("nlang");
 
         // Set URLHasNLangParam to true since `nLang` exist in query string
         URLHasNLangParam = true;
-      } else {
+
+
+
+      } else if (!(urlParams.has("nLang")) || !(urlParams.has("nlang"))) {
+
+
         targetLanguage = "english";
 
         // Set URLHasNLangParam to false since `nLang` does not exist in query string
@@ -203,16 +206,13 @@ var newbly = {
 
     var displayNewblyTranslatorUIModal = function () {
 
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-
 
       // Instantiate the isNewblyTranslatorUIDisplayed var
       let isNewblyTranslatorUIDisplayed;
 
 
       // If targetLanguage is not specified in the URL query params, and if Newbly translation is available, the display the translator modal
-      if (!(urlParams.has("nLang")) || !(urlParams.has("nlang")) && (isNewblyTranslationAvailable())) {
+      if (!(getTargetLanguage().URLHasNLangParam) && (isNewblyTranslationAvailable())) {
 
 
         // Set the display property of #newbly-translation--ui-modal to "block"
@@ -288,16 +288,6 @@ var newbly = {
     }
 
 
-
-
-
-
-
-
-
-
-
-
     function setNewblyUIModalLang() {
 
       // This function provides translations of the Newbly Modal depending on the getShortBrowserLanguage()
@@ -308,132 +298,6 @@ var newbly = {
 
       return { newblyUIModalLang }; // {newblyUIModalLang: 'fr'}
 
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    function getTargetLanguage() {
-
-      let targetLanguage;
-      let URLHasNLangParam;
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-
-      // Check if the target language is available in URL params
-
-      if ((urlParams.has("nLang")) || (urlParams.has("nlang"))) {
-
-        // Call the function to start fetching translations from backend
-        startNewblyTranslation();
-
-        // Assign targetLanguage to "nLang" from the URL params if it exists
-        targetLanguage = urlParams.get("nLang");
-
-        // Set URLHasNLangParam to true since `nLang` exist in query string
-        URLHasNLangParam = true;
-      } else if (!(urlParams.has("nLang")) || !(urlParams.has("nlang"))) {
-
-        // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
-        displayNewblyTranslatorUIModal()
-
-        targetLanguage = "english";
-
-        // Set URLHasNLangParam to false since `nLang` does not exist in query string
-        URLHasNLangParam = false;
-      }
-
-      return { targetLanguage, URLHasNLangParam };
     }
 
 
@@ -511,10 +375,6 @@ var newbly = {
 
 
 
-
-
-
-
     // This refers to the Newbly backend API URL for a specific article gotten through the pageURL
     let newblyBackendAPI = "https://api.newb.ly/articles/?language=" + getTargetLanguage().targetLanguage + "&url=" + getURLToBackend();
 
@@ -522,16 +382,6 @@ var newbly = {
     if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="lib/js/script.min.js"><\/script>');
 
 
-
-    // function startNewblyTranslation(fn) {
-    //   // see if DOM is already available
-    //   if (document.readyState === "complete" || document.readyState === "interactive") {
-    //     // call on next available tick
-    //     setTimeout(fn, 1);
-    //   } else {
-    //     document.addEventListener("DOMContentLoaded", fn);
-    //   }
-    // }
 
 
 
@@ -745,8 +595,6 @@ var newbly = {
           }
 
 
-
-
         }
 
 
@@ -754,19 +602,29 @@ var newbly = {
       }
 
 
-
-
     };
 
 
 
 
-    console.log("Newbly translation initialized. Learn more here: http://newb.ly/.")
+    console.log("Newbly translation initialized. Learn more here: https://newb.ly/")
     console.info("Ξunit");
 
 
+
+    if (getTargetLanguage().URLHasNLangParam) {
+      // Call the function to start fetching translations from backend
+      startNewblyTranslation();
+    } else {
+
+      // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
+      displayNewblyTranslatorUIModal()
+    }
   }
+
+
 }
+
 
 
 // Initialize Newbly translation
