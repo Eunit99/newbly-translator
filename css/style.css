@@ -7,7 +7,7 @@
 /* Add RTL dir for all Arabic contents */
 .newbly-translated-text.arabic,
 .newbly-translation--ui-modal.arabic {
-  direction: rtl;
+  direction: rtl !important;
 }
 
 .newbly-translation--ui-modal {
