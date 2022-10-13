@@ -2,7 +2,9 @@ var newbly = {
   init: function () {
 
     // Include the stylesheet for in the head of the page
-    document.head.innerHTML += '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.3/lib/css/style.min.css" type="text/css"/>';
+    document.head.innerHTML += '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.4/lib/css/style.min.css" type="text/css"/>';
+    // Support for IE
+    if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.4/lib/js/script.min.js"><\/script>');
 
 
     function appendNewblyPromptModal() {
@@ -477,10 +479,6 @@ var newbly = {
           }
         }
 
-
-
-
-
         URLToBackend = actualURLToBackend();
       }
 
@@ -491,34 +489,47 @@ var newbly = {
 
 
 
-    // This refers to the Newbly backend API URL for a specific article gotten through the pageURL
-    let newblyBackendAPI = "https://api.newb.ly/articles/?language=" + getTargetLanguage().targetLanguage + "&url=" + getURLToBackend();
 
-    // Support for IE
-    if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="lib/js/script.min.js"><\/script>');
+    function newblyBackendAPI() {
 
-
+      // This refers to the Newbly backend API URL for a specific article gotten through the pageURL
+      let API_URL;
 
 
+      if (!getTargetLanguage().URLHasNLangParam) {
+        API_URL = "https://api.newb.ly/articles/?language=" + getLongBrowserLanguage().longLang.toLowerCase() + "&url=" + getURLToBackend();
+      } else {
+        API_URL = "https://api.newb.ly/articles/?language=" + getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
+      }
 
 
-    var startNewblyTranslation = function () {
+
+      return API_URL;
+    }
+
+
+
+
+
+
+    var startNewblyTranslation = function (fetchURL) {
 
       let result = "";
 
-      async function fetchArticleFromBackend(newblyBackendAPI) {
-        let response = await fetch(newblyBackendAPI);
+      async function fetchArticleFromBackend(fetchURL) {
+        let response = await fetch(fetchURL);
         let data = await response.json()
         return data;
       }
 
 
-      async function fetchFnc() {
-        result = await fetchArticleFromBackend(newblyBackendAPI);
+      async function fetchFnc(fetchURL) {
+        result = await fetchArticleFromBackend(fetchURL);
         fetchArticleCategory(result);
-      }
+      };
 
-      fetchFnc();
+
+      fetchFnc(newblyBackendAPI());
 
 
       // Set the fetch data
@@ -662,7 +673,8 @@ var newbly = {
 
             // Use insertAdjacentHTML to insert the articleTitleTranslated using HTML format right a the articleTitle
 
-            if (getTargetLanguage().targetLanguage === "arabic") {
+            if (getTargetLanguage().targetLanguage === "arabic" || getLongBrowserLanguage().longLang.toLowerCase() === "arabic") {
+
               //  Add RTL stylings if translation target language is arabic
               container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + articleTitleTranslated + "</p>");
             } else {
@@ -671,7 +683,6 @@ var newbly = {
 
             }
           }
-
 
 
           // For article Content
@@ -694,7 +705,8 @@ var newbly = {
 
               // Use insertAdjacentHTML to insert the articleContentTranslated[i] using HTML format right a the articleTitle
 
-              if (getTargetLanguage().targetLanguage === "arabic") {
+              if (getTargetLanguage().targetLanguage === "arabic" || getLongBrowserLanguage().longLang.toLowerCase() === "arabic") {
+
                 //  Add RTL stylings if translation target language is arabic
                 container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + articleContentTranslated[i] + "</p>");
               } else {
