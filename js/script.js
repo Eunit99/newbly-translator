@@ -1,10 +1,20 @@
 var newbly = {
   init: function () {
 
+    // Global variables
+
+    const release = "1.0.5"; // Current release version
+    const stylesheet = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/css/style.min.css`; // Link to hosted stylesheet
+    const IEScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/js/script.js`; // Link to hosted script compatible with IE 11
+
+
     // Include the stylesheet for in the head of the page
-    document.head.innerHTML += '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.4/lib/css/style.min.css" type="text/css"/>';
+    document.head.innerHTML += `<link rel="stylesheet" href="${stylesheet}" type="text/css"/>`;
+
+
     // Support for IE
-    if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write('<script src="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.4/lib/js/script.min.js"><\/script>');
+    if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write(`<script src="${IEScript}"><\/script>`);
+
 
 
     function appendNewblyPromptModal() {
@@ -52,7 +62,7 @@ var newbly = {
 
 
         // Assign targetLanguage to "nLang" from the URL params if it exists
-        targetLanguage = urlParams.get("nLang") || urlParams.has("nlang");
+        targetLanguage = urlParams.get("nLang") || urlParams.get("nlang");
 
         // Set URLHasNLangParam to true since `nLang` exist in query string
         URLHasNLangParam = true;
