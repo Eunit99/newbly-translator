@@ -81,3 +81,67 @@
 .newbly-translation--ui-modal .newbly-translation--ui-modal__btn__btn {
   margin: auto 8px;
 }
+
+
+.edit-section.enhance-newbly {
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+.editable-container.enhance-newbly textarea.enhance-newbly {
+  display: flex;
+  margin: 0px auto 10px;
+  width: calc(100% - 10px);
+  height: 100px;
+  padding: 10px;
+  border: 1px solid rgb(176, 173, 171);
+  border-radius: 4px;
+  max-height: 60%;
+}
+
+@media screen and (min-width: 601px) {
+  .editable-container.enhance-newbly textarea.enhance-newbly {}
+}
+
+.editable-container.enhance-newbly {
+  -webkit-box-flex: 1;
+  flex: 1 1 0%;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  height: 100%;
+}
+
+.edit-buttons.enhance-newbly {
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.edit-buttons.enhance-newbly button.enhance-newbly {
+  margin-left: 5px;
+  margin-right: 5px;
+  min-height: 30px;
+  padding: 5px 10px;
+  background-color: rgb(176, 173, 171);
+  color: rgb(255, 255, 255);
+  border-radius: 4px;
+  border-color: transparent;
+  cursor: pointer;
+  box-shadow: rgb(34 60 80 / 20%) 0px 4px 8px 0px;
+  min-width: 100px;
+}
+
+.edit-buttons.enhance-newbly button.enhance-newbly:disabled {
+  opacity: 0.5;
+  cursor: default;
+  color: rgb(0, 0, 0);
+}
