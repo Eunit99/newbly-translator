@@ -50,9 +50,9 @@ var newbly = {
     appendNewblyPromptModal();
 
 
-
-    function editIconContainer() {
-      const editIcon = `
+    var enhanceNewbly = {
+      editIconContainer: function (content) {
+        const editIcon = `
           <!-- Edit icons -->
           <span class="newbly-translated-text edit-icon" id="edit-icon">
             <img src="${editIconLink}" alt="Edit">
@@ -60,10 +60,9 @@ var newbly = {
           <!-- Edit icons -->
       `;
 
-      console.log("Edit");
-
-      return editIcon;
-    }
+        return editIcon;
+      }
+    };
 
     function getTargetLanguage() {
 
@@ -679,23 +678,26 @@ var newbly = {
       }
 
 
+      var appendTranslation = function (container, translatedText) {
 
-
-
-      var appendTranslation = {
-        any: function (container, articleTitleTranslated) {
-
-          // Use insertAdjacentHTML to insert the articleTitleTranslated using HTML format right a the articleTitle
-          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + articleTitleTranslated + "</p>");
-
-          container.insertAdjacentHTML("beforeend", editIconContainer());
-        },
-        arabic: function (container, articleTitleTranslated) {
+        if (getTargetLanguage().targetLanguage === "arabic" || getLongBrowserLanguage().longLang.toLowerCase() === "arabic") {
 
           //  Add RTL stylings if translation target language is arabic
-          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + articleTitleTranslated + "</p>");
-        },
-      };
+          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + translatedText + "</p>");
+
+          // Append the editIcon to the container and pass translatedText as an argument to it
+          container.insertAdjacentHTML("beforeend", enhanceNewbly.editIconContainer(translatedText));
+
+        } else {
+
+          // Use insertAdjacentHTML to insert the translatedText using HTML format right a the articleTitle
+          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + translatedText + "</p>");
+
+          // Append the editIcon to the container and pass translatedText as an argument to it
+          container.insertAdjacentHTML("beforeend", enhanceNewbly.editIconContainer(translatedText));
+
+        }
+      }
 
 
 
@@ -711,19 +713,13 @@ var newbly = {
           var articleTitleTranslated = result.articleTitleTranslated;
           var articleTitle = result.articleTitle;
 
+
           // If the container innerText of the document matches with articleTitle, the append articleTitleTranslated
 
           if (container.innerText === articleTitle) {
 
-            if (getTargetLanguage().targetLanguage === "arabic" || getLongBrowserLanguage().longLang.toLowerCase() === "arabic") {
+            appendTranslation(container, articleTitleTranslated);
 
-              appendTranslation.arabic(container, articleTitleTranslated);
-
-            } else {
-
-              appendTranslation.any(container, articleTitleTranslated);
-
-            }
           }
 
 
@@ -747,16 +743,7 @@ var newbly = {
 
               // Use insertAdjacentHTML to insert the articleContentTranslated[i] using HTML format right a the articleTitle
 
-              if (getTargetLanguage().targetLanguage === "arabic" || getLongBrowserLanguage().longLang.toLowerCase() === "arabic") {
-
-                appendTranslation.arabic(container, articleContentTranslated[i]);
-
-              } else {
-
-                appendTranslation.any(container, articleContentTranslated[i]);
-
-              }
-
+              appendTranslation(container, articleContentTranslated[i]);
 
             }
 
