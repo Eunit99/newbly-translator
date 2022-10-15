@@ -519,9 +519,6 @@ var newbly = {
 
 
 
-
-
-
     var startNewblyTranslation = function (fetchURL) {
 
       let result = "";
@@ -646,7 +643,7 @@ var newbly = {
 
               // Call this function to append the translations to the container element
 
-              appendTranslation(container, container.innerText);
+              getContainerAndContent(container, container.innerText);
 
             } else {
 
@@ -665,7 +662,23 @@ var newbly = {
 
 
 
-      var appendTranslation = function (container) {
+
+      var appendTranslation = {
+        any: function (container, articleTitleTranslated) {
+
+          // Use insertAdjacentHTML to insert the articleTitleTranslated using HTML format right a the articleTitle
+          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + articleTitleTranslated + "</p>");
+        },
+        arabic: function (container, articleTitleTranslated) {
+
+          //  Add RTL stylings if translation target language is arabic
+          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + articleTitleTranslated + "</p>");
+        },
+      };
+
+
+
+      var getContainerAndContent = function (container) {
 
 
         var fetchArticleTranslated = function () {
@@ -681,15 +694,13 @@ var newbly = {
 
           if (container.innerText === articleTitle) {
 
-            // Use insertAdjacentHTML to insert the articleTitleTranslated using HTML format right a the articleTitle
-
             if (getTargetLanguage().targetLanguage === "arabic" || getLongBrowserLanguage().longLang.toLowerCase() === "arabic") {
 
-              //  Add RTL stylings if translation target language is arabic
-              container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + articleTitleTranslated + "</p>");
+              appendTranslation.arabic(container, articleTitleTranslated);
+
             } else {
 
-              container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + articleTitleTranslated + "</p>");
+              appendTranslation.any(container, articleTitleTranslated);
 
             }
           }
@@ -717,11 +728,11 @@ var newbly = {
 
               if (getTargetLanguage().targetLanguage === "arabic" || getLongBrowserLanguage().longLang.toLowerCase() === "arabic") {
 
-                //  Add RTL stylings if translation target language is arabic
-                container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + articleContentTranslated[i] + "</p>");
+                appendTranslation.arabic(container, articleContentTranslated[i]);
+
               } else {
 
-                container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + articleContentTranslated[i] + "</p>");
+                appendTranslation.any(container, articleContentTranslated[i]);
 
               }
 
