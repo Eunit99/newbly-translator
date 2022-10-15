@@ -1,19 +1,19 @@
 var newbly = {
   init: function () {
 
+
+    // Support for IE
+    if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write(`<script src="${IEScript}"><\/script>`);
+
     // Global variables
 
     const release = "1.0.5"; // Current release version
     const stylesheet = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/css/style.min.css`; // Link to hosted stylesheet
     const IEScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/js/script.js`; // Link to hosted script compatible with IE 11
-
+    const editIconLink = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/assets/icons/edit-icon.svg`;
 
     // Include the stylesheet for in the head of the page
     document.head.innerHTML += `<link rel="stylesheet" href="${stylesheet}" type="text/css"/>`;
-
-
-    // Support for IE
-    if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write(`<script src="${IEScript}"><\/script>`);
 
 
 
@@ -44,10 +44,26 @@ var newbly = {
 
       document.body.innerHTML += newblyPromptModal;
 
-    }
+    };
+
+    // Call the appendNewblyPromptModal function to append the Newbly prompt modal to the document
     appendNewblyPromptModal();
 
 
+
+    function editIconContainer() {
+      const editIcon = `
+          <!-- Edit icons -->
+          <span class="newbly-translated-text edit-icon" id="edit-icon">
+            <img src="${editIconLink}" alt="Edit">
+          </span>
+          <!-- Edit icons -->
+      `;
+
+      console.log("Edit");
+
+      return editIcon;
+    }
 
     function getTargetLanguage() {
 
@@ -513,6 +529,9 @@ var newbly = {
       }
 
 
+      // Test
+      // let API_URL = `https://api.newb.ly/articles/?language=english&url=https://www.diepresse.com/6191779/Recherche_Niederoesterreich_FakeMails-im-Namen-von-OeVPMitgliedern?from=rss`;
+
 
       return API_URL;
     }
@@ -668,6 +687,8 @@ var newbly = {
 
           // Use insertAdjacentHTML to insert the articleTitleTranslated using HTML format right a the articleTitle
           container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + articleTitleTranslated + "</p>");
+
+          container.insertAdjacentHTML("beforeend", editIconContainer());
         },
         arabic: function (container, articleTitleTranslated) {
 
