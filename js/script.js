@@ -412,8 +412,6 @@ var newbly = {
         shortLang = browserLang;
       }
 
-      // console.log("shortLang: " + shortLang);
-
       return shortLang;
     }
 
