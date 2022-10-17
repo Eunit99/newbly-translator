@@ -64,16 +64,20 @@ var newbly = {
     function appendNewblyTextarea() {
 
       const textarea = `
-          <div class="enhance-newbly edit-section" id="newbly-textarea-container">
-              <div class="enhance-newbly editable-container">
-                <textarea dir="ltr" class="enhance-newbly" spellcheck="false" id="enhance-translations"></textarea>
-                <div class="enhance-newbly edit-buttons" id="">
-                  <button disabled="" class="enhance-newbly" id="save-suggested-changes">
-                    Save changes
-                  </button>
-                  <button class="enhance-newbly" id="cancel-changes">Cancel</button>
+          <div class="enhance-newbly modal-wrapper" id="newbly-textarea-modal-wrapper">
+            <div class="enhance-newbly modal" id="">
+              <div class="enhance-newbly editable-container" id="newbly-textarea-container">
+                <div class="enhance-newbly edit-section">
+                  <textarea dir="ltr" class="enhance-newbly" spellcheck="false" id="enhance-translations"></textarea>
+                  <div class="enhance-newbly edit-buttons" id="">
+                    <button disabled="" class="enhance-newbly" id="save-suggested-changes">
+                      Save changes
+                    </button>
+                    <button class="enhance-newbly" id="cancel-changes">Cancel</button>
+                  </div>
                 </div>
               </div>
+            </div>
           </div>
         `;
 
@@ -105,15 +109,17 @@ var newbly = {
 
         document.getElementById("edit-icon").addEventListener("click", function (e) {
 
-          const textareaContainer = document.getElementById("newbly-textarea-container");
+          const textareaModal = document.getElementById("newbly-textarea-modal-wrapper");
 
           const textarea = document.getElementById("enhance-translations");
 
           // Change display styles to flex
-          textareaContainer.style.display = "flex";
+          textareaModal.style.display = "flex";
+
 
           // Append content to text area
           textarea.value = content
+
           console.log(content)
         });
       },
@@ -583,7 +589,7 @@ var newbly = {
     function newblyBackendAPI() {
 
       // This refers to the Newbly backend API URL for a specific article gotten through the pageURL
-      let API_URL;
+      // let API_URL;
 
 
       if (!getTargetLanguage().URLHasNLangParam) {
@@ -591,7 +597,6 @@ var newbly = {
       } else {
         API_URL = "https://api.newb.ly/articles/?language=" + getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
       }
-
 
       return API_URL;
     }
@@ -772,8 +777,6 @@ var newbly = {
 
 
         var fetchArticleTranslated = function () {
-
-          // console.log(result.articleTitle)
 
           // For article Title
 
