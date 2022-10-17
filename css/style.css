@@ -26,6 +26,7 @@
 }
 
 .newbly-translation--ui-modal {
+  display: flex;
   min-width: 320px;
   position: fixed;
   bottom: 0;
@@ -44,9 +45,6 @@
   max-width: 400px;
   box-sizing: border-box;
   font-size: 16px;
-
-  /* Hidden by default */
-  display: none;
 }
 
 
@@ -88,10 +86,6 @@
   justify-content: center;
   -webkit-box-align: center;
   align-items: center;
-
-
-  /* Hidden by default */
-  display: none;
 }
 
 .editable-container.enhance-newbly textarea.enhance-newbly {
@@ -153,11 +147,14 @@
   inset: 0px;
   z-index: 99;
   overflow: auto;
-  display: flex;
   -webkit-box-pack: center;
   justify-content: center;
   -webkit-box-align: center;
   align-items: center;
+
+
+  /* Hidden by default */
+  display: none;
 }
 
 .modal.enhance-newbly {
