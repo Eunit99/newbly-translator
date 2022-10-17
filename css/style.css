@@ -84,11 +84,14 @@
 
 
 .edit-section.enhance-newbly {
-  display: flex;
   -webkit-box-pack: center;
   justify-content: center;
   -webkit-box-align: center;
   align-items: center;
+
+
+  /* Hidden by default */
+  display: none;
 }
 
 .editable-container.enhance-newbly textarea.enhance-newbly {
