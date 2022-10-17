@@ -26,7 +26,7 @@
 }
 
 .newbly-translation--ui-modal {
-  display: flex;
+  display: block;
   min-width: 320px;
   position: fixed;
   bottom: 0;
@@ -45,6 +45,9 @@
   max-width: 400px;
   box-sizing: border-box;
   font-size: 16px;
+
+  /* Hidden by default */
+  display: none;
 }
 
 
