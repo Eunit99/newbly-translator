@@ -105,10 +105,6 @@
   max-height: 60%;
 }
 
-@media screen and (min-width: 601px) {
-  .editable-container.enhance-newbly textarea.enhance-newbly {}
-}
-
 .editable-container.enhance-newbly {
   -webkit-box-flex: 1;
   flex: 1 1 0%;
