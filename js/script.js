@@ -587,7 +587,7 @@ var newbly = {
     function newblyBackendAPI() {
 
       // This refers to the Newbly backend API URL for a specific article gotten through the pageURL
-      // let API_URL;
+      let API_URL;
 
 
       if (!getTargetLanguage().URLHasNLangParam) {
