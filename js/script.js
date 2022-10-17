@@ -1,18 +1,27 @@
 var newbly = {
   init: function () {
 
-    // Global variables
+
+    /*
+    * GLOBAL VARIABLES
+    * --------------------------------
+    * These are the global variables used.
+    */
 
     const release = "1.0.5"; // Current release version
     const stylesheet = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/css/style.min.css`; // Link to hosted stylesheet
     const IEScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/js/script.js`; // Link to hosted script compatible with IE 11
+    const editIconLink = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/assets/icons/edit-icon.svg`;
 
-
-    // Include the stylesheet for in the head of the page
+    /*
+    * Include the stylesheet for Newbly in the head of the page
+    */
     document.head.innerHTML += `<link rel="stylesheet" href="${stylesheet}" type="text/css"/>`;
 
+    /*
+    * Provide support to legacy IE browser
+    */
 
-    // Support for IE
     if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write(`<script src="${IEScript}"><\/script>`);
 
 
@@ -44,8 +53,78 @@ var newbly = {
 
       document.body.innerHTML += newblyPromptModal;
 
-    }
+    };
+
+    /*
+    * Call the appendNewblyPromptModal function to append the Newbly prompt modal to the document
+    */
     appendNewblyPromptModal();
+
+
+    function appendNewblyTextarea() {
+
+      const textarea = `
+          <div class="enhance-newbly modal-wrapper" id="newbly-textarea-modal-wrapper">
+            <div class="enhance-newbly modal" id="">
+              <div class="enhance-newbly editable-container" id="newbly-textarea-container">
+                <div class="enhance-newbly edit-section">
+                  <textarea dir="ltr" class="enhance-newbly" spellcheck="false" id="enhance-translations"></textarea>
+                  <div class="enhance-newbly edit-buttons" id="">
+                    <button disabled="" class="enhance-newbly" id="save-suggested-changes">
+                      Save changes
+                    </button>
+                    <button class="enhance-newbly" id="cancel-changes">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+      document.body.innerHTML += textarea;
+
+    };
+
+    /*
+    * Call the appendNewblyTextarea function to append the Newbly textarea to the document
+    * Note that there is display: none in the styles for .edit-section by default
+    */
+    appendNewblyTextarea();
+
+
+    var enhanceNewbly = {
+      editIconContainer: function () {
+        const editIcon = `
+          <!-- Edit icons -->
+          <span class="newbly-translated-text edit-icon" id="edit-icon">
+            <img src="${editIconLink}" alt="Edit">
+          </span>
+          <!-- Edit icons -->
+        `;
+
+        return editIcon;
+      },
+
+      displayNewblyTextarea: function (content) {
+
+        document.getElementById("edit-icon").addEventListener("click", function (e) {
+
+          const textareaModal = document.getElementById("newbly-textarea-modal-wrapper");
+
+          const textarea = document.getElementById("enhance-translations");
+
+          // Change display styles to flex
+          textareaModal.style.display = "flex";
+
+
+          // Append content to text area
+          textarea.value = content
+
+          console.log(content)
+        });
+      },
+
+    };
 
 
 
@@ -57,7 +136,6 @@ var newbly = {
       const urlParams = new URLSearchParams(queryString);
 
       // Check if the target language is available in URL params
-
       if ((urlParams.has("nLang")) || (urlParams.has("nlang"))) {
 
 
@@ -68,10 +146,9 @@ var newbly = {
         URLHasNLangParam = true;
 
 
-
       } else if (!(urlParams.has("nLang")) || !(urlParams.has("nlang"))) {
 
-
+        // Assign "english" to the target language if URL does not have "nLang"
         targetLanguage = "english";
 
         // Set URLHasNLangParam to false since `nLang` does not exist in query string
@@ -84,10 +161,12 @@ var newbly = {
 
 
 
-
-
-
-    // This array contains a list of currently available newBlyAvailableTranslations, update as necessary
+    /*
+    * ALL CURRENTLY SUPPORTED TRANSLATIONS
+    * ----------------------------------------------------------------
+    * This array contains a list of currently available newBlyAvailableTranslations, update as necessary
+    * Please update as more translations are available
+    */
 
     var newBlyAvailableLanguageTranslations = [
       "ar", // Arabic
@@ -99,6 +178,13 @@ var newbly = {
       "tr", //Turkish
       "uk", //Ukrainian
     ];
+
+    /*
+    * UI Modal languages
+    *----------------------------------------------------------------
+    * This newblyUIModalLanguages object corresponds to the translations of the UI
+    * IF YOU ADD ADDITIONAL LANGUAGE SUPPORT TO THE newBlyAvailableLanguageTranslations array, DO WELL UPDATE newblyUIModalLanguages TOO
+    */
 
     var newblyUIModalLanguages = {
       ar: {
@@ -326,8 +412,6 @@ var newbly = {
         shortLang = browserLang;
       }
 
-      // console.log("shortLang: " + shortLang);
-
       return shortLang;
     }
 
@@ -512,13 +596,8 @@ var newbly = {
         API_URL = "https://api.newb.ly/articles/?language=" + getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
       }
 
-
-
       return API_URL;
     }
-
-
-
 
 
 
@@ -646,7 +725,7 @@ var newbly = {
 
               // Call this function to append the translations to the container element
 
-              appendTranslation(container, container.innerText);
+              getContainerAndContent(container, container.innerText);
 
             } else {
 
@@ -663,35 +742,52 @@ var newbly = {
       }
 
 
+      var appendTranslation = function (container, translatedText) {
+
+        if (getTargetLanguage().targetLanguage === "arabic" || getLongBrowserLanguage().longLang.toLowerCase() === "arabic") {
+
+          //  Add RTL stylings if translation target language is arabic
+          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + translatedText + "</p>");
+
+          // Append the editIcon to the container and pass translatedText as an argument to it
+          container.insertAdjacentHTML("beforeend", enhanceNewbly.editIconContainer(translatedText));
+
+          // call the function displayNewblyTextarea() to display the textarea also passing the translatedText as a parameter
+          enhanceNewbly.displayNewblyTextarea(translatedText);
+
+        } else {
+
+          // Use insertAdjacentHTML to insert the translatedText using HTML format right a the articleTitle
+          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + translatedText + "</p>");
+
+          // Append the editIcon to the container and pass translatedText as an argument to it
+          container.insertAdjacentHTML("beforeend", enhanceNewbly.editIconContainer(translatedText));
+
+          // call the function displayNewblyTextarea() to display the textarea also passing the translatedText as a parameter
+          enhanceNewbly.displayNewblyTextarea(translatedText);
+
+        }
+      }
 
 
-      var appendTranslation = function (container) {
+
+      var getContainerAndContent = function (container) {
 
 
         var fetchArticleTranslated = function () {
-
-          // console.log(result.articleTitle)
 
           // For article Title
 
           var articleTitleTranslated = result.articleTitleTranslated;
           var articleTitle = result.articleTitle;
 
+
           // If the container innerText of the document matches with articleTitle, the append articleTitleTranslated
 
           if (container.innerText === articleTitle) {
 
-            // Use insertAdjacentHTML to insert the articleTitleTranslated using HTML format right a the articleTitle
+            appendTranslation(container, articleTitleTranslated);
 
-            if (getTargetLanguage().targetLanguage === "arabic" || getLongBrowserLanguage().longLang.toLowerCase() === "arabic") {
-
-              //  Add RTL stylings if translation target language is arabic
-              container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + articleTitleTranslated + "</p>");
-            } else {
-
-              container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + articleTitleTranslated + "</p>");
-
-            }
           }
 
 
@@ -715,16 +811,7 @@ var newbly = {
 
               // Use insertAdjacentHTML to insert the articleContentTranslated[i] using HTML format right a the articleTitle
 
-              if (getTargetLanguage().targetLanguage === "arabic" || getLongBrowserLanguage().longLang.toLowerCase() === "arabic") {
-
-                //  Add RTL stylings if translation target language is arabic
-                container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + articleContentTranslated[i] + "</p>");
-              } else {
-
-                container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + articleContentTranslated[i] + "</p>");
-
-              }
-
+              appendTranslation(container, articleContentTranslated[i]);
 
             }
 
@@ -740,7 +827,7 @@ var newbly = {
 
     };
 
-    console.log("Newbly translation initialized. Learn more here: https://newb.ly/")
+    console.log("Newbly translation initialized. Learn more here: https://newb.ly/");
     console.info("Ξunit");
 
 
@@ -753,6 +840,7 @@ var newbly = {
       // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
       displayNewblyTranslatorUIModal()
     }
+
 
 
   }

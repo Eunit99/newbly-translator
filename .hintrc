@@ -8,6 +8,12 @@
       {
         "html-has-lang": "off"
       }
+    ],
+    "axe/forms": [
+      "default",
+      {
+        "label": "off"
+      }
     ]
   }
 }

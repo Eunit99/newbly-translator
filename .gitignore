@@ -26,4 +26,7 @@ yarn-error.log*
 node_modules
 
 test.html
+legacy.html
+
 /js/test.js
+/js/legacy.js
