@@ -8,7 +8,7 @@ var newbly = {
     * These are the global variables used.
     */
 
-    const release = "1.0.7"; // Current release version
+    const release = "1.0.5"; // Current release version
     const stylesheet = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/css/style.min.css`; // Link to hosted stylesheet
     const IEScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/js/script.js`; // Link to hosted script compatible with IE 11
     const editIconLink = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/assets/icons/edit-icon.svg`;
@@ -412,6 +412,8 @@ var newbly = {
         shortLang = browserLang;
       }
 
+      // console.log("shortLang: " + shortLang);
+
       return shortLang;
     }
 
@@ -587,7 +589,7 @@ var newbly = {
     function newblyBackendAPI() {
 
       // This refers to the Newbly backend API URL for a specific article gotten through the pageURL
-      let API_URL;
+      // let API_URL;
 
 
       if (!getTargetLanguage().URLHasNLangParam) {
@@ -603,12 +605,20 @@ var newbly = {
 
     var startNewblyTranslation = function (fetchURL) {
 
+
       let result = "";
 
       async function fetchArticleFromBackend(fetchURL) {
         let response = await fetch(fetchURL);
-        let data = await response.json()
-        return data;
+        let data = await response.json();
+
+        if (response.ok) {
+
+          return data;
+        } else {
+          console.error("Something went wrong while contacting the Newbly server. Could not fetch translations.")
+          return false;
+        }
       }
 
 
@@ -616,7 +626,6 @@ var newbly = {
         result = await fetchArticleFromBackend(fetchURL);
         fetchArticleCategory(result);
       };
-
 
       fetchFnc(newblyBackendAPI());
 
