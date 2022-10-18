@@ -4,6 +4,7 @@
   "description": "JavaScript based plugin that shall be included into any Newbly partner website, and the plugin will insert translations of the main content (article) into the webpage.",
   "main": "index.js",
   "scripts": {
+    "start": "json-server --watch data/data.json --port 8888",
     "test": "echo \"Error: no test specified\"",
     "build": "babel js/script.js -d lib && minify js/script.js > js/script.min.js && minify css/style.css > css/style.min.css && cp ./js/script.min.js ./lib/js && cp ./css/style.min.css ./lib/css/",
     "np": "np"
@@ -21,6 +22,7 @@
   "dependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "json-server": "^0.17.0",
     "minify": "^9.1.0"
   },
   "publishConfig": {
