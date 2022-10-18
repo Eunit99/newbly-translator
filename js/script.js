@@ -568,7 +568,43 @@ var newbly = {
       }
 
       return API_URL;
-    }
+    };
+
+
+    /*
+    * Actions and activities that happen in the enhance textareaModal
+    */
+    var enhanceNewblyTextareaActions = {
+
+      // cancel button
+      handleCancelBtn: function () {
+        document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
+
+      },
+
+      // Save changes button
+      handleSaveChangeslBtn: function () {
+        console.log("Saving changes btn clicked")
+      }
+    };
+
+
+
+    /*
+    * Initialize buttons in the enhance textareaModal
+    * Depending upon the button that was clicked,
+    * Call the corresponding function
+    */
+    function initEnhanceNewblyTextareaBtns() {
+
+      document.getElementById("cancel-changes").addEventListener("click", function (e) {
+        enhanceNewblyTextareaActions.handleCancelBtn();
+      });
+
+      document.getElementById("save-suggested-changes").addEventListener("click", function (e) {
+        enhanceNewblyTextareaActions.handleSaveChangeslBtn();
+      })
+    };
 
 
 
@@ -594,6 +630,7 @@ var newbly = {
         result = await fetchArticleFromBackend(fetchURL);
         fetchArticleCategory(result);
       };
+
 
       fetchFnc(newblyBackendAPI());
 
@@ -842,6 +879,8 @@ var newbly = {
 
       document.body.innerHTML += textarea;
 
+      // Initialize the buttons waiting for corresponding actions
+      initEnhanceNewblyTextareaBtns();
     };
 
     /*
@@ -852,11 +891,6 @@ var newbly = {
 
     console.log("Newbly translation initialized. Learn more here: https://newb.ly/");
     console.info("Ξunit");
-
-
-
-
-
 
 
 
