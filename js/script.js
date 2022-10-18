@@ -867,8 +867,12 @@ var newbly = {
 
 
 
-
-
+    /*
+      * Controls wether to start translations or display the consent modal
+      *----------------------------------------------------------------
+      * If URLHasNLangParam === true, then start translations automatically
+      * If URLHasNLangParam !== true, then start display the translation consent modal
+    */
 
     if (getTargetLanguage().URLHasNLangParam) {
       // Call the function to start fetching translations from backend
@@ -878,8 +882,6 @@ var newbly = {
       // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
       displayNewblyTranslatorUIModal()
     }
-
-
 
   }
 
