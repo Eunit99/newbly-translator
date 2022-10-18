@@ -8,7 +8,7 @@ var newbly = {
     * These are the global variables used.
     */
 
-    const release = "1.0.5"; // Current release version
+    const release = "1.0.7"; // Current release version
     const stylesheet = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/css/style.min.css`; // Link to hosted stylesheet
     const IEScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/js/script.js`; // Link to hosted script compatible with IE 11
     const editIconLink = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/assets/icons/edit-icon.svg`;
@@ -61,36 +61,6 @@ var newbly = {
     appendNewblyPromptModal();
 
 
-    function appendNewblyTextarea() {
-
-      const textarea = `
-          <div class="enhance-newbly modal-wrapper" id="newbly-textarea-modal-wrapper">
-            <div class="enhance-newbly modal" id="">
-              <div class="enhance-newbly editable-container" id="newbly-textarea-container">
-                <div class="enhance-newbly edit-section">
-                  <textarea dir="ltr" class="enhance-newbly" spellcheck="false" id="enhance-translations"></textarea>
-                  <div class="enhance-newbly edit-buttons" id="">
-                    <button disabled="" class="enhance-newbly" id="save-suggested-changes">
-                      Save changes
-                    </button>
-                    <button class="enhance-newbly" id="cancel-changes">Cancel</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-
-      document.body.innerHTML += textarea;
-
-    };
-
-    /*
-    * Call the appendNewblyTextarea function to append the Newbly textarea to the document
-    * Note that there is display: none in the styles for .edit-section by default
-    */
-    appendNewblyTextarea();
-
 
     var enhanceNewbly = {
       editIconContainer: function () {
@@ -106,7 +76,6 @@ var newbly = {
       },
 
       displayNewblyTextarea: function (content) {
-
         document.getElementById("edit-icon").addEventListener("click", function (e) {
 
           const textareaModal = document.getElementById("newbly-textarea-modal-wrapper");
@@ -370,6 +339,7 @@ var newbly = {
 
 
 
+
     var getFirstBrowserLanguage = function () {
       var nav = window.navigator,
         browserLanguagePropertyKeys = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'],
@@ -416,7 +386,6 @@ var newbly = {
 
       return shortLang;
     }
-
 
 
 
@@ -604,7 +573,6 @@ var newbly = {
 
 
     var startNewblyTranslation = function (fetchURL) {
-
 
       let result = "";
 
@@ -836,8 +804,69 @@ var newbly = {
 
     };
 
+
+    function getTextDirection() {
+      let textDirection;
+
+      if (getShortBrowserLanguage() === "ar") {
+        textDirection = "rtl"
+      } else {
+        textDirection = "ltr"
+      }
+
+
+      return textDirection;
+    };
+
+
+    function appendNewblyTextarea() {
+      const textarea = `
+          <div class="enhance-newbly modal-wrapper" id="newbly-textarea-modal-wrapper">
+            <div class="enhance-newbly modal" id="">
+              <div class="enhance-newbly editable-container" id="newbly-textarea-container">
+                <div class="enhance-newbly edit-section">
+                  <textarea
+                  dir=${getTextDirection()}
+                  class="enhance-newbly" spellcheck="false" id="enhance-translations"></textarea>
+                  <div class="enhance-newbly edit-buttons" id="">
+                    <button disabled="" class="enhance-newbly" id="save-suggested-changes">
+                      Save changes
+                    </button>
+                    <button class="enhance-newbly" id="cancel-changes">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+      document.body.innerHTML += textarea;
+
+    };
+
+    /*
+    * Call the appendNewblyTextarea function to append the Newbly textarea to the document
+    * Note that there is display: none in the styles for .edit-section by default
+    */
+    appendNewblyTextarea();
+
     console.log("Newbly translation initialized. Learn more here: https://newb.ly/");
     console.info("Ξunit");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
