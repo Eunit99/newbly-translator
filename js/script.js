@@ -25,9 +25,9 @@ var newbly = {
     if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write(`<script src="${IEScript}"><\/script>`);
 
 
-
-    function appendNewblyPromptModal() {
-      const newblyPromptModal = `
+    var append = {
+      appendNewblyPromptModal: function () {
+        const newblyPromptModal = `
         <div class="newbly-translation--ui-modal" id="newbly-translation--ui-modal">
               <div class="newbly-translation--ui-modal__title" id="newbly-translation--ui-modal__title">
                 Translations are available for this article!
@@ -51,14 +51,72 @@ var newbly = {
           </div>
       `;
 
-      document.body.innerHTML += newblyPromptModal;
+        document.body.innerHTML += newblyPromptModal;
+      },
 
+      appendNewblyTextarea: function () {
+
+        const textarea = `
+          <div class="enhance-newbly modal-wrapper" id="newbly-textarea-modal-wrapper">
+            <div class="enhance-newbly modal" id="">
+              <div class="enhance-newbly editable-container" id="newbly-textarea-container">
+                <div class="enhance-newbly edit-section">
+                  <textarea
+                  dir=${getTextDirection()}
+                  class="enhance-newbly" spellcheck="false" id="enhance-translations"></textarea>
+                  <div class="enhance-newbly edit-buttons" id="">
+                    <button disabled="" class="enhance-newbly" id="save-suggested-changes">
+                      Save changes
+                    </button>
+                    <button class="enhance-newbly" id="cancel-changes">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.body.innerHTML += textarea;
+
+        // Initialize the buttons waiting for corresponding actions
+        initEnhanceNewblyTextareaBtns();
+
+        /*
+        * Call the appendNewblyConfirmationModal function to append the Newbly confirmation modal to the document
+        * Note that there is display: none in the styles for .modal-wrapper by default
+        */
+        this.appendNewblyConfirmationModal();
+      },
+
+      appendNewblyConfirmationModal: function () {
+
+
+        const confirmationPrompt = `
+          <!-- Confirmation modal -->
+          <div class="enhance-newbly modal-wrapper" id="newbly-enhance-textarea">
+            <div class="enhance-newbly modal" id="">
+              <div class="enhance-newbly editable-container" id="">
+              <!-- Modal (Are you sure) -->
+                <p class="enhance-newbly" id="">Are you sure?!</p>
+                <div class="enhance-newbly edit-buttons" id="">
+                  <button class="enhance-newbly" id="close-newbly-enhance-textarea">
+                    Discard changes</button>
+                  <button class="enhance-newbly" id="close-newbly-modal">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.body.innerHTML += confirmationPrompt;
+      },
     };
+
 
     /*
     * Call the appendNewblyPromptModal function to append the Newbly prompt modal to the document
     */
-    appendNewblyPromptModal();
+    append.appendNewblyPromptModal();
 
 
 
@@ -558,7 +616,7 @@ var newbly = {
     function newblyBackendAPI() {
 
       // This refers to the Newbly backend API URL for a specific article gotten through the pageURL
-      // let API_URL;
+      let API_URL;
 
 
       if (!getTargetLanguage().URLHasNLangParam) {
@@ -567,8 +625,12 @@ var newbly = {
         API_URL = "https://api.newb.ly/articles/?language=" + getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
       }
 
+
       return API_URL;
     };
+
+
+
 
 
     /*
@@ -856,38 +918,14 @@ var newbly = {
     };
 
 
-    function appendNewblyTextarea() {
-      const textarea = `
-          <div class="enhance-newbly modal-wrapper" id="newbly-textarea-modal-wrapper">
-            <div class="enhance-newbly modal" id="">
-              <div class="enhance-newbly editable-container" id="newbly-textarea-container">
-                <div class="enhance-newbly edit-section">
-                  <textarea
-                  dir=${getTextDirection()}
-                  class="enhance-newbly" spellcheck="false" id="enhance-translations"></textarea>
-                  <div class="enhance-newbly edit-buttons" id="">
-                    <button disabled="" class="enhance-newbly" id="save-suggested-changes">
-                      Save changes
-                    </button>
-                    <button class="enhance-newbly" id="cancel-changes">Cancel</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-
-      document.body.innerHTML += textarea;
-
-      // Initialize the buttons waiting for corresponding actions
-      initEnhanceNewblyTextareaBtns();
-    };
 
     /*
     * Call the appendNewblyTextarea function to append the Newbly textarea to the document
-    * Note that there is display: none in the styles for .edit-section by default
+    * Note that there is display: none in the styles for .modal-wrapper by default
     */
-    appendNewblyTextarea();
+    append.appendNewblyTextarea();
+
+
 
     console.log("Newbly translation initialized. Learn more here: https://newb.ly/");
     console.info("Ξunit");
