@@ -27,6 +27,8 @@ var newbly = {
 
     var append = {
       appendNewblyPromptModal: function () {
+
+
         const newblyPromptModal = `
         <div class="newbly-translation--ui-modal" id="newbly-translation--ui-modal">
               <div class="newbly-translation--ui-modal__title" id="newbly-translation--ui-modal__title">
@@ -54,7 +56,7 @@ var newbly = {
         document.body.innerHTML += newblyPromptModal;
       },
 
-      appendNewblyTextarea: function () {
+      appendNewblyTextarea: function (content) {
 
         const textarea = `
           <div class="enhance-newbly modal-wrapper" id="newbly-textarea-modal-wrapper">
@@ -63,7 +65,9 @@ var newbly = {
                 <div class="enhance-newbly edit-section">
                   <textarea
                   dir=${getTextDirection()}
-                  class="enhance-newbly" spellcheck="false" id="enhance-translations"></textarea>
+                  class="enhance-newbly" spellcheck="false" id="enhance-translations">
+                  ${content}
+                  </textarea>
                   <div class="enhance-newbly edit-buttons" id="">
                     <button class="enhance-newbly" id="save-suggested-changes">
                       Save changes
@@ -85,7 +89,6 @@ var newbly = {
 
       appendNewblyConfirmationModal: function () {
 
-
         const confirmationPrompt = `
           <!-- Confirmation modal -->
           <div class="enhance-newbly modal-wrapper" id="newbly-enhance-confirmation-modal">
@@ -105,6 +108,7 @@ var newbly = {
 
         document.body.innerHTML += confirmationPrompt;
 
+        document.getElementById("newbly-enhance-confirmation-modal").style.display = "flex";
 
         // Initialize the buttons waiting for corresponding actions
         initModalBtns.newblyConfirmationBtns();
@@ -120,10 +124,16 @@ var newbly = {
 
 
     var enhanceNewbly = {
-      editIconContainer: function () {
+      editIconContainer: function (index, translatedText) {
+        handleEditIconBtn(index, translatedText);
+
+        /*
+        * Append the editIcon to the container containing the translated text
+        * fetchArticleTranslated currently calls this function
+        */
         const editIcon = `
           <!-- Edit icons -->
-          <span class="newbly-translated-text edit-icon" id="edit-icon">
+          <span class="newbly-translated-text edit-icon" id="edit-icon-${index}">
             <img src="${editIconLink}" alt="Edit">
           </span>
           <!-- Edit icons -->
@@ -132,24 +142,54 @@ var newbly = {
         return editIcon;
       },
 
-      displayNewblyTextarea: function (content) {
-        document.getElementById("edit-icon").addEventListener("click", function (e) {
-
-          const textareaModal = document.getElementById("newbly-textarea-modal-wrapper");
-
-          const textarea = document.getElementById("enhance-translations");
-
-          // Change display styles to flex
-          textareaModal.style.display = "flex";
+    };
 
 
-          // Append content to text area
-          textarea.value = content
 
-        });
-      },
+    var displayNewblyTextarea = function (editIconId, translatedText) {
+
+      document.getElementById(editIconId).addEventListener("click", function (e) {
+
+        const textareaModal = document.getElementById("newbly-textarea-modal-wrapper");
+
+        const textarea = document.getElementById("enhance-translations");
+
+        // Change display styles to flex
+        textareaModal.style.display = "flex";
+
+        // Append translatedText to text area
+        textarea.value = translatedText
+
+      });
 
     };
+
+
+    var handleEditIconBtn = function (index, translatedText) {
+      let editIconId;
+
+      if (index === null) {
+
+        /*
+        * If index is null, then, the edit-icon corresponds to that of the articleTitle
+        * Article title does not have an index from the response received from the API, remember?
+        */
+        editIconId = "edit-icon-null"
+      } else {
+        editIconId = `edit-icon-${index}`
+      }
+
+      /*
+      * Call displayNewblyTextarea in 1s to allow appending of editIcon to the document
+      * So we can attach an even to it
+      */
+      setTimeout(() => {
+        displayNewblyTextarea(editIconId, translatedText);
+      }, 1000);
+    };
+
+
+
 
 
 
@@ -610,7 +650,6 @@ var newbly = {
 
 
 
-
     function newblyBackendAPI() {
 
       // This refers to the Newbly backend API URL for a specific article gotten through the pageURL
@@ -641,31 +680,48 @@ var newbly = {
       handleCancelBtn: function () {
         document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
 
+        console.log("handleCancelBtn");
 
         /*
         * Call the appendNewblyConfirmationModal function to append the Newbly confirmation modal to the document
         * Note that there is display: none in the styles for .modal-wrapper by default
         */
 
+        append.appendNewblyConfirmationModal();
+
+
       },
 
       // Save changes button
       handleSaveChangesBtn: function () {
+        let isLoggedIn = false;
 
-        append.appendNewblyConfirmationModal();
-
-        enhanceNewbly.displayNewblyTextarea();
+        if (isLoggedIn) {
+          console.log("Save btn clicked, you are logged in");
+        } else {
+          console.log("Save btn clicked, you are NOT logged in");
+        }
       },
 
       // cancel button in confirmation modal
       handleCancelConfirmationBtn: function () {
         document.getElementById("newbly-enhance-confirmation-modal").style.display = "none";
 
+        // Show textarea
+        document.getElementById("newbly-textarea-modal-wrapper").style.display = "flex";
+
+        displayNewblyTextarea("Eunit");
       },
 
       // Discard changes button in confirmation modal upon click, will hide the modal
       handleDiscardChangesBtn: function () {
+
+        // Hide all modals
+
         document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
+
+        document.getElementById("newbly-enhance-confirmation-modal").style.display = "none";
+
       }
     };
 
@@ -691,7 +747,6 @@ var newbly = {
 
 
       newblyConfirmationBtns: function () {
-        console.log("Confirmation btns init");
 
         document.getElementById("close-newbly-modal").addEventListener("click", function (e) {
           enhanceNewblyModalActions.handleCancelConfirmationBtn();
@@ -839,10 +894,6 @@ var newbly = {
 
               getContainerAndContent(container, container.innerText);
 
-            } else {
-
-              // Log error regarding a particular HTML element which does not contain a particular text
-              // console.error("Texts do not exist with current element: " + element);
             }
           }
 
@@ -861,22 +912,10 @@ var newbly = {
           //  Add RTL stylings if translation target language is arabic
           container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + translatedText + "</p>");
 
-          // Append the editIcon to the container and pass translatedText as an argument to it
-          container.insertAdjacentHTML("beforeend", enhanceNewbly.editIconContainer(translatedText));
-
-          // call the function displayNewblyTextarea() to display the textarea also passing the translatedText as a parameter
-          enhanceNewbly.displayNewblyTextarea(translatedText);
-
         } else {
 
           // Use insertAdjacentHTML to insert the translatedText using HTML format right a the articleTitle
           container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + translatedText + "</p>");
-
-          // Append the editIcon to the container and pass translatedText as an argument to it
-          container.insertAdjacentHTML("beforeend", enhanceNewbly.editIconContainer(translatedText));
-
-          // call the function displayNewblyTextarea() to display the textarea also passing the translatedText as a parameter
-          enhanceNewbly.displayNewblyTextarea(translatedText);
 
         }
       }
@@ -899,6 +938,11 @@ var newbly = {
           if (container.innerText === articleTitle) {
 
             appendTranslation(container, articleTitleTranslated);
+
+            /*
+            * Append the editIcon to the container and pass null as an id and articleTitleTranslated as parameters to it
+            */
+            container.insertAdjacentHTML("beforeend", enhanceNewbly.editIconContainer(null, articleTitleTranslated));
 
           }
 
@@ -924,6 +968,9 @@ var newbly = {
               // Use insertAdjacentHTML to insert the articleContentTranslated[i] using HTML format right a the articleTitle
 
               appendTranslation(container, articleContentTranslated[i]);
+
+              // Append the editIcon to container and pass the index of the translatedContent and articleContentTranslated[i] as parameters to it
+              container.insertAdjacentHTML("beforeend", enhanceNewbly.editIconContainer(i, articleContentTranslated[i]));
 
             }
 
@@ -991,12 +1038,12 @@ var newbly = {
     } else {
 
       // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
-      displayNewblyTranslatorUIModal()
+      displayNewblyTranslatorUIModal();
     }
 
   }
 
-}
+};
 
 
 
