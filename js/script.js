@@ -58,7 +58,6 @@ var newbly = {
 
       appendNewblyTextarea: function (content) {
 
-        console.log("the appendNewblyTextarea function ");
 
         const textarea = `
           <div class="enhance-newbly modal-wrapper" id="newbly-textarea-modal-wrapper">
@@ -204,31 +203,28 @@ var newbly = {
 
 
 
+
+
     var displayNewblyTextarea = function (editIconId, translatedText) {
 
-      document.getElementById(editIconId).addEventListener("click", function (e) {
 
+      /*
+       * Call the appendNewblyTextarea function to append the Newbly textarea to the document
+       * Note that there is display: none in the styles for .modal-wrapper by default
+       */
+      append.appendNewblyTextarea();
 
-        /*
-         * Call the appendNewblyTextarea function to append the Newbly textarea to the document
-         * Note that there is display: none in the styles for .modal-wrapper by default
-         */
-        append.appendNewblyTextarea();
+      // Change display styles to flex
+      document.getElementById("newbly-textarea-modal-wrapper").style.display = "flex";
 
+      const textarea = document.getElementById("enhance-translations");
 
-        const textareaModal = document.getElementById("newbly-textarea-modal-wrapper");
+      // Append translatedText to text area
+      textarea.value = translatedText;
 
-        const textarea = document.getElementById("enhance-translations");
-
-        // Change display styles to flex
-        textareaModal.style.display = "flex";
-
-        // Append translatedText to text area
-        textarea.value = translatedText
-
-      });
 
     };
+
 
 
     var handleEditIconBtn = function (index, translatedText) {
@@ -245,13 +241,20 @@ var newbly = {
         editIconId = `edit-icon-${index}`
       }
 
-      /*
-      * Call displayNewblyTextarea in 1s to allow appending of editIcon to the document
-      * So we can attach an even to it
-      */
       setTimeout(() => {
-        displayNewblyTextarea(editIconId, translatedText);
+
+        document.getElementById(editIconId).addEventListener("click", function (e) {
+
+          /*
+          * Call displayNewblyTextarea in 1s to allow appending of editIcon to the document when the edit icon is clicked
+          * So we can attach an even to it
+          */
+
+          displayNewblyTextarea(editIconId, translatedText);
+        });
+
       }, 1000);
+
     };
 
 
@@ -748,7 +751,6 @@ var newbly = {
       handleTextareaCancelBtn: function () {
         document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
 
-        console.log("handleTextareaCancelBtn");
 
         /*
         * Call the appendNewblyConfirmationModal function to append the Newbly confirmation modal to the document
@@ -775,10 +777,8 @@ var newbly = {
       handleCancelConfirmationBtn: function () {
         document.getElementById("newbly-enhance-confirmation-modal").style.display = "none";
 
-        // Show textarea
-        document.getElementById("newbly-textarea-modal-wrapper").style.display = "flex";
 
-        displayNewblyTextarea("Eunit");
+        displayNewblyTextarea();
       },
 
       // Discard changes button in confirmation modal upon click, will hide the modal
