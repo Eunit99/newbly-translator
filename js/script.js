@@ -58,6 +58,8 @@ var newbly = {
 
       appendNewblyTextarea: function (content) {
 
+        console.log("the appendNewblyTextarea function ");
+
         const textarea = `
           <div class="enhance-newbly modal-wrapper" id="newbly-textarea-modal-wrapper">
             <div class="enhance-newbly modal" id="">
@@ -113,7 +115,63 @@ var newbly = {
         // Initialize the buttons waiting for corresponding actions
         initModalBtns.newblyConfirmationBtns();
       },
+
+
+      appendNewblyAuthenticationModal: function () {
+
+        const authPrompt = `
+          <!-- Authentication modal -->
+          <div class="enhance-newbly modal-wrapper" id="enhance-newbly-auth-wrapper">
+            <div class="enhance-newbly modal">
+              <div class="enhance-newbly close-button" id="enhance-newbly-auth-wrapper-close-button"><svg fill="#b0adab" width="35" height="35" viewBox="0 0 24 24">
+                  <path d="M0 0h24v24H0V0z" fill="none"></path>
+                  <path
+                    d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z">
+                  </path>
+                </svg></div>
+              <div class="enhance-newbly modal-content">
+                <p class="enhance-newbly" id="enhance-newbly-auth-first-text">Awesome that you contributes by fixing a translation error!</p>
+                <p class="enhance-newbly" id="enhance-newbly-auth-second-text">In order for us to review your suggestions, you need to first login. If you don’t have
+                  an account yet, it is very easy to sign up!</p>
+                  <button class="enhance-newbly login-button" id="enhance-newbly-auth-button"><span
+                    class="enhance-newbly">Login / Register</span>
+                  </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.body.innerHTML += authPrompt;
+
+        document.getElementById("enhance-newbly-auth-wrapper").style.display = "flex";
+
+        // Initialize the buttons waiting for corresponding actions
+        initModalBtns.newblyAuthModalBtns();
+      },
+
+
+
+
     };
+
+
+    var isUserLoggedIn = function (user) {
+      // checks if user is logged in and  if so, returns  true
+
+      let logInStatus = false;
+      let isLoggedIn;
+      user = null;
+
+      if (logInStatus) {
+        isLoggedIn = true;
+      } else {
+        isLoggedIn = false;
+      }
+
+      return { isLoggedIn, user };
+    };
+
+
 
 
     /*
@@ -149,6 +207,14 @@ var newbly = {
     var displayNewblyTextarea = function (editIconId, translatedText) {
 
       document.getElementById(editIconId).addEventListener("click", function (e) {
+
+
+        /*
+         * Call the appendNewblyTextarea function to append the Newbly textarea to the document
+         * Note that there is display: none in the styles for .modal-wrapper by default
+         */
+        append.appendNewblyTextarea();
+
 
         const textareaModal = document.getElementById("newbly-textarea-modal-wrapper");
 
@@ -663,7 +729,6 @@ var newbly = {
       }
 
 
-
       return API_URL;
     };
 
@@ -671,16 +736,19 @@ var newbly = {
 
 
 
+
     /*
-    * Actions and activities that happen in the enhance textareaModal
+    * Actions and activities that happen in the enhance modal
+    * These functions control the displaying of the different modals depending on the action taken from the different buttons
+    * These modals include the textareaModal, confirmationModal, authenticationModal
     */
     var enhanceNewblyModalActions = {
 
       // cancel button
-      handleCancelBtn: function () {
+      handleTextareaCancelBtn: function () {
         document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
 
-        console.log("handleCancelBtn");
+        console.log("handleTextareaCancelBtn");
 
         /*
         * Call the appendNewblyConfirmationModal function to append the Newbly confirmation modal to the document
@@ -694,12 +762,12 @@ var newbly = {
 
       // Save changes button
       handleSaveChangesBtn: function () {
-        let isLoggedIn = false;
+        let isLoggedIn = isUserLoggedIn.isLoggedIn;
 
         if (isLoggedIn) {
           console.log("Save btn clicked, you are logged in");
         } else {
-          console.log("Save btn clicked, you are NOT logged in");
+          append.appendNewblyAuthenticationModal();
         }
       },
 
@@ -717,18 +785,42 @@ var newbly = {
       handleDiscardChangesBtn: function () {
 
         // Hide all modals
-
         document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
 
         document.getElementById("newbly-enhance-confirmation-modal").style.display = "none";
 
-      }
+      },
+
+      handleCloseAuthModalBtn: function (e) {
+
+        // Hide all modals
+        document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
+
+        document.getElementById("newbly-enhance-confirmation-modal").style.display = "none";
+
+        // Hide the authentication prompt modal
+        document.getElementById("enhance-newbly-auth-wrapper").style.display = "none";
+      },
+
+      handleAuthBtn: function (e) {
+
+        // Hide the authentication prompt modal
+        document.getElementById("enhance-newbly-auth-wrapper").style.display = "none";
+
+
+        console.log("Taken you to authentication service");
+
+
+      },
+
+
+
     };
 
 
 
     /*
-    * Initialize buttons in the enhance modal
+    * Initialize buttons in the enhance modals such as texareaModal, confirmationModal, authenticationModal, etc
     * Depending upon the button that was clicked,
     * Call the corresponding function
     */
@@ -737,7 +829,7 @@ var newbly = {
       newblyTextareaBtns: function () {
 
         document.getElementById("cancel-changes").addEventListener("click", function (e) {
-          enhanceNewblyModalActions.handleCancelBtn();
+          enhanceNewblyModalActions.handleTextareaCancelBtn();
         });
 
         document.getElementById("save-suggested-changes").addEventListener("click", function (e) {
@@ -755,6 +847,19 @@ var newbly = {
         document.getElementById("close-newbly-enhance-textarea").addEventListener("click", function (e) {
           enhanceNewblyModalActions.handleDiscardChangesBtn();
         })
+      },
+
+
+      newblyAuthModalBtns: function () {
+
+        document.getElementById("enhance-newbly-auth-wrapper-close-button").addEventListener("click", function (e) {
+          enhanceNewblyModalActions.handleCloseAuthModalBtn();
+        });
+
+        document.getElementById("enhance-newbly-auth-button").addEventListener("click", function (e) {
+          enhanceNewblyModalActions.handleAuthBtn();
+        });
+
       },
 
     }
@@ -972,16 +1077,16 @@ var newbly = {
               // Append the editIcon to container and pass the index of the translatedContent and articleContentTranslated[i] as parameters to it
               container.insertAdjacentHTML("beforeend", enhanceNewbly.editIconContainer(i, articleContentTranslated[i]));
 
-            }
+            };
 
-          }
+          };
 
 
-        }
+        };
 
 
         fetchArticleTranslated();
-      }
+      };
 
 
     };
@@ -1002,11 +1107,6 @@ var newbly = {
 
 
 
-    /*
-    * Call the appendNewblyTextarea function to append the Newbly textarea to the document
-    * Note that there is display: none in the styles for .modal-wrapper by default
-    */
-    append.appendNewblyTextarea();
 
 
 
