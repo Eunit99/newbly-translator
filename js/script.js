@@ -66,9 +66,7 @@ var newbly = {
                 <div class="enhance-newbly edit-section">
                   <textarea
                   dir=${getTextDirection()}
-                  class="enhance-newbly" spellcheck="false" id="enhance-translations">
-                  ${content}
-                  </textarea>
+                  class="enhance-newbly" spellcheck="false" id="enhance-translations">${content}</textarea>
                   <div class="enhance-newbly edit-buttons" id="">
                     <button class="enhance-newbly" id="save-suggested-changes">
                       Save changes
@@ -84,11 +82,11 @@ var newbly = {
         document.body.innerHTML += textarea;
 
         // Initialize the buttons waiting for corresponding actions
-        initModalBtns.newblyTextareaBtns();
+        initModalBtns.newblyTextareaBtns(content);
 
       },
 
-      appendNewblyConfirmationModal: function () {
+      appendNewblyConfirmationModal: function (content) {
 
         const confirmationPrompt = `
           <!-- Confirmation modal -->
@@ -112,7 +110,7 @@ var newbly = {
         document.getElementById("newbly-enhance-confirmation-modal").style.display = "flex";
 
         // Initialize the buttons waiting for corresponding actions
-        initModalBtns.newblyConfirmationBtns();
+        initModalBtns.newblyConfirmationBtns(content);
       },
 
 
@@ -205,22 +203,16 @@ var newbly = {
 
 
 
-    var displayNewblyTextarea = function (editIconId, translatedText) {
-
+    var displayNewblyTextarea = function (translatedText) {
 
       /*
        * Call the appendNewblyTextarea function to append the Newbly textarea to the document
        * Note that there is display: none in the styles for .modal-wrapper by default
        */
-      append.appendNewblyTextarea();
+      append.appendNewblyTextarea(translatedText);
 
       // Change display styles to flex
       document.getElementById("newbly-textarea-modal-wrapper").style.display = "flex";
-
-      const textarea = document.getElementById("enhance-translations");
-
-      // Append translatedText to text area
-      textarea.value = translatedText;
 
 
     };
@@ -250,7 +242,9 @@ var newbly = {
           * So we can attach an even to it
           */
 
-          displayNewblyTextarea(editIconId, translatedText);
+          displayNewblyTextarea(translatedText);
+
+
         });
 
       }, 1000);
@@ -748,7 +742,7 @@ var newbly = {
     var enhanceNewblyModalActions = {
 
       // cancel button
-      handleTextareaCancelBtn: function () {
+      handleTextareaCancelBtn: function (content) {
         document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
 
 
@@ -757,7 +751,7 @@ var newbly = {
         * Note that there is display: none in the styles for .modal-wrapper by default
         */
 
-        append.appendNewblyConfirmationModal();
+        append.appendNewblyConfirmationModal(content);
 
 
       },
@@ -774,9 +768,8 @@ var newbly = {
       },
 
       // cancel button in confirmation modal
-      handleCancelConfirmationBtn: function () {
+      handleCancelConfirmationBtn: function (content) {
         document.getElementById("newbly-enhance-confirmation-modal").style.display = "none";
-
 
         displayNewblyTextarea();
       },
@@ -789,14 +782,15 @@ var newbly = {
 
         document.getElementById("newbly-enhance-confirmation-modal").style.display = "none";
 
+        // TODO Write a function to allow editBtn to still be clicked agin
+        handleEditIconBtn(5, "translatedText");
+
       },
 
       handleCloseAuthModalBtn: function (e) {
 
-        // Hide all modals
+        // Hide the textarea modal
         document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
-
-        document.getElementById("newbly-enhance-confirmation-modal").style.display = "none";
 
         // Hide the authentication prompt modal
         document.getElementById("enhance-newbly-auth-wrapper").style.display = "none";
@@ -826,26 +820,26 @@ var newbly = {
     */
 
     var initModalBtns = {
-      newblyTextareaBtns: function () {
+      newblyTextareaBtns: function (content) {
 
         document.getElementById("cancel-changes").addEventListener("click", function (e) {
-          enhanceNewblyModalActions.handleTextareaCancelBtn();
+          enhanceNewblyModalActions.handleTextareaCancelBtn(content);
         });
 
         document.getElementById("save-suggested-changes").addEventListener("click", function (e) {
-          enhanceNewblyModalActions.handleSaveChangesBtn();
+          enhanceNewblyModalActions.handleSaveChangesBtn(content);
         })
       },
 
 
-      newblyConfirmationBtns: function () {
+      newblyConfirmationBtns: function (content) {
 
         document.getElementById("close-newbly-modal").addEventListener("click", function (e) {
-          enhanceNewblyModalActions.handleCancelConfirmationBtn();
+          enhanceNewblyModalActions.handleCancelConfirmationBtn(content);
         });
 
         document.getElementById("close-newbly-enhance-textarea").addEventListener("click", function (e) {
-          enhanceNewblyModalActions.handleDiscardChangesBtn();
+          enhanceNewblyModalActions.handleDiscardChangesBtn(content);
         })
       },
 
