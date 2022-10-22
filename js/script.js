@@ -894,7 +894,6 @@ var newbly = {
         fetchArticleContent(data.articleContent);
 
 
-
         return data;
 
       }
