@@ -25,35 +25,387 @@ var newbly = {
     if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write(`<script src="${IEScript}"><\/script>`);
 
 
+
+
+
+
+
+
+    /*
+    * ALL CURRENTLY SUPPORTED TRANSLATIONS
+    * ----------------------------------------------------------------
+    * This array contains a list of currently available newBlyAvailableTranslations, update as necessary
+    * Please update as more translations are available
+    */
+
+    var newBlyAvailableLanguageTranslations = [
+      "ar", // Arabic
+      // "bh", // Hindi
+      "hr", // Croatian
+      "en", //English
+      "ro", //Romanian
+      "ru", //Russian
+      "sr", //Serbian
+      "tr", //Turkish
+      "uk", //Ukrainian
+    ];
+
+    /*
+    * UI Modal languages
+    *----------------------------------------------------------------
+    * This newblyUIModalLanguages object corresponds to the translations of the UI
+    * IF YOU ADD ADDITIONAL LANGUAGE SUPPORT TO THE newBlyAvailableLanguageTranslations array, DO WELL UPDATE newblyUIModalLanguages TOO
+    */
+
+    var newblyUIModalLanguages = {
+      ar: {
+        "title": "الترجمات متوفرة لهذا المقال!",
+        "includeText": "تضمين الترجمة!",
+        "notThisTime": "ليس هذه المرة.",
+        "translationConsentText": "متصفحك باللغة العربية لذلك اعتقدنا أنك قد ترغب في تضمين ترجمات باللغة العربية لهذه المقالة.",
+        "saveChanges": "احفظ التغييرات",
+        "cancel": "يلغي",
+        "discardChanges": "تجاهل التغييرات",
+        "loginRegister": "دخولتسجيل",
+        "authTextOne": "رائع! لقد ساهمت بإصلاح خطأ في الترجمة!",
+        "authTextTwo": "لكي نتمكن من مراجعة اقتراحاتك ، عليك أولاً تسجيل الدخول. إذا لم يكن لديك حساب بعد ، فإن التسجيل سهل للغاية!",
+        "areYouSure": "هل أنت واثق؟",
+      },
+      bh: {
+        "title": "इस लेख के लिए अनुवाद उपलब्ध हैं!",
+        "includeText": "अनुवाद शामिल करें!",
+        "notThisTime": "इस समय नहीं।",
+        "translationConsentText": "आपका ब्राउज़र हिंदी में है इसलिए हमने सोचा कि आप इस लेख के लिए हिंदी में अनुवाद शामिल करना चाहेंगे।",
+        "saveChanges": "परिवर्तनों को सुरक्षित करें",
+        "cancel": "रद्द करना",
+        "discardChanges": "परिवर्तनों को निरस्त करें",
+        "loginRegister": "लॉग इन / रजिस्टर",
+        "authTextOne": "बहुत बढ़िया! आपने अनुवाद त्रुटि को ठीक करके योगदान दिया है!",
+        "authTextTwo": "हमारे लिए आपके सुझावों की समीक्षा करने के लिए, आपको पहले लॉग इन करना होगा। यदि आपके पास अभी तक कोई खाता नहीं है, तो साइन अप करना बहुत आसान है!",
+        "areYouSure": "क्या आपको यकीन है?",
+      },
+      en: {
+        "title": "Translations available for this article!",
+        "includeText": "Include translation!",
+        "notThisTime": "Not this time.",
+        "translationConsentText": "Your browser is in English so we thought you might want to include translations in English for this article.",
+        "saveChanges": "Save changes",
+        "cancel": "Cancel",
+        "discardChanges": "Discard changes",
+        "loginRegister": "Login / Register",
+        "authTextOne": "Awesome! You contributed by fixing a translation error!",
+        "authTextTwo": "In order for us to review your suggestions, you need first to log in. If you do not yet have an account, signing up is very easy!",
+        "areYouSure": "Are you sure?",
+      },
+      fr: {
+        "title": "Des traductions sont disponibles pour cet article !",
+        "includeText": "Inclure la traduction !",
+        "notThisTime": "Pas cette fois.",
+        "translationConsentText": "Votre navigateur est en français, nous avons donc pensé que vous voudriez peut-être inclure des traductions en français pour cet article.",
+        "saveChanges": "Sauvegarder les modifications",
+        "cancel": "Annuler",
+        "discardChanges": "Annuler les modifications",
+        "loginRegister": "Connexion ou Inscription",
+        "authTextOne": "Impressionnant! Vous avez contribué en corrigeant une erreur de traduction !",
+        "authTextTwo": "Pour que nous puissions examiner vos suggestions, vous devez d'abord vous connecter. Si vous n'avez pas encore de compte, l'inscription est très simple !",
+        "areYouSure": "Êtes-vous sûr?",
+      },
+      hr: {
+        "title": "Prijevodi su dostupni za ovaj članak!",
+        "includeText": "Uključi prijevod!",
+        "notThisTime": "Ne ovaj put.",
+        "translationConsentText": "Vaš preglednik je na hrvatskom pa smo mislili da biste mogli uključiti prijevode na hrvatski za ovaj članak.",
+        "saveChanges": "Spremi promjene",
+        "cancel": "Otkazati",
+        "discardChanges": "Odbaciti promjene",
+        "loginRegister": "Prijavite se ili se registrirajte",
+        "authTextOne": "Super! Doprinijeli ste ispravljanjem pogreške u prijevodu!",
+        "authTextTwo": "Kako bismo mogli pregledati vaše prijedloge, morate se prvo prijaviti. Ako još nemate račun, prijava je vrlo jednostavna!",
+        "areYouSure": "Jesi li siguran?",
+      },
+      ro: {
+        "title": "Sunt disponibile traduceri pentru acest articol!",
+        "includeText": "Includeți traducerea!",
+        "notThisTime": "Nu de data asta.",
+        "translationConsentText": "Browserul dvs. este în limba română, așa că ne-am gândit că ați dori să includeți traduceri în limba română pentru acest articol.",
+        "saveChanges": "Salvează modificările",
+        "cancel": "Anulare",
+        "discardChanges": "Renunțați la modificări",
+        "loginRegister": "Autentificați-vă sau înregistrați-vă",
+        "authTextOne": "Minunat! Ai contribuit prin remedierea unei erori de traducere!",
+        "authTextTwo": "Pentru ca noi să examinăm sugestiile dvs., trebuie mai întâi să vă conectați. Dacă nu aveți încă un cont, înregistrarea este foarte ușoară!",
+        "areYouSure": "Esti sigur?",
+      },
+      ru: {
+        "title": "Для этой статьи доступны переводы!",
+        "includeText": "Включите перевод!",
+        "notThisTime": "Не в этот раз.",
+        "translationConsentText": "Ваш браузер на русском языке, поэтому мы подумали, что вы, возможно, захотите включить русский перевод для этой статьи.",
+        "saveChanges": "Сохранить изменения",
+        "cancel": "Отмена",
+        "discardChanges": "Отменить изменения",
+        "loginRegister": "Войдите или зарегистрируйтесь",
+        "authTextOne": "Потрясающий! Вы внесли свой вклад, исправив ошибку перевода!",
+        "authTextTwo": "Чтобы мы рассмотрели ваши предложения, вам необходимо сначала войти в систему. Если у вас еще нет учетной записи, зарегистрироваться очень просто!",
+        "areYouSure": "Ты уверен?",
+      },
+      sr: {
+        "title": "Преводи су доступни за овај чланак!",
+        "includeText": "Укључи превод!",
+        "notThisTime": "Не овог пута.",
+        "translationConsentText": "Ваш претраживач је на српском, па смо мислили да бисте могли да укључите преводе на српски за овај чланак.",
+        "saveChanges": "Сачувај измене",
+        "cancel": "Поништити, отказати",
+        "discardChanges": "Одбаците промене",
+        "loginRegister": "Пријавите се или региструјте",
+        "authTextOne": "Сјајно! Ви сте допринели исправљањем грешке у преводу!",
+        "authTextTwo": "Да бисмо прегледали ваше предлоге, прво се морате пријавити. Ако још увек немате налог, регистрација је веома лака!",
+        "areYouSure": "Да ли сте сигурни?",
+      },
+      tr: {
+        "title": "Bu makale için çeviriler mevcuttur!",
+        "includeText": "Çeviri dahil!",
+        "notThisTime": "Bu sefer değil.",
+        "translationConsentText": "Tarayıcınız Türkçe olduğu için bu makaleye Türkçe çeviriler eklemek isteyebileceğinizi düşündük.",
+        "saveChanges": "Değişiklikleri Kaydet",
+        "cancel": "İptal",
+        "discardChanges": "Değişiklikleri gözardı et",
+        "loginRegister": "Giriş yap veya kaydol",
+        "authTextOne": "Mükemmel! Bir çeviri hatasını düzelterek katkıda bulundunuz!",
+        "authTextTwo": "Önerilerinizi inceleyebilmemiz için öncelikle giriş yapmanız gerekiyor. Henüz bir hesabınız yoksa üye olmak çok kolay!",
+        "areYouSure": "Emin misin?",
+      },
+      uk: {
+        "title": "Для цієї статті доступні переклади!",
+        "includeText": "Включіть переклад!",
+        "notThisTime": "Не цього разу.",
+        "translationConsentText": "Ваш веб-переглядач україномовний, тому ми подумали, що ви можете включити переклад українською для цієї статті.",
+        "saveChanges": "Зберегти зміни",
+        "cancel": "Скасувати",
+        "discardChanges": "Скасувати зміни",
+        "loginRegister": "Увійти або зареєструватися",
+        "authTextOne": "Чудово! Ви зробили свій внесок, виправивши помилку перекладу!",
+        "authTextTwo": "Щоб ми могли розглянути ваші пропозиції, вам потрібно спочатку ввійти. Якщо у вас ще немає облікового запису, зареєструватися дуже просто!",
+        "areYouSure": "Ти впевнений?",
+      },
+    };
+
+
+
+    function getLongBrowserLanguage() {
+
+      // This function provides translations of the Newbly Modal depending on the shortLang, like fr, en, sr, ru
+
+      let newblyUIModalLang = newblyUIModalLanguages,
+        newblyModalTitle,
+        newblyModalIncludeText,
+        newblyModalCancelText,
+        newblyTranslationConsentText,
+        saveChanges,
+        cancel,
+        discardChanges,
+        loginRegister,
+        authTextOne,
+        authTextTwo,
+        areYouSure;
+
+      switch (getShortBrowserLanguage()) {
+        case "ar":
+          longLang = "Arabic";
+          newblyModalTitle = newblyUIModalLang.ar.title;
+          newblyModalIncludeText = newblyUIModalLang.ar.includeText;
+          newblyModalCancelText = newblyUIModalLang.ar.notThisTime;
+          newblyTranslationConsentText = newblyUIModalLang.ar.translationConsentText;
+          saveChanges = newblyUIModalLang.ar.saveChanges;
+          cancel = newblyUIModalLang.ar.cancel;
+          discardChanges = newblyUIModalLang.ar.discardChanges;
+          loginRegister = newblyUIModalLang.ar.loginRegister;
+          authTextOne = newblyUIModalLang.ar.authTextOne;
+          authTextTwo = newblyUIModalLang.ar.authTextTwo;
+          areYouSure = newblyUIModalLang.ar.areYouSure;
+          break;
+        case "bh":
+          longLang = "Bihari";
+          newblyModalTitle = newblyUIModalLang.bh.title;
+          newblyModalIncludeText = newblyUIModalLang.bh.includeText;
+          newblyModalCancelText = newblyUIModalLang.bh.notThisTime;
+          newblyTranslationConsentText = newblyUIModalLang.bh.translationConsentText;
+          saveChanges = newblyUIModalLang.bh.saveChanges;
+          cancel = newblyUIModalLang.bh.cancel;
+          discardChanges = newblyUIModalLang.bh.discardChanges;
+          loginRegister = newblyUIModalLang.bh.loginRegister;
+          authTextOne = newblyUIModalLang.bh.authTextOne;
+          authTextTwo = newblyUIModalLang.bh.authTextTwo;
+          areYouSure = newblyUIModalLang.bh.areYouSure;
+          break;
+        case "en":
+          longLang = "English";
+          newblyModalTitle = newblyUIModalLang.en.title;
+          newblyModalIncludeText = newblyUIModalLang.en.includeText;
+          newblyModalCancelText = newblyUIModalLang.en.notThisTime;
+          newblyTranslationConsentText = newblyUIModalLang.en.translationConsentText;
+          saveChanges = newblyUIModalLang.en.saveChanges;
+          cancel = newblyUIModalLang.en.cancel;
+          discardChanges = newblyUIModalLang.en.discardChanges;
+          loginRegister = newblyUIModalLang.en.loginRegister;
+          authTextOne = newblyUIModalLang.en.authTextOne;
+          authTextTwo = newblyUIModalLang.en.authTextTwo;
+          areYouSure = newblyUIModalLang.en.areYouSure;
+          break;
+        case "fr":
+          longLang = "French";
+          newblyModalTitle = newblyUIModalLang.fr.title;
+          newblyModalIncludeText = newblyUIModalLang.fr.includeText;
+          newblyModalCancelText = newblyUIModalLang.fr.notThisTime;
+          newblyTranslationConsentText = newblyUIModalLang.fr.translationConsentText;
+          saveChanges = newblyUIModalLang.fr.saveChanges;
+          cancel = newblyUIModalLang.fr.cancel;
+          discardChanges = newblyUIModalLang.fr.discardChanges;
+          loginRegister = newblyUIModalLang.fr.loginRegister;
+          authTextOne = newblyUIModalLang.fr.authTextOne;
+          authTextTwo = newblyUIModalLang.fr.authTextTwo;
+          areYouSure = newblyUIModalLang.fr.areYouSure;
+          break;
+        case "hr":
+          longLang = "Croatian";
+          newblyModalTitle = newblyUIModalLang.hr.title;
+          newblyModalIncludeText = newblyUIModalLang.hr.includeText;
+          newblyModalCancelText = newblyUIModalLang.hr.notThisTime;
+          newblyTranslationConsentText = newblyUIModalLang.hr.translationConsentText;
+          saveChanges = newblyUIModalLang.hr.saveChanges;
+          cancel = newblyUIModalLang.hr.cancel;
+          discardChanges = newblyUIModalLang.hr.discardChanges;
+          loginRegister = newblyUIModalLang.hr.loginRegister;
+          authTextOne = newblyUIModalLang.hr.authTextOne;
+          authTextTwo = newblyUIModalLang.hr.authTextTwo;
+          areYouSure = newblyUIModalLang.hr.areYouSure;
+          break;
+        case "ro":
+          longLang = "Romanian";
+          newblyModalTitle = newblyUIModalLang.ro.title;
+          newblyModalIncludeText = newblyUIModalLang.ro.includeText;
+          newblyModalCancelText = newblyUIModalLang.ro.notThisTime;
+          newblyTranslationConsentText = newblyUIModalLang.ro.translationConsentText;
+          saveChanges = newblyUIModalLang.ro.saveChanges;
+          cancel = newblyUIModalLang.ro.cancel;
+          discardChanges = newblyUIModalLang.ro.discardChanges;
+          loginRegister = newblyUIModalLang.ro.loginRegister;
+          authTextOne = newblyUIModalLang.ro.authTextOne;
+          authTextTwo = newblyUIModalLang.ro.authTextTwo;
+          areYouSure = newblyUIModalLang.ro.areYouSure;
+          break;
+        case "ru":
+          longLang = "Russian";
+          newblyModalTitle = newblyUIModalLang.ru.title;
+          newblyModalIncludeText = newblyUIModalLang.ru.includeText;
+          newblyModalCancelText = newblyUIModalLang.ru.notThisTime;
+          newblyTranslationConsentText = newblyUIModalLang.ru.translationConsentText;
+          saveChanges = newblyUIModalLang.ru.saveChanges;
+          cancel = newblyUIModalLang.ru.cancel;
+          discardChanges = newblyUIModalLang.ru.discardChanges;
+          loginRegister = newblyUIModalLang.ru.loginRegister;
+          authTextOne = newblyUIModalLang.ru.authTextOne;
+          authTextTwo = newblyUIModalLang.ru.authTextTwo;
+          areYouSure = newblyUIModalLang.ru.areYouSure;
+          break;
+        case "sr":
+          longLang = "Serbian";
+          newblyModalTitle = newblyUIModalLang.sr.title;
+          newblyModalIncludeText = newblyUIModalLang.sr.includeText;
+          newblyModalCancelText = newblyUIModalLang.sr.notThisTime;
+          newblyTranslationConsentText = newblyUIModalLang.sr.translationConsentText;
+          saveChanges = newblyUIModalLang.sr.saveChanges;
+          cancel = newblyUIModalLang.sr.cancel;
+          discardChanges = newblyUIModalLang.sr.discardChanges;
+          loginRegister = newblyUIModalLang.sr.loginRegister;
+          authTextOne = newblyUIModalLang.sr.authTextOne;
+          authTextTwo = newblyUIModalLang.sr.authTextTwo;
+          areYouSure = newblyUIModalLang.sr.areYouSure;
+          break;
+        case "tr":
+          longLang = "Turkish";
+          newblyModalTitle = newblyUIModalLang.tr.title;
+          newblyModalIncludeText = newblyUIModalLang.tr.includeText;
+          newblyModalCancelText = newblyUIModalLang.tr.notThisTime;
+          newblyTranslationConsentText = newblyUIModalLang.tr.translationConsentText;
+          saveChanges = newblyUIModalLang.uk.saveChanges;
+          cancel = newblyUIModalLang.uk.cancel;
+          discardChanges = newblyUIModalLang.uk.discardChanges;
+          loginRegister = newblyUIModalLang.uk.loginRegister;
+          authTextOne = newblyUIModalLang.uk.authTextOne;
+          authTextTwo = newblyUIModalLang.uk.authTextTwo;
+          areYouSure = newblyUIModalLang.tr.areYouSure;
+          break;
+        case "uk":
+          longLang = "Ukrainian";
+          newblyModalTitle = newblyUIModalLang.uk.title;
+          newblyModalIncludeText = newblyUIModalLang.uk.includeText;
+          newblyModalCancelText = newblyUIModalLang.uk.notThisTime;
+          newblyTranslationConsentText = newblyUIModalLang.uk.translationConsentText;
+          saveChanges = newblyUIModalLang.uk.saveChanges;
+          cancel = newblyUIModalLang.uk.cancel;
+          discardChanges = newblyUIModalLang.uk.discardChanges;
+          loginRegister = newblyUIModalLang.uk.loginRegister;
+          authTextOne = newblyUIModalLang.uk.authTextOne;
+          authTextTwo = newblyUIModalLang.uk.authTextTwo;
+          areYouSure = newblyUIModalLang.uk.areYouSure;
+          break;
+        default:
+          longLang = "English";
+          newblyModalTitle = newblyUIModalLang.en.title;
+          newblyModalIncludeText = newblyUIModalLang.en.includeText;
+          newblyModalCancelText = newblyUIModalLang.en.notThisTime;
+          newblyTranslationConsentText = newblyUIModalLang.en.translationConsentText;
+          saveChanges = newblyUIModalLang.en.saveChanges;
+          cancel = newblyUIModalLang.en.cancel;
+          discardChanges = newblyUIModalLang.en.discardChanges;
+          loginRegister = newblyUIModalLang.en.loginRegister;
+          authTextOne = newblyUIModalLang.en.authTextOne;
+          authTextTwo = newblyUIModalLang.en.authTextTwo;
+          areYouSure = newblyUIModalLang.en.areYouSure;
+      }
+
+      newblyUIModalLang = longLang;
+
+      return {
+        longLang,
+        newblyUIModalLang,
+        newblyModalTitle,
+        newblyTranslationConsentText,
+        newblyModalIncludeText,
+        newblyModalCancelText,
+        saveChanges,
+        cancel,
+        discardChanges,
+        loginRegister,
+        authTextOne,
+        authTextTwo,
+        areYouSure
+      };
+    }
+
+
+
     var append = {
       appendNewblyPromptModal: function () {
 
 
         const newblyPromptModal = `
         <div class="newbly-translation--ui-modal" id="newbly-translation--ui-modal">
-              <div class="newbly-translation--ui-modal__title" id="newbly-translation--ui-modal__title">
-                Translations are available for this article!
-              </div>
+              <div class="newbly-translation--ui-modal__title" id="newbly-translation--ui-modal__title"></div>
 
-              <div class="newbly-translation--ui-modal__text" id="newbly-translation--ui-modal__text">
-                Your browser is in <span id="userBrowserLanguage">English</span>
-                so we thought you might want to include translations in <span id="suggestedTranslation">English</span> for this
-                article.
-              </div>
+              <div class="newbly-translation--ui-modal__text" id="newbly-translation--ui-modal__text"></div>
 
               <div class="newbly-translation--ui-modal__btn-container">
-                <button id="include-translation" class="newbly-translation--ui-modal__btn__btn">
-                  Include translation!
-                </button>
+                <button id="include-translation" class="newbly-translation--ui-modal__btn__btn"></button>
 
-                <button id="cancel-translation" class="newbly-translation--ui-modal__btn__btn">
-                  Not this time.
-                </button>
+                <button id="cancel-translation" class="newbly-translation--ui-modal__btn__btn"></button>
               </div>
           </div>
       `;
 
         document.body.innerHTML += newblyPromptModal;
+
       },
 
       appendNewblyTextarea: function (contentIndex, content) {
@@ -68,10 +420,8 @@ var newbly = {
                   dir=${getTextDirection()}
                   class="enhance-newbly" spellcheck="false" id="enhance-translations">${content}</textarea>
                   <div class="enhance-newbly edit-buttons" id="">
-                    <button class="enhance-newbly" id="save-suggested-changes">
-                      Save changes
-                    </button>
-                    <button class="enhance-newbly" id="cancel-changes">Cancel</button>
+                    <button class="enhance-newbly" id="save-suggested-changes"></button>
+                    <button class="enhance-newbly" id="cancel-changes"></button>
                   </div>
                 </div>
               </div>
@@ -81,8 +431,20 @@ var newbly = {
 
         document.body.innerHTML += textarea;
 
-        // Initialize the buttons waiting for corresponding actions
-        initModalBtns.newblyTextareaBtns(contentIndex, content);
+        // If shortBrowserLanguage is "ar", then add class ".arabic" to  modal
+        if (getShortBrowserLanguage() === "ar") {
+          document.getElementById("newbly-textarea-modal-wrapper").classList.add("arabic");
+        };
+
+        // Add content depending on user's browser language
+        document.getElementById("save-suggested-changes").innerText = getLongBrowserLanguage().saveChanges;
+        document.getElementById("cancel-changes").innerText = getLongBrowserLanguage().cancel;
+
+        // Initialize the modal buttons
+        initModalBtns.newblyTextareaBtns();
+
+        // Display the translationConsentText depending on user's browser language
+        document.getElementById("newbly-translation--ui-modal__text").innerText = getLongBrowserLanguage().newblyTranslationConsentText;
 
       },
 
@@ -94,11 +456,10 @@ var newbly = {
             <div class="enhance-newbly modal" id="">
               <div class="enhance-newbly editable-container" id="">
               <!-- Modal (Are you sure) -->
-                <p class="enhance-newbly" id="">Are you sure?!</p>
+                <p class="enhance-newbly" id="are-you-sure"></p>
                 <div class="enhance-newbly edit-buttons" id="">
-                  <button class="enhance-newbly" id="close-newbly-enhance-textarea">
-                    Discard changes</button>
-                  <button class="enhance-newbly" id="close-newbly-modal">Cancel</button>
+                  <button class="enhance-newbly" id="close-newbly-enhance-textarea"></button>
+                  <button class="enhance-newbly" id="close-newbly-modal"></button>
                 </div>
               </div>
             </div>
@@ -106,6 +467,18 @@ var newbly = {
         `;
 
         document.body.innerHTML += confirmationPrompt;
+
+        // If shortBrowserLanguage is "ar", then add class ".arabic" to  modal
+        if (getShortBrowserLanguage() === "ar") {
+          document.getElementById("newbly-enhance-confirmation-modal").classList.add("arabic");
+        };
+
+
+        // Add content depending on user's browser language
+        document.getElementById("are-you-sure").innerText = getLongBrowserLanguage().areYouSure;
+        document.getElementById("close-newbly-enhance-textarea").innerText = getLongBrowserLanguage().discardChanges;
+        document.getElementById("close-newbly-modal").innerText = getLongBrowserLanguage().cancel;
+
 
         document.getElementById("newbly-enhance-confirmation-modal").style.display = "flex";
 
@@ -127,11 +500,10 @@ var newbly = {
                   </path>
                 </svg></div>
               <div class="enhance-newbly modal-content">
-                <p class="enhance-newbly" id="enhance-newbly-auth-first-text">Awesome that you contributes by fixing a translation error!</p>
-                <p class="enhance-newbly" id="enhance-newbly-auth-second-text">In order for us to review your suggestions, you need to first login. If you don’t have
-                  an account yet, it is very easy to sign up!</p>
+                <p class="enhance-newbly" id="enhance-newbly-auth-text-one"></p>
+                <p class="enhance-newbly" id="enhance-newbly-auth-text-two"></p>
                   <button class="enhance-newbly login-button" id="enhance-newbly-auth-button"><span
-                    class="enhance-newbly">Login / Register</span>
+                    class="enhance-newbly"></span>
                   </button>
               </div>
             </div>
@@ -141,6 +513,16 @@ var newbly = {
         document.body.innerHTML += authPrompt;
 
         document.getElementById("enhance-newbly-auth-wrapper").style.display = "flex";
+
+        // If shortBrowserLanguage is "ar", then add class ".arabic" to  modal
+        if (getShortBrowserLanguage() === "ar") {
+          document.getElementById("enhance-newbly-auth-wrapper").classList.add("arabic");
+        };
+
+        // Add content depending on user's browser language
+        document.getElementById("enhance-newbly-auth-text-one").innerText = getLongBrowserLanguage().authTextOne;
+        document.getElementById("enhance-newbly-auth-text-two").innerText = getLongBrowserLanguage().authTextTwo;
+        document.getElementById("enhance-newbly-auth-button").innerText = getLongBrowserLanguage().loginRegister;
 
         // Initialize the buttons waiting for corresponding actions
         initModalBtns.newblyAuthModalBtns();
@@ -287,190 +669,6 @@ var newbly = {
 
 
 
-
-    /*
-    * ALL CURRENTLY SUPPORTED TRANSLATIONS
-    * ----------------------------------------------------------------
-    * This array contains a list of currently available newBlyAvailableTranslations, update as necessary
-    * Please update as more translations are available
-    */
-
-    var newBlyAvailableLanguageTranslations = [
-      "ar", // Arabic
-      "hr", // Croatian
-      "en", //English
-      "ro", //Romanian
-      "ru", //Russian
-      "sr", //Serbian
-      "tr", //Turkish
-      "uk", //Ukrainian
-    ];
-
-    /*
-    * UI Modal languages
-    *----------------------------------------------------------------
-    * This newblyUIModalLanguages object corresponds to the translations of the UI
-    * IF YOU ADD ADDITIONAL LANGUAGE SUPPORT TO THE newBlyAvailableLanguageTranslations array, DO WELL UPDATE newblyUIModalLanguages TOO
-    */
-
-    var newblyUIModalLanguages = {
-      ar: {
-        "title": "الترجمات متوفرة لهذا المقال!",
-        "includeText": "تضمين الترجمة!",
-        "cancelText": "ليس هذه المرة.",
-        "translationConsentText": "متصفحك باللغة العربية لذلك اعتقدنا أنك قد ترغب في تضمين ترجمات باللغة العربية لهذه المقالة."
-      },
-      bh: {
-        "title": "इस लेख के लिए अनुवाद उपलब्ध हैं!",
-        "includeText": "अनुवाद शामिल करें!",
-        "cancelText": "इस समय नहीं।",
-        "translationConsentText": "आपका ब्राउज़र हिंदी में है इसलिए हमने सोचा कि आप इस लेख के लिए हिंदी में अनुवाद शामिल करना चाहेंगे।"
-      },
-      en: {
-        "title": "Translations available for this article!",
-        "includeText": "Include translation!",
-        "cancelText": "Not this time.",
-        "translationConsentText": "Your browser is in English so we thought you might want to include translations in English for this article."
-      },
-      fr: {
-        "title": "Des traductions sont disponibles pour cet article !",
-        "includeText": "Inclure la traduction !",
-        "cancelText": "Pas cette fois.",
-        "translationConsentText": "Votre navigateur est en français, nous avons donc pensé que vous voudriez peut-être inclure des traductions en français pour cet article."
-      },
-      hr: {
-        "title": "Prijevodi su dostupni za ovaj članak!",
-        "includeText": "Uključi prijevod!",
-        "cancelText": "Ne ovaj put.",
-        "translationConsentText": "Vaš preglednik je na hrvatskom pa smo mislili da biste mogli uključiti prijevode na hrvatski za ovaj članak."
-      },
-      ro: {
-        "title": "Sunt disponibile traduceri pentru acest articol!",
-        "includeText": "Includeți traducerea!",
-        "cancelText": "Nu de data asta.",
-        "translationConsentText": "Browserul dvs. este în limba română, așa că ne-am gândit că ați dori să includeți traduceri în limba română pentru acest articol."
-      },
-      ru: {
-        "title": "Для этой статьи доступны переводы!",
-        "includeText": "Включите перевод!",
-        "cancelText": "Не в этот раз.",
-        "translationConsentText": "Ваш браузер на русском языке, поэтому мы подумали, что вы, возможно, захотите включить русский перевод для этой статьи."
-      },
-      sr: {
-        "title": "Преводи су доступни за овај чланак!",
-        "includeText": "Укључи превод!",
-        "cancelText": "Не овог пута.",
-        "translationConsentText": "Ваш претраживач је на српском, па смо мислили да бисте могли да укључите преводе на српски за овај чланак."
-      },
-      tr: {
-        "title": "Bu makale için çeviriler mevcuttur!",
-        "includeText": "Çeviri dahil!",
-        "cancelText": "Bu sefer değil.",
-        "translationConsentText": "Tarayıcınız Türkçe olduğu için bu makaleye Türkçe çeviriler eklemek isteyebileceğinizi düşündük."
-      },
-      uk: {
-        "title": "Для цієї статті доступні переклади!",
-        "includeText": "Включіть переклад!",
-        "cancelText": "Не цього разу.",
-        "translationConsentText": "Ваш веб-переглядач україномовний, тому ми подумали, що ви можете включити переклад українською для цієї статті."
-      },
-    };
-
-
-
-    function getLongBrowserLanguage() {
-
-      // This function provides translations of the Newbly Modal depending on the shortLang, like fr, en, sr, ru
-
-      let newblyUIModalLang = newblyUIModalLanguages,
-        newblyModalTitle,
-        newblyModalIncludeText,
-        newblyModalCancelText,
-        newblyTranslationConsentText;
-
-      switch (getShortBrowserLanguage()) {
-        case "ar":
-          longLang = "Arabic";
-          newblyModalTitle = newblyUIModalLang.ar.title;
-          newblyModalIncludeText = newblyUIModalLang.ar.includeText;
-          newblyModalCancelText = newblyUIModalLang.ar.cancelText;
-          newblyTranslationConsentText = newblyUIModalLang.ar.translationConsentText;
-          break;
-        case "bh":
-          longLang = "Bihari";
-          newblyModalTitle = newblyUIModalLang.bh.title;
-          newblyModalIncludeText = newblyUIModalLang.bh.includeText;
-          newblyModalCancelText = newblyUIModalLang.bh.cancelText;
-          newblyTranslationConsentText = newblyUIModalLang.bh.translationConsentText;
-          break;
-        case "en":
-          longLang = "English";
-          newblyModalTitle = newblyUIModalLang.en.title;
-          newblyModalIncludeText = newblyUIModalLang.en.includeText;
-          newblyModalCancelText = newblyUIModalLang.en.cancelText;
-          newblyTranslationConsentText = newblyUIModalLang.en.translationConsentText;
-          break;
-        case "fr":
-          longLang = "French";
-          newblyModalTitle = newblyUIModalLang.fr.title;
-          newblyModalIncludeText = newblyUIModalLang.fr.includeText;
-          newblyModalCancelText = newblyUIModalLang.fr.cancelText;
-          newblyTranslationConsentText = newblyUIModalLang.fr.translationConsentText;
-          break;
-        case "hr":
-          longLang = "Croatian";
-          newblyModalTitle = newblyUIModalLang.hr.title;
-          newblyModalIncludeText = newblyUIModalLang.hr.includeText;
-          newblyModalCancelText = newblyUIModalLang.hr.cancelText;
-          newblyTranslationConsentText = newblyUIModalLang.hr.translationConsentText;
-          break;
-        case "ro":
-          longLang = "Romanian";
-          newblyModalTitle = newblyUIModalLang.ro.title;
-          newblyModalIncludeText = newblyUIModalLang.ro.includeText;
-          newblyModalCancelText = newblyUIModalLang.ro.cancelText;
-          newblyTranslationConsentText = newblyUIModalLang.ro.translationConsentText;
-          break;
-        case "ru":
-          longLang = "Russian";
-          newblyModalTitle = newblyUIModalLang.ru.title;
-          newblyModalIncludeText = newblyUIModalLang.ru.includeText;
-          newblyModalCancelText = newblyUIModalLang.ru.cancelText;
-          newblyTranslationConsentText = newblyUIModalLang.ru.translationConsentText;
-          break;
-        case "sr":
-          longLang = "Serbian";
-          newblyModalTitle = newblyUIModalLang.sr.title;
-          newblyModalIncludeText = newblyUIModalLang.sr.includeText;
-          newblyModalCancelText = newblyUIModalLang.sr.cancelText;
-          newblyTranslationConsentText = newblyUIModalLang.sr.translationConsentText;
-          break;
-        case "tr":
-          longLang = "Turkish";
-          newblyModalTitle = newblyUIModalLang.tr.title;
-          newblyModalIncludeText = newblyUIModalLang.tr.includeText;
-          newblyModalCancelText = newblyUIModalLang.tr.cancelText;
-          newblyTranslationConsentText = newblyUIModalLang.tr.translationConsentText;
-          break;
-        case "uk":
-          longLang = "Ukrainian";
-          newblyModalTitle = newblyUIModalLang.uk.title;
-          newblyModalIncludeText = newblyUIModalLang.uk.includeText;
-          newblyModalCancelText = newblyUIModalLang.uk.cancelText;
-          newblyTranslationConsentText = newblyUIModalLang.uk.translationConsentText;
-          break;
-        default:
-          longLang = "English";
-          newblyModalTitle = newblyUIModalLang.en.title;
-          newblyModalIncludeText = newblyUIModalLang.en.includeText;
-          newblyModalCancelText = newblyUIModalLang.en.cancelText;
-          newblyTranslationConsentText = newblyUIModalLang.en.translationConsentText;
-      }
-
-      newblyUIModalLang = longLang;
-
-      return { longLang, newblyUIModalLang, newblyModalTitle, newblyTranslationConsentText, newblyModalIncludeText, newblyModalCancelText };
-    }
 
 
 
@@ -717,7 +915,6 @@ var newbly = {
       } else {
         API_URL = "https://api.newb.ly/articles/?language=" + getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
       }
-
 
       return API_URL;
     };
@@ -1124,7 +1321,7 @@ var newbly = {
     var isUserLoggedIn = function (user) {
       // checks if user is logged in and  if so, returns  true
 
-      let logInStatus = true;
+      let logInStatus = false;
 
       let isLoggedIn;
       user = null;
