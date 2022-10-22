@@ -146,29 +146,7 @@ var newbly = {
         initModalBtns.newblyAuthModalBtns();
       },
 
-
-
-
     };
-
-
-    var isUserLoggedIn = function (user) {
-      // checks if user is logged in and  if so, returns  true
-
-      let logInStatus = false;
-      let isLoggedIn;
-      user = null;
-
-      if (logInStatus) {
-        isLoggedIn = true;
-      } else {
-        isLoggedIn = false;
-      }
-
-      return { isLoggedIn, user };
-    };
-
-
 
 
     /*
@@ -197,6 +175,27 @@ var newbly = {
         return editIcon;
       },
 
+    };
+
+
+
+    var hideModals = {
+      textareaModal: function () {
+        document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
+      },
+
+      confirmationModal: function () {
+        document.getElementById("newbly-enhance-confirmation-modal").style.display = "none";
+      },
+
+      authenticationModal: function () {
+        document.getElementById("enhance-newbly-auth-wrapper").style.display = "none";
+      },
+
+      NewblyTranslatorUIModal: function () {
+        // Hide #newbly-translation--ui-modal"
+        document.getElementById("newbly-translation--ui-modal").style.display = "none";
+      },
     };
 
 
@@ -599,15 +598,9 @@ var newbly = {
 
       return isNewblyTranslatorUIDisplayed;
 
-    }
+    };
 
 
-    var hideNewblyTranslatorUI = function () {
-
-      // Set the display property of #newbly-translation--ui-modal to "none"
-      document.getElementById("newbly-translation--ui-modal").style.display = "none";
-
-    }
 
 
     var initNewblyTranslatorUIBtns = {
@@ -623,7 +616,7 @@ var newbly = {
           console.info("Newbly translation started");
 
           // Hide the Newbly translation modal prompt
-          hideNewblyTranslatorUI();
+          hideModals.NewblyTranslatorUIModal();
         }); // Translation started
 
 
@@ -637,7 +630,7 @@ var newbly = {
           console.info("Newbly translation cancelled");
 
           // Hide the Newbly translation modal prompt
-          hideNewblyTranslatorUI();
+          hideModals.NewblyTranslatorUIModal();
         }); // Translation cancelled
 
 
@@ -743,7 +736,7 @@ var newbly = {
 
       // cancel button
       handleTextareaCancelBtn: function (content) {
-        document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
+        hideModals.textareaModal();
 
 
         /*
@@ -758,10 +751,13 @@ var newbly = {
 
       // Save changes button
       handleSaveChangesBtn: function () {
-        let isLoggedIn = isUserLoggedIn.isLoggedIn;
+        let isSignedIn = isUserLoggedIn().isLoggedIn;
+        console.log("isSignedIn :" + isSignedIn);
 
-        if (isLoggedIn) {
-          console.log("Save btn clicked, you are logged in");
+
+        if (isSignedIn) {
+
+          saveSuggestion("updatedTranslations");
         } else {
           append.appendNewblyAuthenticationModal();
         }
@@ -769,7 +765,7 @@ var newbly = {
 
       // cancel button in confirmation modal
       handleCancelConfirmationBtn: function (content) {
-        document.getElementById("newbly-enhance-confirmation-modal").style.display = "none";
+        hideModals.confirmationModal();
 
         displayNewblyTextarea();
       },
@@ -777,10 +773,9 @@ var newbly = {
       // Discard changes button in confirmation modal upon click, will hide the modal
       handleDiscardChangesBtn: function () {
 
-        // Hide all modals
-        document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
+        hideModals.textareaModal();
+        hideModals.confirmationModal();
 
-        document.getElementById("newbly-enhance-confirmation-modal").style.display = "none";
 
         // TODO Write a function to allow editBtn to still be clicked agin
         handleEditIconBtn(5, "translatedText");
@@ -790,19 +785,17 @@ var newbly = {
       handleCloseAuthModalBtn: function (e) {
 
         // Hide the textarea modal
-        document.getElementById("newbly-textarea-modal-wrapper").style.display = "none";
+        hideModals.textareaModal();
 
         // Hide the authentication prompt modal
-        document.getElementById("enhance-newbly-auth-wrapper").style.display = "none";
+        hideModals.authenticationModal();
       },
 
       handleAuthBtn: function (e) {
 
+
         // Hide the authentication prompt modal
-        document.getElementById("enhance-newbly-auth-wrapper").style.display = "none";
-
-
-        console.log("Taken you to authentication service");
+        hideModals.authenticationModal();
 
 
       },
@@ -1080,6 +1073,8 @@ var newbly = {
 
 
         fetchArticleTranslated();
+
+
       };
 
 
@@ -1103,17 +1098,8 @@ var newbly = {
 
 
 
-
-
-
-
     console.log("Newbly translation initialized. Learn more here: https://newb.ly/");
     console.info("Ξunit");
-
-
-
-
-
 
 
 
@@ -1134,6 +1120,58 @@ var newbly = {
       // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
       displayNewblyTranslatorUIModal();
     }
+
+
+    var isUserLoggedIn = function (user) {
+      // checks if user is logged in and  if so, returns  true
+
+      let logInStatus = true;
+
+      let isLoggedIn;
+      user = null;
+
+      if (logInStatus) {
+        isLoggedIn = true;
+      } else {
+        isLoggedIn = false;
+      }
+
+      return { isLoggedIn, user };
+    };
+
+
+
+    var saveSuggestion = function (articleContentIndex, updatedTranslations, articleId) {
+      console.log("saveSuggestion called")
+
+      const payload = {
+        "articleContentIndex": articleContentIndex,
+        "articleTranslatedPartCorrection": updatedTranslations,
+      };
+
+      const options = {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      };
+
+
+      fetch(`https://api.newb.ly/articles/${articleId}/suggestion`, options)
+        .then(data => {
+          if (!data.ok) {
+            throw Error(data.status);
+          }
+          return data.json();
+        }).then(update => {
+          console.log(update);
+        }).catch(e => {
+          console.log(e);
+        });
+    };
+
+
 
   }
 
