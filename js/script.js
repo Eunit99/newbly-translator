@@ -56,7 +56,7 @@ var newbly = {
         document.body.innerHTML += newblyPromptModal;
       },
 
-      appendNewblyTextarea: function (content) {
+      appendNewblyTextarea: function (contentIndex, content) {
 
 
         const textarea = `
@@ -82,7 +82,7 @@ var newbly = {
         document.body.innerHTML += textarea;
 
         // Initialize the buttons waiting for corresponding actions
-        initModalBtns.newblyTextareaBtns(content);
+        initModalBtns.newblyTextareaBtns(contentIndex, content);
 
       },
 
@@ -202,13 +202,13 @@ var newbly = {
 
 
 
-    var displayNewblyTextarea = function (translatedText) {
+    var displayNewblyTextarea = function (translatedTextIndex, translatedText) {
 
       /*
        * Call the appendNewblyTextarea function to append the Newbly textarea to the document
        * Note that there is display: none in the styles for .modal-wrapper by default
        */
-      append.appendNewblyTextarea(translatedText);
+      append.appendNewblyTextarea(translatedTextIndex, translatedText);
 
       // Change display styles to flex
       document.getElementById("newbly-textarea-modal-wrapper").style.display = "flex";
@@ -218,18 +218,18 @@ var newbly = {
 
 
 
-    var handleEditIconBtn = function (index, translatedText) {
+    var handleEditIconBtn = function (translatedTextIndex, translatedText) {
       let editIconId;
 
-      if (index === null) {
+      if (translatedTextIndex === null) {
 
         /*
-        * If index is null, then, the edit-icon corresponds to that of the articleTitle
-        * Article title does not have an index from the response received from the API, remember?
+        * If translatedTextIndex is null, then, the edit-icon corresponds to that of the articleTitle
+        * Article title does not have an translatedTextIndex from the response received from the API, remember?
         */
         editIconId = "edit-icon-null"
       } else {
-        editIconId = `edit-icon-${index}`
+        editIconId = `edit-icon-${translatedTextIndex}`
       }
 
       setTimeout(() => {
@@ -241,7 +241,7 @@ var newbly = {
           * So we can attach an even to it
           */
 
-          displayNewblyTextarea(translatedText);
+          displayNewblyTextarea(translatedTextIndex, translatedText);
 
 
         });
@@ -750,14 +750,14 @@ var newbly = {
       },
 
       // Save changes button
-      handleSaveChangesBtn: function () {
+      handleSaveChangesBtn: function (contentIndex, content) {
         let isSignedIn = isUserLoggedIn().isLoggedIn;
         console.log("isSignedIn :" + isSignedIn);
 
 
         if (isSignedIn) {
 
-          saveSuggestion("updatedTranslations");
+          saveSuggestion(contentIndex, content);
         } else {
           append.appendNewblyAuthenticationModal();
         }
@@ -813,14 +813,14 @@ var newbly = {
     */
 
     var initModalBtns = {
-      newblyTextareaBtns: function (content) {
+      newblyTextareaBtns: function (contentIndex, content) {
 
         document.getElementById("cancel-changes").addEventListener("click", function (e) {
-          enhanceNewblyModalActions.handleTextareaCancelBtn(content);
+          enhanceNewblyModalActions.handleTextareaCancelBtn(contentIndex, content);
         });
 
         document.getElementById("save-suggested-changes").addEventListener("click", function (e) {
-          enhanceNewblyModalActions.handleSaveChangesBtn(content);
+          enhanceNewblyModalActions.handleSaveChangesBtn(contentIndex, content);
         })
       },
 
@@ -1185,6 +1185,9 @@ var newbly = {
           }
           return data.json();
         }).then(update => {
+
+          hideModals.textareaModal();
+
           console.log(update);
         }).catch(e => {
           console.log(e);
