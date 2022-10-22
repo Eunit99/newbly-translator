@@ -510,17 +510,17 @@ var newbly = {
           language = nav.languages[i];
           if (language && language.length) {
             return language;
-          }
-        }
-      }
+          };
+        };
+      };
 
       // support for other well known properties in browsers
       for (i = 0; i < browserLanguagePropertyKeys.length; i++) {
         language = nav[browserLanguagePropertyKeys[i]];
         if (language && language.length) {
           return language;
-        }
-      }
+        };
+      };
 
       return null;
     };
@@ -873,7 +873,7 @@ var newbly = {
 
       async function fetchFnc(fetchURL) {
         result = await fetchArticleFromBackend(fetchURL);
-        fetchArticleCategory(result);
+        fetchData(result);
       };
 
 
@@ -881,7 +881,7 @@ var newbly = {
 
 
       // Set the fetch data
-      var fetchArticleCategory = function (data) {
+      var fetchData = function (data) {
 
         /** We only need to call the function `displayContentsFromBackendOnPage` because we do
         * not have the backend API on our index.html page which will provide the the articles in array format
@@ -894,10 +894,10 @@ var newbly = {
         fetchArticleContent(data.articleContent);
 
 
+
         return data;
 
       }
-
 
 
       var fetchArticleTitle = function (articleTitle) {
@@ -1010,7 +1010,7 @@ var newbly = {
           container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + translatedText + "</p>");
 
         }
-      }
+      };
 
 
 
@@ -1140,9 +1140,29 @@ var newbly = {
     };
 
 
+    async function getArticleId(fetchURL) {
+      let articleId = "";
 
-    var saveSuggestion = function (articleContentIndex, updatedTranslations, articleId) {
-      console.log("saveSuggestion called")
+      let response = await fetch(fetchURL);
+      let data = await response.json();
+
+      if (response.ok) {
+        articleId = data.articleId;
+
+        return articleId;
+      } else {
+        console.error("Something went wrong while contacting the Newbly server. Could not fetch articleId.")
+        return false;
+      }
+
+    }
+
+
+    async function saveSuggestion(articleContentIndex, updatedTranslations) {
+
+
+      let articleId = await getArticleId(newblyBackendAPI());
+
 
       const payload = {
         "articleContentIndex": articleContentIndex,
@@ -1170,7 +1190,6 @@ var newbly = {
           console.log(e);
         });
     };
-
 
 
   }
