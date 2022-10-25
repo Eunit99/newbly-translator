@@ -12,6 +12,9 @@ var newbly = {
     const stylesheet = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/css/style.min.css`; // Link to hosted stylesheet
     const IEScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/js/script.js`; // Link to hosted script compatible with IE 11
     const editIconLink = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/assets/icons/edit-icon.svg`;
+    const keycloakFileURL = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/src/keycloak.min.js`;
+
+
 
     /*
     * Include the stylesheet for Newbly in the head of the page
@@ -24,9 +27,170 @@ var newbly = {
 
     if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write(`<script src="${IEScript}"><\/script>`);
 
+    /*
+    * Include the keycloakFileURL script in the head of the page
+    */
+    document.head.innerHTML += `<script src="${keycloakFileURL}"></script></script>`;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+    * Get current page URL
+    * --------------------------------------------------------------
+    * function to return current page URL
+    */
+
+    function getPageURL() {
+      let pageURL = window.location.href;
+      return pageURL;
+    };
+
+
+
+
+    /*
+    * KEYCLOAK ADAPTER
+    * --------------------------------------------------------------
+    * Keycloak is used to provide authentication service for user
+    * If a user needs to submit their correction, then they must be authenticated
+    * We use Keycloak to handle auth
+    */
+
+    const keycloak = Keycloak({
+      "realm": "newbly",
+      "auth-server-url": "https://sso.newb.ly/auth",
+      "ssl-required": "external",
+      "resource": "newbly",
+      "public-client": true,
+      "confidential-port": 0,
+      "url": `https://sso.newb.ly/auth/realms/newbly/protocol/openid-connect/auth?client_id=newbly-ui&redirect_uri=${getPageURL()}&state=addc88ed-299c-4a1b-b304-555bdffb8909&response_mode=fragment&response_type=code&scope=openid&nonce=e19093ff-fab9-4a80-80a8-99f9a979a836`,
+      "clientId": "newbly-api",
+      "enable-cors": true
+    });
+
+
+
+
+
+
+
+
+    async function getArticleId(fetchURL) {
+      let articleId = "";
+
+      let response = await fetch(fetchURL);
+      let data = await response.json();
+
+      if (response.ok) {
+        articleId = data.articleId;
+
+        return articleId;
+      } else {
+        console.error("Something went wrong while contacting the Newbly server. Could not fetch articleId.")
+        return false;
+      }
+
+    };
+
+
+    async function saveSuggestion(articleContentIndex, updatedTranslations) {
+
+
+      let articleId = await getArticleId(newblyBackendAPI());
+
+
+      const payload = {
+        "articleContentIndex": articleContentIndex,
+        "articleTranslatedPartCorrection": updatedTranslations,
+      };
+
+      const options = {
+        method: "PATCH",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          "Authorization": "Bearer " + keycloak.token,
+        },
+        body: JSON.stringify(payload),
+      };
+
+
+      fetch(`https://api.newb.ly/articles/${articleId}/suggestion`, options)
+        .then(data => {
+          if (!data.ok) {
+            throw Error(data.status);
+          }
+          return data.json();
+        }).then(update => {
+
+          hideModals.textareaModal();
+
+          console.log(update);
+        }).catch(e => {
+          console.log(e);
+        });
+    };
+
+
+
+    /*
+    * This function loadData is called when the user is authenticated
+    * If the user is not authenticated, this function will not be called
+    */
+    const loadData = () => {
+      console.log(keycloak.subject);
+      if (keycloak.idToken) {
+        document.location.href = "?user=" + keycloak.idTokenParsed.preferred_username;
+        console.log("IDToken");
+        console.log(keycloak.idTokenParsed.preferred_username);
+        console.log(keycloak.idTokenParsed.email);
+        console.log(keycloak.idTokenParsed.name);
+        console.log(keycloak.idTokenParsed.given_name);
+        console.log(keycloak.idTokenParsed.family_name);
+      } else {
+        keycloak.loadUserProfile(function () {
+          console.log("Account Service");
+          console.log(keycloak.profile.username);
+          console.log(keycloak.profile.email);
+          console.log(keycloak.profile.firstName + " " + keycloak.profile.lastName);
+          console.log(keycloak.profile.firstName);
+          console.log(keycloak.profile.lastName);
+        }, function () {
+          console.log("Failed to retrieve user details. Please enable claims or account role");
+        });
+      }
+    };
+
+    /*
+   * This function loadFailure is called when the user is not authenticated
+   * If the user is authenticated, this  function will not be called
+   */
+    const loadFailure = () => {
+      console.error("Failed to load data. Check console log");
+    };
+
+    const reloadData = () => {
+      keycloak.updateToken(30)
+        .then(loadData)
+        .catch(() => {
+          loadFailure();
+          console.error("Failed to load data. User is logged out.");
+        });
+    };
 
 
 
@@ -749,7 +913,7 @@ var newbly = {
     var displayNewblyTranslatorUIModal = function () {
 
 
-      // Instantiate the isNewblyTranslatorUIDisplayed var
+      // Instantiate the isNewblyTranslatorUIDisplayed variable
       let isNewblyTranslatorUIDisplayed;
 
 
@@ -808,10 +972,15 @@ var newbly = {
 
         includeTranslationBtn.addEventListener("click", function (e) {
 
-          // Call the function to start fetching translations from backend
+          /*
+          * THIS FUNCTION IS RESPONSIBLE FOR THE TRANSLATION
+          * ----------------------------------------------------------------
+          * startNewblyTranslation() - Start fetching the translations from the backend
+          */
+
           startNewblyTranslation();
 
-          console.info("Newbly translation started");
+          console.info("Newbly translation started!");
 
           // Hide the Newbly translation modal prompt
           hideModals.NewblyTranslatorUIModal();
@@ -836,12 +1005,6 @@ var newbly = {
     }
 
 
-
-
-    function getPageURL() {
-      let pageURL = window.location.href;
-      return pageURL;
-    }
 
     function getURLToBackend() {
 
@@ -948,16 +1111,34 @@ var newbly = {
 
       // Save changes button
       handleSaveChangesBtn: function (contentIndex, content) {
-        let isSignedIn = isUserLoggedIn().isLoggedIn;
-        console.log("isSignedIn :" + isSignedIn);
+        keycloak.init().then(function (authenticated) {
+
+          console.log("handleSaveChangesBtn called");
+          console.log("authenticated :" + authenticated);
 
 
-        if (isSignedIn) {
+          /*
+           * Use Keycloak to check if user is authenticated
+           * If authenticated, call saveSuggestion()
+           * else call appendNewblyAuthenticationModal()
+           */
 
-          saveSuggestion(contentIndex, content);
-        } else {
-          append.appendNewblyAuthenticationModal();
-        }
+          if (authenticated) {
+
+            saveSuggestion(contentIndex, content);
+          } else {
+            append.appendNewblyAuthenticationModal();
+          }
+
+          alert(authenticated ? "authenticated" : "not authenticated");
+
+        }).catch(function () {
+          console.info("authenticated: " + authenticated);
+
+          alert("Failed to initialize Keycloak");
+        });
+
+
       },
 
       // cancel button in confirmation modal
@@ -1232,7 +1413,7 @@ var newbly = {
             */
             container.insertAdjacentHTML("beforeend", enhanceNewbly.editIconContainer(null, articleTitleTranslated));
 
-          }
+          };
 
 
           // For article Content
@@ -1272,6 +1453,20 @@ var newbly = {
 
 
       };
+
+      /*
+      * INITIALIZE KEYCLOAK
+      * --------------------------------
+      * Keycloak is initialized here since the user chose to include translations
+      * on the webpage
+      */
+
+      keycloak.init(
+        {
+          onLoad: "check-sso",
+          flow: "implicit"
+        }
+      ).then(reloadData);
 
 
     };
@@ -1315,79 +1510,6 @@ var newbly = {
 
       // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
       displayNewblyTranslatorUIModal();
-    }
-
-
-    var isUserLoggedIn = function (user) {
-      // checks if user is logged in and  if so, returns  true
-
-      let logInStatus = false;
-
-      let isLoggedIn;
-      user = null;
-
-      if (logInStatus) {
-        isLoggedIn = true;
-      } else {
-        isLoggedIn = false;
-      }
-
-      return { isLoggedIn, user };
-    };
-
-
-    async function getArticleId(fetchURL) {
-      let articleId = "";
-
-      let response = await fetch(fetchURL);
-      let data = await response.json();
-
-      if (response.ok) {
-        articleId = data.articleId;
-
-        return articleId;
-      } else {
-        console.error("Something went wrong while contacting the Newbly server. Could not fetch articleId.")
-        return false;
-      }
-
-    }
-
-
-    async function saveSuggestion(articleContentIndex, updatedTranslations) {
-
-
-      let articleId = await getArticleId(newblyBackendAPI());
-
-
-      const payload = {
-        "articleContentIndex": articleContentIndex,
-        "articleTranslatedPartCorrection": updatedTranslations,
-      };
-
-      const options = {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      };
-
-
-      fetch(`https://api.newb.ly/articles/${articleId}/suggestion`, options)
-        .then(data => {
-          if (!data.ok) {
-            throw Error(data.status);
-          }
-          return data.json();
-        }).then(update => {
-
-          hideModals.textareaModal();
-
-          console.log(update);
-        }).catch(e => {
-          console.log(e);
-        });
     };
 
 
