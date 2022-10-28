@@ -12,9 +12,16 @@ var newbly = {
     const stylesheet = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/css/style.min.css`; // Link to hosted stylesheet
     const IEScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/js/script.js`; // Link to hosted script compatible with IE 11
     const editIconLink = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/assets/icons/edit-icon.svg`;
-    const keycloakFileURL = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/src/keycloak.min.js`;
+    const keycloakFileURL = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/vendor/keycloak.min.js`;
+    const toastrScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/vendor/toastr.min.js`;
+    const toastrStyle = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/vendor/toastr.min.css`;
 
 
+
+    /*
+    * Include the jQuery script in the head of the page from Cloudflare CDN
+    */
+    document.head.innerHTML += `<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>`;
 
     /*
     * Include the stylesheet for Newbly in the head of the page
@@ -28,18 +35,19 @@ var newbly = {
     if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) document.write(`<script src="${IEScript}"><\/script>`);
 
     /*
+    * Include the toastr styles in the head of the page
+    */
+    document.head.innerHTML += `<link rel="stylesheet" href="${toastrStyle}" type="text/css"/>`;
+
+    /*
+    * Include the toastr script in the head of the page
+    */
+    document.head.innerHTML += `<script src="${toastrScript}"></script>`;
+
+    /*
     * Include the keycloakFileURL script in the head of the page
     */
-    document.head.innerHTML += `<script src="${keycloakFileURL}"></script></script>`;
-
-
-
-
-
-
-
-
-
+    document.head.innerHTML += `<script src="${keycloakFileURL}"></script>`;
 
 
 
@@ -58,7 +66,6 @@ var newbly = {
       let pageURL = window.location.href;
       return pageURL;
     };
-
 
 
 
@@ -100,7 +107,8 @@ var newbly = {
 
         return articleId;
       } else {
-        console.error("Something went wrong while contacting the Newbly server. Could not fetch articleId.")
+        console.error("Something went wrong while contacting the Newbly server. Could not fetch articleId.");
+        toastr.error("Something went wrong while contacting the Newbly server. Could not fetch articleId.");
         return false;
       }
 
@@ -135,13 +143,14 @@ var newbly = {
             throw Error(data.status);
           }
           return data.json();
-        }).then(update => {
+        }).then(response => {
 
-          hideModals.textareaModal();
+          console.info("The suggestion was successfully submitted");
+          toastr.success("The suggestion was successfully submitted");
 
-          console.log(update);
         }).catch(e => {
-          console.log(e);
+          console.error("An error occurred: " + e);
+          toastr.error("An error occurred");
         });
     };
 
@@ -150,25 +159,16 @@ var newbly = {
     /*
     * This function loadData is called when the user is authenticated
     * If the user is not authenticated, this function will not be called
+    * This function retrieves user details
     */
     const loadData = () => {
-      console.log(keycloak.subject);
       if (keycloak.idToken) {
-        document.location.href = "?user=" + keycloak.idTokenParsed.preferred_username;
-        console.log("IDToken");
-        console.log(keycloak.idTokenParsed.preferred_username);
-        console.log(keycloak.idTokenParsed.email);
-        console.log(keycloak.idTokenParsed.name);
-        console.log(keycloak.idTokenParsed.given_name);
-        console.log(keycloak.idTokenParsed.family_name);
+        // IDToken
+        console.log(keycloak.idTokenParsed);
       } else {
         keycloak.loadUserProfile(function () {
-          console.log("Account Service");
-          console.log(keycloak.profile.username);
-          console.log(keycloak.profile.email);
-          console.log(keycloak.profile.firstName + " " + keycloak.profile.lastName);
-          console.log(keycloak.profile.firstName);
-          console.log(keycloak.profile.lastName);
+          // Account Service
+          console.log(keycloak.profile);
         }, function () {
           console.log("Failed to retrieve user details. Please enable claims or account role");
         });
@@ -181,6 +181,7 @@ var newbly = {
    */
     const loadFailure = () => {
       console.error("Failed to load data. Check console log");
+      toastr.error("Failed to load data. Check console log");
     };
 
     const reloadData = () => {
@@ -189,6 +190,7 @@ var newbly = {
         .catch(() => {
           loadFailure();
           console.error("Failed to load data. User is logged out.");
+          toastr.error("Failed to load data. User is logged out.");
         });
     };
 
@@ -902,10 +904,8 @@ var newbly = {
         shortLang = browserLang;
       }
 
-      // console.log("shortLang: " + shortLang);
-
       return shortLang;
-    }
+    };
 
 
 
@@ -1060,8 +1060,6 @@ var newbly = {
         URLToBackend = actualURLToBackend();
       }
 
-
-      // console.log("URLToBackend: " + URLToBackend);
       return URLToBackend
     }
 
@@ -1106,37 +1104,43 @@ var newbly = {
 
         append.appendNewblyConfirmationModal(content);
 
-
       },
 
       // Save changes button
       handleSaveChangesBtn: function (contentIndex, content) {
-        keycloak.init().then(function (authenticated) {
 
-          console.log("handleSaveChangesBtn called");
-          console.log("authenticated :" + authenticated);
+        // Hide the textarea modal once button is clicked
+        hideModals.textareaModal();
 
 
-          /*
-           * Use Keycloak to check if user is authenticated
-           * If authenticated, call saveSuggestion()
-           * else call appendNewblyAuthenticationModal()
-           */
+        keycloak.init({
+          onLoad: "check-sso",
+          flow: "implicit"
+        })
+          .then(function (authenticated) {
 
-          if (authenticated) {
+            /*
+             * Use Keycloak to check if user is authenticated
+             * If authenticated, call saveSuggestion()
+             * else call appendNewblyAuthenticationModal()
+             */
 
-            saveSuggestion(contentIndex, content);
-          } else {
-            append.appendNewblyAuthenticationModal();
-          }
+            if (authenticated) {
 
-          alert(authenticated ? "authenticated" : "not authenticated");
+              saveSuggestion(contentIndex, content);
+            } else {
 
-        }).catch(function () {
-          console.info("authenticated: " + authenticated);
+              /*
+              * Call appendNewblyAuthenticationModal() to append the authModal since user is not authenticated
+              */
 
-          alert("Failed to initialize Keycloak");
-        });
+              append.appendNewblyAuthenticationModal();
+            }
+
+          }).catch(function () {
+            console.error("Failed to initialize Keycloak");
+            toastr.error("Failed to initialize Keycloak");
+          });
 
 
       },
@@ -1175,7 +1179,12 @@ var newbly = {
         // Hide the authentication prompt modal
         hideModals.authenticationModal();
 
-
+        keycloak.init(
+          {
+            onLoad: "login-required",
+            flow: "implicit"
+          }
+        );
       },
 
 
@@ -1243,7 +1252,9 @@ var newbly = {
 
           return data;
         } else {
-          console.error("Something went wrong while contacting the Newbly server. Could not fetch translations.")
+          console.error("Something went wrong while contacting the Newbly server. Could not fetch translations.");
+          toastr.error("Something went wrong while contacting the Newbly server. Could not fetch translations.");
+
           return false;
         }
       }
