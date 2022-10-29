@@ -140,7 +140,7 @@ var newbly = {
 
       let value = {
         "title": "",
-        "suggestions": [0, 1, 2],
+        "suggestions": [],
         "content": []
       };
 
@@ -155,22 +155,35 @@ var newbly = {
       value.suggestions = [...value.suggestions, value.suggestions.length]
 
 
-      console.log(value.content.length);
-      console.log(articleContent);
-      console.log(value);
-
 
       localStorage.setItem(key, JSON.stringify(value));
-      return key;
     };
 
 
 
 
+    async function getLocalStorageArticleContent() {
+      const key = await localStorageArticleKey();
+
+      let content;
+
+      content = localStorage.getItem(key);
 
 
+      return JSON.parse(content);
+    }
 
 
+    function setTranslationModalViewed() {
+      localStorage.setItem("@translationModalViewed", true);
+    };
+
+    function getTranslationModalViewed() {
+
+      let value = localStorage.getItem("@translationModalViewed");
+
+      return JSON.parse(value);
+    }
 
 
 
@@ -598,6 +611,8 @@ var newbly = {
 
       newblyUIModalLang = longLang;
 
+      setLanguage(getShortBrowserLanguage(), longLang);
+
       return {
         longLang,
         newblyUIModalLang,
@@ -972,11 +987,19 @@ var newbly = {
       return shortLang;
     };
 
+    function setLanguage(shortLang, longLang) {
 
+      let value = {
+        "code": shortLang,
+        "name": longLang,
+        "native": longLang
+      };
+
+      localStorage.setItem("@language", JSON.stringify(value));
+    }
 
 
     var displayNewblyTranslatorUIModal = function () {
-
 
       // Instantiate the isNewblyTranslatorUIDisplayed variable
       let isNewblyTranslatorUIDisplayed;
@@ -1049,6 +1072,13 @@ var newbly = {
 
           // Hide the Newbly translation modal prompt
           hideModals.NewblyTranslatorUIModal();
+
+          /*
+           * Call setTranslationModalViewed
+           * ----------------------------------------------------------------
+           * sets @translationModalViewed to true
+           */
+          setTranslationModalViewed();
         }); // Translation started
 
 
@@ -1179,12 +1209,12 @@ var newbly = {
         * Call the setLocalStorageArticleContent to set the corresponding
         * content to localStorage
         */
-
         await setLocalStorageArticleContent(contentIndex, content);
 
 
-
-        // Hide the textarea modal once button is clicked
+        /*
+        * Hide the textarea modal once button is clicked
+        */
         hideModals.textareaModal();
 
 
@@ -1595,16 +1625,25 @@ var newbly = {
       * Controls wether to start translations or display the consent modal
       *----------------------------------------------------------------
       * If URLHasNLangParam === true, then start translations automatically
-      * If URLHasNLangParam !== true, then start display the translation consent modal
+      * If URLHasNLangParam !== true, then start check for check if translation modal has been viewed
+      * If translation modal has been viewed, start translations automatically, else
+      * display the translation consent modal
     */
 
     if (getTargetLanguage().URLHasNLangParam) {
-      // Call the function to start fetching translations from backend
+      /*
+      * Call the function to start fetching translations from backend
+      * Since the URL has nLang query parameter
+      */
       startNewblyTranslation();
     } else {
 
-      // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
-      displayNewblyTranslatorUIModal();
+      if (getTranslationModalViewed()) {
+        startNewblyTranslation();
+      } else {
+        // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
+        displayNewblyTranslatorUIModal();
+      }
     };
 
 
