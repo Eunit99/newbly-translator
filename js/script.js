@@ -96,9 +96,18 @@ var newbly = {
 
 
 
-    async function getArticleId(fetchURL) {
-      let articleId = "";
 
+
+
+
+
+
+
+
+
+    async function getArticleId() {
+      let articleId = "";
+      let fetchURL = newblyBackendAPI();
       let response = await fetch(fetchURL);
       let data = await response.json();
 
@@ -114,11 +123,67 @@ var newbly = {
 
     };
 
+    async function localStorageArticleKey() {
+
+      let key;
+      let articleId = await getArticleId();
+      key = `${getLongBrowserLanguage().longLang.toLowerCase()}_${articleId}`;
+
+      return key; // english_wu4Rqww7
+
+    };
+
+
+
+    async function setLocalStorageArticleContent(articleId, articleContent) {
+      const key = await localStorageArticleKey();
+
+      let value = {
+        "title": "",
+        "suggestions": [0, 1, 2],
+        "content": []
+      };
+
+      if (articleId === null) {
+        value.title = articleContent
+      };
+
+      if (articleId !== null) {
+        value.content = [...value.content, articleContent]
+      };
+
+      value.suggestions = [...value.suggestions, value.suggestions.length]
+
+
+      console.log(value.content.length);
+      console.log(articleContent);
+      console.log(value);
+
+
+      localStorage.setItem(key, JSON.stringify(value));
+      return key;
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     async function saveSuggestion(articleContentIndex, updatedTranslations) {
 
 
-      let articleId = await getArticleId(newblyBackendAPI());
+      let articleId = await getArticleId();
 
 
       const payload = {
@@ -145,8 +210,8 @@ var newbly = {
           return data.json();
         }).then(response => {
 
-          console.info("The suggestion was successfully submitted");
-          toastr.success("The suggestion was successfully submitted");
+          console.info("The suggestion was successfully submitted!");
+          toastr.success("The suggestion was successfully submitted!");
 
         }).catch(e => {
           console.error("An error occurred: " + e);
@@ -607,14 +672,14 @@ var newbly = {
         document.getElementById("cancel-changes").innerText = getLongBrowserLanguage().cancel;
 
         // Initialize the modal buttons
-        initModalBtns.newblyTextareaBtns();
+        initModalBtns.newblyTextareaBtns(contentIndex, content);
 
         // Display the translationConsentText depending on user's browser language
         document.getElementById("newbly-translation--ui-modal__text").innerText = getLongBrowserLanguage().newblyTranslationConsentText;
 
       },
 
-      appendNewblyConfirmationModal: function (content) {
+      appendNewblyConfirmationModal: function (contentIndex, content) {
 
         const confirmationPrompt = `
           <!-- Confirmation modal -->
@@ -649,7 +714,7 @@ var newbly = {
         document.getElementById("newbly-enhance-confirmation-modal").style.display = "flex";
 
         // Initialize the buttons waiting for corresponding actions
-        initModalBtns.newblyConfirmationBtns(content);
+        initModalBtns.newblyConfirmationBtns(contentIndex, content);
       },
 
 
@@ -1107,7 +1172,17 @@ var newbly = {
       },
 
       // Save changes button
-      handleSaveChangesBtn: function (contentIndex, content) {
+      handleSaveChangesBtn: async function (contentIndex, content) {
+
+
+        /*
+        * Call the setLocalStorageArticleContent to set the corresponding
+        * content to localStorage
+        */
+
+        await setLocalStorageArticleContent(contentIndex, content);
+
+
 
         // Hide the textarea modal once button is clicked
         hideModals.textareaModal();
@@ -1203,10 +1278,13 @@ var newbly = {
       newblyTextareaBtns: function (contentIndex, content) {
 
         document.getElementById("cancel-changes").addEventListener("click", function (e) {
+          e.preventDefault();
           enhanceNewblyModalActions.handleTextareaCancelBtn(contentIndex, content);
         });
 
         document.getElementById("save-suggested-changes").addEventListener("click", function (e) {
+          e.preventDefault();
+
           enhanceNewblyModalActions.handleSaveChangesBtn(contentIndex, content);
         })
       },
@@ -1215,10 +1293,12 @@ var newbly = {
       newblyConfirmationBtns: function (content) {
 
         document.getElementById("close-newbly-modal").addEventListener("click", function (e) {
+          e.preventDefault();
           enhanceNewblyModalActions.handleCancelConfirmationBtn(content);
         });
 
         document.getElementById("close-newbly-enhance-textarea").addEventListener("click", function (e) {
+          e.preventDefault();
           enhanceNewblyModalActions.handleDiscardChangesBtn(content);
         })
       },
@@ -1227,10 +1307,12 @@ var newbly = {
       newblyAuthModalBtns: function () {
 
         document.getElementById("enhance-newbly-auth-wrapper-close-button").addEventListener("click", function (e) {
+          e.preventDefault();
           enhanceNewblyModalActions.handleCloseAuthModalBtn();
         });
 
         document.getElementById("enhance-newbly-auth-button").addEventListener("click", function (e) {
+          e.preventDefault();
           enhanceNewblyModalActions.handleAuthBtn();
         });
 
@@ -1478,6 +1560,8 @@ var newbly = {
           flow: "implicit"
         }
       ).then(reloadData);
+
+
 
 
     };
