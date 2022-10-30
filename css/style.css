@@ -137,7 +137,7 @@
   min-width: 100px;
 }
 
-.edit-buttons.enhance-newbly button.enhance-newbly:disabled {
+.edit-buttons.enhance-newbly button.enhance-newbly.disabled {
   opacity: 0.5;
   cursor: default;
   color: rgb(0, 0, 0);
