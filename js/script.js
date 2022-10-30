@@ -215,6 +215,7 @@ var newbly = {
       };
 
 
+
       fetch(`https://api.newb.ly/articles/${articleId}/suggestion`, options)
         .then(data => {
           if (!data.ok) {
@@ -230,6 +231,8 @@ var newbly = {
           console.error("An error occurred: " + e);
           toastr.error("An error occurred");
         });
+
+
     };
 
 
@@ -666,7 +669,7 @@ var newbly = {
                   dir=${getTextDirection()}
                   class="enhance-newbly" spellcheck="false" id="enhance-translations">${content}</textarea>
                   <div class="enhance-newbly edit-buttons" id="">
-                    <button class="enhance-newbly" id="save-suggested-changes"></button>
+                    <button class="enhance-newbly disabled" id="save-suggested-changes"></button>
                     <button class="enhance-newbly" id="cancel-changes"></button>
                   </div>
                 </div>
@@ -686,8 +689,13 @@ var newbly = {
         document.getElementById("save-suggested-changes").innerText = getLongBrowserLanguage().saveChanges;
         document.getElementById("cancel-changes").innerText = getLongBrowserLanguage().cancel;
 
-        // Initialize the modal buttons
+        /*
+        * Initialize the modal buttons
+        * This is needed so user can click on the cancel button
+        * to cancel or close the modal
+        */
         initModalBtns.newblyTextareaBtns(contentIndex, content);
+
 
         // Display the translationConsentText depending on user's browser language
         document.getElementById("newbly-translation--ui-modal__text").innerText = getLongBrowserLanguage().newblyTranslationConsentText;
@@ -830,6 +838,34 @@ var newbly = {
 
 
 
+
+    var handleTextareaChange = function (translatedTextIndex, translatedText) {
+
+      const textarea = document.getElementById("enhance-translations");
+      const saveBtn = document.getElementById("save-suggested-changes");
+      var isTextChange = false;
+      let currentTextareaContent;
+
+      textarea.addEventListener("input", function (e) {
+
+
+        currentTextareaContent = e.target.value;
+
+        if (currentTextareaContent !== translatedText) {
+          saveBtn.classList.remove("disabled");
+          isTextChange = true;
+        } else {
+          saveBtn.classList.add("disabled");
+          isTextChange = false;
+        };
+
+      });
+
+      return isTextChange;
+    };
+
+
+
     var displayNewblyTextarea = function (translatedTextIndex, translatedText) {
 
       /*
@@ -841,9 +877,9 @@ var newbly = {
       // Change display styles to flex
       document.getElementById("newbly-textarea-modal-wrapper").style.display = "flex";
 
+      handleTextareaChange(translatedTextIndex, translatedText);
 
     };
-
 
 
     var handleEditIconBtn = function (translatedTextIndex, translatedText) {
@@ -871,12 +907,20 @@ var newbly = {
 
           displayNewblyTextarea(translatedTextIndex, translatedText);
 
-
         });
 
       }, 1000);
 
     };
+
+
+    function replaceTranslationWithCorrectedTranslation(contentIndex, currentTextareaContent) {
+
+      const textId = `newbly-translated-text-${contentIndex}`;
+
+      document.getElementById(textId).innerHTML = currentTextareaContent;
+    };
+
 
 
 
@@ -1188,28 +1232,39 @@ var newbly = {
     var enhanceNewblyModalActions = {
 
       // cancel button
-      handleTextareaCancelBtn: function (content) {
+      handleTextareaCancelBtn: function (contentIndex, content) {
         hideModals.textareaModal();
 
 
         /*
-        * Call the appendNewblyConfirmationModal function to append the Newbly confirmation modal to the document
+        * Call the appendNewblyConfirmationModal function to append the Newbly confirmation modal to the document if the textarea content did change
         * Note that there is display: none in the styles for .modal-wrapper by default
         */
-
         append.appendNewblyConfirmationModal(content);
-
       },
+
 
       // Save changes button
       handleSaveChangesBtn: async function (contentIndex, content) {
 
+        let currentTextareaContent
+          = document.getElementById("enhance-translations").value;
+
+
+
+
+
+
+
+
+        replaceTranslationWithCorrectedTranslation(contentIndex, currentTextareaContent);
+
 
         /*
         * Call the setLocalStorageArticleContent to set the corresponding
-        * content to localStorage
+        * currentTextareaContent to localStorage
         */
-        await setLocalStorageArticleContent(contentIndex, content);
+        await setLocalStorageArticleContent(contentIndex, currentTextareaContent);
 
 
         /*
@@ -1232,7 +1287,8 @@ var newbly = {
 
             if (authenticated) {
 
-              saveSuggestion(contentIndex, content);
+              saveSuggestion(contentIndex, currentTextareaContent);
+
             } else {
 
               /*
@@ -1315,8 +1371,10 @@ var newbly = {
         document.getElementById("save-suggested-changes").addEventListener("click", function (e) {
           e.preventDefault();
 
+
           enhanceNewblyModalActions.handleSaveChangesBtn(contentIndex, content);
-        })
+
+        });
       },
 
 
@@ -1497,19 +1555,36 @@ var newbly = {
       }
 
 
-      var appendTranslation = function (container, translatedText) {
+      var appendTranslation = function (id, container, translatedText) {
+
+
+
+        /*
+        * Use insertAdjacentHTML to insert the translatedText using HTML format right a the articleTitle
+        */
+
+        container.insertAdjacentHTML(`beforeend`, `<p class='newbly-translated-text' id='newbly-translated-text-${id}'> ${translatedText}</p>`);
+
+
+
+
+
+        /*
+        *  Add RTL stylings if translation target language is arabic
+        * This is done by adding the .arabic class
+        */
 
         if (getTargetLanguage().targetLanguage === "arabic" || getLongBrowserLanguage().longLang.toLowerCase() === "arabic") {
 
-          //  Add RTL stylings if translation target language is arabic
-          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text arabic'>" + translatedText + "</p>");
+          const arTranslations = document.querySelectorAll(".newbly-translated-text");
 
-        } else {
+          for (const arTranslation of arTranslations) {
+            arTranslation.classList.add("arabic");
+          }
 
-          // Use insertAdjacentHTML to insert the translatedText using HTML format right a the articleTitle
-          container.insertAdjacentHTML("beforeend", "<p class='newbly-translated-text'>" + translatedText + "</p>");
+        };
 
-        }
+
       };
 
 
@@ -1529,7 +1604,11 @@ var newbly = {
 
           if (container.innerText === articleTitle) {
 
-            appendTranslation(container, articleTitleTranslated);
+            /*
+             * Use insertAdjacentHTML to insert the articleTitleTranslated using HTML format right a the articleTitle
+             * null represent the index, we shall use it to represent the id for the title
+            */
+            appendTranslation(null, container, articleTitleTranslated);
 
             /*
             * Append the editIcon to the container and pass null as an id and articleTitleTranslated as parameters to it
@@ -1551,15 +1630,18 @@ var newbly = {
           for (let i = 0; i < articleContent.length; i++) {
 
 
-
-            // If the container innerText  of the document matches with articleContent[i], the append articleContentTranslated[i]
-
+            /*
+            * If the container innerText  of the document matches with articleContent[i], the append articleContentTranslated[i]
+            */
 
             if (container.innerText === articleContent[i]) {
 
-              // Use insertAdjacentHTML to insert the articleContentTranslated[i] using HTML format right a the articleTitle
+              /*
+              * Use insertAdjacentHTML to insert the articleContentTranslated[i] using HTML format right a the articleTitle
+              * i represent the index, we shall use it to differentialte the ids
+              */
 
-              appendTranslation(container, articleContentTranslated[i]);
+              appendTranslation(i, container, articleContentTranslated[i]);
 
               // Append the editIcon to container and pass the index of the translatedContent and articleContentTranslated[i] as parameters to it
               container.insertAdjacentHTML("beforeend", enhanceNewbly.editIconContainer(i, articleContentTranslated[i]));
@@ -1636,14 +1718,11 @@ var newbly = {
       * Since the URL has nLang query parameter
       */
       startNewblyTranslation();
+    } else if (getTranslationModalViewed()) {
+      startNewblyTranslation();
     } else {
-
-      if (getTranslationModalViewed()) {
-        startNewblyTranslation();
-      } else {
-        // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
-        displayNewblyTranslatorUIModal();
-      }
+      // Call the displayNewblyTranslatorUIModal function to display the Newbly prompt modal to suggest translation
+      displayNewblyTranslatorUIModal();
     };
 
 
