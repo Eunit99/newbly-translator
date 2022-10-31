@@ -165,12 +165,7 @@ var newbly = {
     async function getLocalStorageArticleContent() {
       const key = await localStorageArticleKey();
 
-      let content;
-
-      content = localStorage.getItem(key);
-
-
-      return JSON.parse(content);
+      return JSON.parse(localStorage.getItem(key));
     }
 
 
@@ -180,9 +175,7 @@ var newbly = {
 
     function getTranslationModalViewed() {
 
-      let value = localStorage.getItem("@translationModalViewed");
-
-      return JSON.parse(value);
+      return JSON.parse(localStorage.getItem("@translationModalViewed"));
     }
 
 
@@ -197,12 +190,17 @@ var newbly = {
 
 
       let articleId = await getArticleId();
+      let payload;
 
 
-      const payload = {
-        "articleContentIndex": articleContentIndex,
-        "articleTranslatedPartCorrection": updatedTranslations,
-      };
+      if (!isSuggestionsSentToBackend()) {
+        payload = await getLocalStorageArticleContent();
+      } else {
+        payload = {
+          "articleContentIndex": articleContentIndex,
+          "articleTranslatedPartCorrection": updatedTranslations,
+        };
+      }
 
       const options = {
         method: "PATCH",
@@ -216,9 +214,12 @@ var newbly = {
 
 
 
+
+
       fetch(`https://api.newb.ly/articles/${articleId}/suggestion`, options)
         .then(data => {
           if (!data.ok) {
+            setSuggestionsSentToBackend(false)
             throw Error(data.status);
           }
           return data.json();
@@ -226,13 +227,13 @@ var newbly = {
 
           console.info("The suggestion was successfully submitted!");
           toastr.success("The suggestion was successfully submitted!");
+          setSuggestionsSentToBackend(true)
 
         }).catch(e => {
           console.error("An error occurred: " + e);
           toastr.error("An error occurred");
+          setSuggestionsSentToBackend(false)
         });
-
-
     };
 
 
@@ -257,9 +258,9 @@ var newbly = {
     };
 
     /*
-   * This function loadFailure is called when the user is not authenticated
-   * If the user is authenticated, this  function will not be called
-   */
+    * This function loadFailure is called when the user is not authenticated
+    * If the user is authenticated, this  function will not be called
+    */
     const loadFailure = () => {
       console.error("Failed to load data. Check console log");
       toastr.error("Failed to load data. Check console log");
@@ -854,6 +855,14 @@ var newbly = {
         if (currentTextareaContent !== translatedText) {
           saveBtn.classList.remove("disabled");
           isTextChange = true;
+
+
+          /*
+          * Set setSuggestionsSentToBackend to false because
+          * This new suggestion has not been sent to the backend yet
+          */
+          setSuggestionsSentToBackend(false);
+
         } else {
           saveBtn.classList.add("disabled");
           isTextChange = false;
@@ -1040,7 +1049,26 @@ var newbly = {
       };
 
       localStorage.setItem("@language", JSON.stringify(value));
-    }
+    };
+
+
+    function setSuggestionsSentToBackend(value) {
+      localStorage.setItem("@suggestionsSent", value);
+    };
+
+    function isSuggestionsSentToBackend() {
+      return JSON.parse(localStorage.getItem("@suggestionsSent"));
+    };
+
+
+
+
+
+
+
+
+
+
 
 
     var displayNewblyTranslatorUIModal = function () {
@@ -1251,12 +1279,6 @@ var newbly = {
           = document.getElementById("enhance-translations").value;
 
 
-
-
-
-
-
-
         replaceTranslationWithCorrectedTranslation(contentIndex, currentTextareaContent);
 
 
@@ -1287,7 +1309,16 @@ var newbly = {
 
             if (authenticated) {
 
-              saveSuggestion(contentIndex, currentTextareaContent);
+
+              /*
+              * Check if this suggestion has not already been sent to backend
+              * If suggestion has not been sent,
+              * Then call the saveSuggestion function to send a PATCH reques
+              * Else do not call saveSuggestion function
+              */
+              if (!isSuggestionsSentToBackend()) {
+                saveSuggestion(contentIndex, currentTextareaContent);
+              };
 
             } else {
 
