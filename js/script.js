@@ -138,24 +138,39 @@ var newbly = {
     async function setLocalStorageArticleContent(articleId, articleContent) {
       const key = await localStorageArticleKey();
 
+
+      let localStorageArticleContent = await getLocalStorageArticleContent();
+
+      // Initialize these variables depending on if they exist on the local storage
+      let title = localStorageArticleContent?.title ? localStorageArticleContent?.title : "";
+      let suggestions = localStorageArticleContent?.suggestions ? localStorageArticleContent?.suggestions : [];
+      let content = localStorageArticleContent?.content ? localStorageArticleContent?.content : [];
+
+
+
+
       let value = {
-        "title": "",
-        "suggestions": [],
-        "content": []
+        "title": title,
+        "suggestions": suggestions,
+        "content": content
       };
 
+
+      // This part represent the article title since it is assigned an Id of null
       if (articleId === null) {
         value.title = articleContent
       };
 
+      // This part corresponds to an acyual articleContent since we never assigned articleId as null
       if (articleId !== null) {
-        value.content = [...value.content, articleContent]
+        value.content.push(articleContent)
       };
 
-      value.suggestions = [...value.suggestions, value.suggestions.length]
+      // Keep track of the number of suggestions done by the user
+      value.suggestions.push(value.suggestions.length)
 
 
-
+      // Set the value to localStorage
       localStorage.setItem(key, JSON.stringify(value));
     };
 
@@ -166,7 +181,7 @@ var newbly = {
       const key = await localStorageArticleKey();
 
       return JSON.parse(localStorage.getItem(key));
-    }
+    };
 
 
     function setTranslationModalViewed() {
@@ -176,7 +191,7 @@ var newbly = {
     function getTranslationModalViewed() {
 
       return JSON.parse(localStorage.getItem("@translationModalViewed"));
-    }
+    };
 
 
 
@@ -188,19 +203,24 @@ var newbly = {
 
     async function saveSuggestion(articleContentIndex, updatedTranslations) {
 
-
+      /*
+      * Get the articleId
+      * The articleId is used to know which article we are sending a PATCGH request to
+      */
       let articleId = await getArticleId();
-      let payload;
 
 
-      if (!isSuggestionsSentToBackend()) {
-        payload = await getLocalStorageArticleContent();
-      } else {
-        payload = {
-          "articleContentIndex": articleContentIndex,
-          "articleTranslatedPartCorrection": updatedTranslations,
-        };
-      }
+      let payload = {
+        "articleContentIndex": articleContentIndex,
+        "articleTranslatedPartCorrection": updatedTranslations,
+      };
+
+
+
+
+
+
+
 
       const options = {
         method: "PATCH",
@@ -215,8 +235,8 @@ var newbly = {
 
 
 
-
       fetch(`https://api.newb.ly/articles/${articleId}/suggestion`, options)
+      fetch(`http://localhost:8888/articles/1`, options)
         .then(data => {
           if (!data.ok) {
             setSuggestionsSentToBackend(false)
@@ -234,6 +254,7 @@ var newbly = {
           toastr.error("An error occurred");
           setSuggestionsSentToBackend(false)
         });
+
     };
 
 
@@ -1279,6 +1300,8 @@ var newbly = {
           = document.getElementById("enhance-translations").value;
 
 
+
+
         replaceTranslationWithCorrectedTranslation(contentIndex, currentTextareaContent);
 
 
@@ -1319,7 +1342,6 @@ var newbly = {
               if (!isSuggestionsSentToBackend()) {
                 saveSuggestion(contentIndex, currentTextareaContent);
               };
-
             } else {
 
               /*
