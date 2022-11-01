@@ -105,6 +105,39 @@ var newbly = {
 
 
 
+
+
+
+
+
+
+    async function updateDOMContentWithLocalStorage() {
+      let localStorageArticleContent = await getLocalStorageArticleContent();
+
+      // Initialize these variables depending on if they exist on the local storage
+      let title = localStorageArticleContent?.title;
+      let suggestions = localStorageArticleContent?.suggestions;
+      let content = localStorageArticleContent?.content;
+
+      // Replace the title with content from localStorage
+      document.getElementById("newbly-translated-text-null").innerHTML = title;
+
+      for (let i = 0; i < content.length; i++) {
+        let currentElement = document.getElementById(`newbly-translated-text-${i}`);
+
+        if (content[i] && currentElement) {
+          document.getElementById(`newbly-translated-text-${i}`).innerHTML = content[i];
+        };
+
+      };
+
+    };
+
+
+
+
+
+
     async function getArticleId() {
       let articleId = "";
       let fetchURL = newblyBackendAPI();
@@ -119,15 +152,14 @@ var newbly = {
         console.error("Something went wrong while contacting the Newbly server. Could not fetch articleId.");
         toastr.error("Something went wrong while contacting the Newbly server. Could not fetch articleId.");
         return false;
-      }
+      };
 
     };
 
     async function localStorageArticleKey() {
 
-      let key;
       let articleId = await getArticleId();
-      key = `${getLongBrowserLanguage().longLang.toLowerCase()}_${articleId}`;
+      let key = `${getLongBrowserLanguage().longLang.toLowerCase()}_${articleId}`;
 
       return key; // english_wu4Rqww7
 
@@ -163,15 +195,27 @@ var newbly = {
 
       // This part corresponds to an acyual articleContent since we never assigned articleId as null
       if (articleId !== null) {
-        value.content.push(articleContent)
+
+        const index = articleId;
+
+        // If suggestion has already been provided, then, replace that suggestion with the new one
+        if (value.content[articleId]) {
+          value.content.splice(articleId, 1, articleContent)
+          // Else add the suggestion to the array since it does not already exist
+        } else {
+          value.content.push(articleContent)
+        }
       };
 
       // Keep track of the number of suggestions done by the user
-      value.suggestions.push(value.suggestions.length)
+      value.suggestions.push(value.suggestions.length);
 
 
       // Set the value to localStorage
       localStorage.setItem(key, JSON.stringify(value));
+
+      // function to replace DOM content with that from localStorage
+      await updateDOMContentWithLocalStorage();
     };
 
 
@@ -195,13 +239,23 @@ var newbly = {
 
 
 
+    async function replaceDOMContentWithCustomSuggestions() {
+      let localStorageKey = await localStorageArticleKey();
+      let articleId = await getArticleId();
+      const generatedKey = `${getLongBrowserLanguage().longLang.toLowerCase()}_${articleId}`;
 
+      if (localStorageKey === generatedKey) {
+        // function to replace DOM content with that from localStorage
+        await updateDOMContentWithLocalStorage();
+      };
+    };
 
 
 
 
 
     async function saveSuggestion(articleContentIndex, updatedTranslations) {
+
 
       /*
       * Get the articleId
@@ -233,9 +287,7 @@ var newbly = {
       };
 
 
-
-
-      fetch(`https://api.newb.ly/articles/${articleId}/suggestion`, options)
+      // fetch(`https://api.newb.ly/articles/${articleId}/suggestion`, options)
       fetch(`http://localhost:8888/articles/1`, options)
         .then(data => {
           if (!data.ok) {
@@ -653,7 +705,7 @@ var newbly = {
         authTextTwo,
         areYouSure
       };
-    }
+    };
 
 
 
@@ -1259,12 +1311,13 @@ var newbly = {
       let API_URL;
 
 
-      if (!getTargetLanguage().URLHasNLangParam) {
-        API_URL = "https://api.newb.ly/articles/?language=" + getLongBrowserLanguage().longLang.toLowerCase() + "&url=" + getURLToBackend();
-      } else {
-        API_URL = "https://api.newb.ly/articles/?language=" + getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
-      }
+      // if (!getTargetLanguage().URLHasNLangParam) {
+      //   API_URL = "https://api.newb.ly/articles/?language=" + getLongBrowserLanguage().longLang.toLowerCase() + "&url=" + getURLToBackend();
+      // } else {
+      //   API_URL = "https://api.newb.ly/articles/?language=" + getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
+      // }
 
+      API_URL = "http://localhost:8888/articles/1"
       return API_URL;
     };
 
@@ -1298,8 +1351,6 @@ var newbly = {
 
         let currentTextareaContent
           = document.getElementById("enhance-translations").value;
-
-
 
 
         replaceTranslationWithCorrectedTranslation(contentIndex, currentTextareaContent);
@@ -1339,9 +1390,11 @@ var newbly = {
               * Then call the saveSuggestion function to send a PATCH reques
               * Else do not call saveSuggestion function
               */
+
               if (!isSuggestionsSentToBackend()) {
                 saveSuggestion(contentIndex, currentTextareaContent);
               };
+
             } else {
 
               /*
@@ -1727,8 +1780,8 @@ var newbly = {
       ).then(reloadData);
 
 
-
-
+      // call the function to automatically replace contents on the page with custom suggestions
+      replaceDOMContentWithCustomSuggestions();
     };
 
 
