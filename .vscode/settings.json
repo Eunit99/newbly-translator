@@ -1,8 +1,12 @@
 {
   "cSpell.words": [
     "Btns",
+    "Keycloak",
     "Newbly",
     "nlang",
-    "nLang"
-  ]
+    "nLang",
+    "Rqww",
+    "toastr"
+  ],
+  "liveServer.settings.port": 5501
 }
