@@ -233,8 +233,7 @@ var newbly = {
         body: JSON.stringify(payload),
       };
 
-      // fetch(`https://api.newb.ly/articles/${articleId}/suggestion`, options)
-      fetch(`http://localhost:8888/articles/1`, options)
+      fetch(`https://api.newb.ly/articles/${articleId}/suggestion`, options)
         .then((data) => {
           if (!data.ok) {
             setSuggestionsSentToBackend(false);
@@ -1017,7 +1016,7 @@ var newbly = {
           isTranslationAvailable = true;
           console.log(
             "Newbly translation is available for: " +
-              getLongBrowserLanguage().longLang
+            getLongBrowserLanguage().longLang
           );
         }
       }
@@ -1133,7 +1132,7 @@ var newbly = {
         // log the error in the console
         console.error(
           "Newbly translation is not currently available for this page. Browser language is: " +
-            getFirstBrowserLanguage()
+          getFirstBrowserLanguage()
         );
 
         isNewblyTranslatorUIDisplayed = false;
@@ -1254,16 +1253,15 @@ var newbly = {
       // through the pageURL
       let API_URL;
 
-      // if (!getTargetLanguage().URLHasNLangParam) {
-      //   API_URL = "https://api.newb.ly/articles/?language=" +
-      //   getLongBrowserLanguage().longLang.toLowerCase() + "&url=" +
-      //   getURLToBackend();
-      // } else {
-      //   API_URL = "https://api.newb.ly/articles/?language=" +
-      //   getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
-      // }
+      if (!getTargetLanguage().URLHasNLangParam) {
+        API_URL = "https://api.newb.ly/articles/?language=" +
+          getLongBrowserLanguage().longLang.toLowerCase() + "&url=" +
+          getURLToBackend();
+      } else {
+        API_URL = "https://api.newb.ly/articles/?language=" +
+          getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
+      }
 
-      API_URL = "http://localhost:8888/articles/1";
       return API_URL;
     }
 
@@ -1359,9 +1357,6 @@ var newbly = {
       handleDiscardChangesBtn: function () {
         hideModals.textareaModal();
         hideModals.confirmationModal();
-
-        // TODO Write a function to allow editBtn to still be clicked agin
-        handleEditIconBtn(5, "translatedText");
       },
 
       handleCloseAuthModalBtn: function (e) {
