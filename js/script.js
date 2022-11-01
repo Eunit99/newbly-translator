@@ -83,8 +83,20 @@ var newbly = {
 
       // Initialize these variables depending on if they exist on the local
       // storage
-      let title = localStorageArticleContent.title;
-      let content = localStorageArticleContent.content;
+      let title;
+      let content;
+
+      if (localStorageArticleContent.title) {
+        title = localStorageArticleContent.title
+      } else {
+        title = "";
+      };
+
+      if (localStorageArticleContent.content) {
+        content = localStorageArticleContent.content
+      } else {
+        content = [];
+      };
 
       // Replace the title with content from localStorage
       document.getElementById("newbly-translated-text-null").innerHTML = title;
@@ -127,7 +139,7 @@ var newbly = {
       let key = `${getLongBrowserLanguage().longLang.toLowerCase()}_${articleId}`;
 
       return key; // english_wu4Rqww7
-    }
+    };
 
     async function setLocalStorageArticleContent(articleId, articleContent) {
       const key = await localStorageArticleKey();
@@ -136,15 +148,27 @@ var newbly = {
 
       // Initialize these variables depending on if they exist on the local
       // storage
-      let title = localStorageArticleContent?.title
-        ? localStorageArticleContent?.title
-        : "";
-      let suggestions = localStorageArticleContent?.suggestions
-        ? localStorageArticleContent?.suggestions
-        : [];
-      let content = localStorageArticleContent?.content
-        ? localStorageArticleContent?.content
-        : [];
+      let title;
+      let content;
+      let suggestions;
+
+      if (localStorageArticleContent.title) {
+        title = localStorageArticleContent.title
+      } else {
+        title = "";
+      };
+
+      if (localStorageArticleContent.content) {
+        content = localStorageArticleContent.content
+      } else {
+        content = [];
+      };
+
+      if (localStorageArticleContent.suggestions) {
+        suggestions = localStorageArticleContent.suggestions
+      } else {
+        suggestions = [];
+      };
 
       let value = {
         title: title,
@@ -1190,7 +1214,7 @@ var newbly = {
       let nonQueryPartURL = URLArray[0];
       let queryPartURL = URLArray[1];
 
-      // If no query string (?...) is provided, then assign URLToBackend to the
+      // If no query string (...) is provided, then assign URLToBackend to the
       // first part of the URLArray
       if (!queryPartURL) {
         // No query string specified in URL
