@@ -6,7 +6,7 @@ var newbly = {
      * These are the global variables used.
      */
 
-    const release = "1.0.9"; // Current release version
+    const release = "1.0.10"; // Current release version
     const stylesheet = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/css/style.min.css`; // Link to hosted stylesheet
     const IEScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/js/script.js`; // Link to hosted script compatible with IE
     // 11
@@ -88,13 +88,13 @@ var newbly = {
       let title;
       let content;
 
-      if (localStorageArticleContent.title) {
+      if (localStorageArticleContent !== null) {
         title = localStorageArticleContent.title
       } else {
         title = "";
       };
 
-      if (localStorageArticleContent.content) {
+      if (localStorageArticleContent !== null) {
         content = localStorageArticleContent.content
       } else {
         content = [];
@@ -155,19 +155,21 @@ var newbly = {
       let content;
       let suggestions;
 
-      if (localStorageArticleContent.title) {
+
+
+      if (localStorageArticleContent !== null) {
         title = localStorageArticleContent.title
       } else {
         title = "";
       };
 
-      if (localStorageArticleContent.content) {
+      if (localStorageArticleContent !== null) {
         content = localStorageArticleContent.content
       } else {
         content = [];
       };
 
-      if (localStorageArticleContent.suggestions) {
+      if (localStorageArticleContent !== null) {
         suggestions = localStorageArticleContent.suggestions
       } else {
         suggestions = [];
@@ -1218,7 +1220,7 @@ var newbly = {
       let nonQueryPartURL = URLArray[0];
       let queryPartURL = URLArray[1];
 
-      // If no query string (?...) is provided, then assign URLToBackend to the
+      // If no query string (...) is provided, then assign URLToBackend to the
       // first part of the URLArray
       if (!queryPartURL) {
         // No query string specified in URL
