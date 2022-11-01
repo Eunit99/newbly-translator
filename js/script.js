@@ -259,7 +259,7 @@ var newbly = {
 
       /*
       * Get the articleId
-      * The articleId is used to know which article we are sending a PATCGH request to
+      * The articleId is used to know which article we are sending a PATCH request to
       */
       let articleId = await getArticleId();
 
