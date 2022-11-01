@@ -1,5 +1,5 @@
 var newbly = {
-  init: function () {
+  init : function() {
     /*
      * GLOBAL VARIABLES
      * --------------------------------
@@ -7,23 +7,35 @@ var newbly = {
      */
 
     const release = "1.0.8"; // Current release version
-    const stylesheet = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/css/style.min.css`; // Link to hosted stylesheet
-    const IEScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/js/script.js`; // Link to hosted script compatible with IE
+    const stylesheet = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${
+        release}/lib/css/style.min.css`; // Link to hosted stylesheet
+    const IEScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${
+        release}/lib/js/script.js`; // Link to hosted script compatible with IE
     // 11
-    const editIconLink = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/assets/icons/edit-icon.svg`;
-    const keycloakFileURL = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/vendor/keycloak.min.js`;
-    const toastrScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/vendor/toastr.min.js`;
-    const toastrStyle = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/vendor/toastr.min.css`;
+    const editIconLink =
+        `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${
+            release}/assets/icons/edit-icon.svg`;
+    const keycloakFileURL =
+        `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${
+            release}/vendor/keycloak.min.js`;
+    const toastrScript =
+        `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${
+            release}/vendor/toastr.min.js`;
+    const toastrStyle =
+        `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${
+            release}/vendor/toastr.min.css`;
 
     /*
      * Include the jQuery script in the head of the page from Cloudflare CDN
      */
-    document.head.innerHTML += `<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>`;
+    document.head.innerHTML +=
+        `<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>`;
 
     /*
      * Include the stylesheet for Newbly in the head of the page
      */
-    document.head.innerHTML += `<link rel="stylesheet" href="${stylesheet}" type="text/css"/>`;
+    document.head.innerHTML +=
+        `<link rel="stylesheet" href="${stylesheet}" type="text/css"/>`;
 
     /*
      * Provide support to legacy IE browser
@@ -35,7 +47,8 @@ var newbly = {
     /*
      * Include the toastr styles in the head of the page
      */
-    document.head.innerHTML += `<link rel="stylesheet" href="${toastrStyle}" type="text/css"/>`;
+    document.head.innerHTML +=
+        `<link rel="stylesheet" href="${toastrStyle}" type="text/css"/>`;
 
     /*
      * Include the toastr script in the head of the page
@@ -67,15 +80,16 @@ var newbly = {
      */
 
     const keycloak = Keycloak({
-      realm: "newbly",
-      "auth-server-url": "https://sso.newb.ly/auth",
-      "ssl-required": "external",
-      resource: "newbly",
-      "public-client": true,
-      "confidential-port": 0,
-      url: `https://sso.newb.ly/auth/realms/newbly/protocol/openid-connect/auth?client_id=newbly-ui&redirect_uri=${getPageURL()}&state=addc88ed-299c-4a1b-b304-555bdffb8909&response_mode=fragment&response_type=code&scope=openid&nonce=e19093ff-fab9-4a80-80a8-99f9a979a836`,
-      clientId: "newbly-api",
-      "enable-cors": true,
+      realm : "newbly",
+      "auth-server-url" : "https://sso.newb.ly/auth",
+      "ssl-required" : "external",
+      resource : "newbly",
+      "public-client" : true,
+      "confidential-port" : 0,
+      url : `https://sso.newb.ly/auth/realms/newbly/protocol/openid-connect/auth?client_id=newbly-ui&redirect_uri=${
+          getPageURL()}&state=addc88ed-299c-4a1b-b304-555bdffb8909&response_mode=fragment&response_type=code&scope=openid&nonce=e19093ff-fab9-4a80-80a8-99f9a979a836`,
+      clientId : "newbly-api",
+      "enable-cors" : true,
     });
 
     async function updateDOMContentWithLocalStorage() {
@@ -102,13 +116,12 @@ var newbly = {
       document.getElementById("newbly-translated-text-null").innerHTML = title;
 
       for (let i = 0; i < content.length; i++) {
-        let currentElement = document.getElementById(
-          `newbly-translated-text-${i}`
-        );
+        let currentElement =
+            document.getElementById(`newbly-translated-text-${i}`);
 
         if (content[i] && currentElement) {
           document.getElementById(`newbly-translated-text-${i}`).innerHTML =
-            content[i];
+              content[i];
         }
       }
     }
@@ -125,18 +138,17 @@ var newbly = {
         return articleId;
       } else {
         console.error(
-          "Something went wrong while contacting the Newbly server. Could not fetch articleId."
-        );
+            "Something went wrong while contacting the Newbly server. Could not fetch articleId.");
         toastr.error(
-          "Something went wrong while contacting the Newbly server. Could not fetch articleId."
-        );
+            "Something went wrong while contacting the Newbly server. Could not fetch articleId.");
         return false;
       }
     }
 
     async function localStorageArticleKey() {
       let articleId = await getArticleId();
-      let key = `${getLongBrowserLanguage().longLang.toLowerCase()}_${articleId}`;
+      let key =
+          `${getLongBrowserLanguage().longLang.toLowerCase()}_${articleId}`;
 
       return key; // english_wu4Rqww7
     };
@@ -171,9 +183,9 @@ var newbly = {
       };
 
       let value = {
-        title: title,
-        suggestions: suggestions,
-        content: content,
+        title : title,
+        suggestions : suggestions,
+        content : content,
       };
 
       // This part represent the article title since it is assigned an Id of
@@ -225,7 +237,8 @@ var newbly = {
     async function replaceDOMContentWithCustomSuggestions() {
       let localStorageKey = await localStorageArticleKey();
       let articleId = await getArticleId();
-      const generatedKey = `${getLongBrowserLanguage().longLang.toLowerCase()}_${articleId}`;
+      const generatedKey =
+          `${getLongBrowserLanguage().longLang.toLowerCase()}_${articleId}`;
 
       if (localStorageKey === generatedKey) {
         // function to replace DOM content with that from localStorage
@@ -242,38 +255,38 @@ var newbly = {
       let articleId = await getArticleId();
 
       let payload = {
-        articleContentIndex: articleContentIndex,
-        articleTranslatedPartCorrection: updatedTranslations,
+        articleContentIndex : articleContentIndex,
+        articleTranslatedPartCorrection : updatedTranslations,
       };
 
       const options = {
-        method: "PATCH",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json; charset=UTF-8",
-          Authorization: "Bearer " + keycloak.token,
+        method : "PATCH",
+        headers : {
+          Accept : "application/json",
+          "Content-Type" : "application/json; charset=UTF-8",
+          Authorization : "Bearer " + keycloak.token,
         },
-        body: JSON.stringify(payload),
+        body : JSON.stringify(payload),
       };
 
       fetch(`https://api.newb.ly/articles/${articleId}/suggestion`, options)
-        .then((data) => {
-          if (!data.ok) {
+          .then((data) => {
+            if (!data.ok) {
+              setSuggestionsSentToBackend(false);
+              throw Error(data.status);
+            }
+            return data.json();
+          })
+          .then((response) => {
+            console.info("The suggestion was successfully submitted!");
+            toastr.success("The suggestion was successfully submitted!");
+            setSuggestionsSentToBackend(true);
+          })
+          .catch((e) => {
+            console.error("An error occurred: " + e);
+            toastr.error("An error occurred");
             setSuggestionsSentToBackend(false);
-            throw Error(data.status);
-          }
-          return data.json();
-        })
-        .then((response) => {
-          console.info("The suggestion was successfully submitted!");
-          toastr.success("The suggestion was successfully submitted!");
-          setSuggestionsSentToBackend(true);
-        })
-        .catch((e) => {
-          console.error("An error occurred: " + e);
-          toastr.error("An error occurred");
-          setSuggestionsSentToBackend(false);
-        });
+          });
     }
 
     /*
@@ -287,16 +300,14 @@ var newbly = {
         console.log(keycloak.idTokenParsed);
       } else {
         keycloak.loadUserProfile(
-          function () {
-            // Account Service
-            console.log(keycloak.profile);
-          },
-          function () {
-            console.log(
-              "Failed to retrieve user details. Please enable claims or account role"
-            );
-          }
-        );
+            function() {
+              // Account Service
+              console.log(keycloak.profile);
+            },
+            function() {
+              console.log(
+                  "Failed to retrieve user details. Please enable claims or account role");
+            });
       }
     };
 
@@ -310,14 +321,11 @@ var newbly = {
     };
 
     const reloadData = () => {
-      keycloak
-        .updateToken(30)
-        .then(loadData)
-        .catch(() => {
-          loadFailure();
-          console.error("Failed to load data. User is logged out.");
-          toastr.error("Failed to load data. User is logged out.");
-        });
+      keycloak.updateToken(30).then(loadData).catch(() => {
+        loadFailure();
+        console.error("Failed to load data. User is logged out.");
+        toastr.error("Failed to load data. User is logged out.");
+      });
     };
 
     /*
@@ -350,162 +358,161 @@ var newbly = {
      */
 
     var newblyUIModalLanguages = {
-      ar: {
-        title: "الترجمات متوفرة لهذا المقال!",
-        includeText: "تضمين الترجمة!",
-        notThisTime: "ليس هذه المرة.",
-        translationConsentText:
-          "متصفحك باللغة العربية لذلك اعتقدنا أنك قد ترغب في تضمين ترجمات باللغة العربية لهذه المقالة.",
-        saveChanges: "احفظ التغييرات",
-        cancel: "يلغي",
-        discardChanges: "تجاهل التغييرات",
-        loginRegister: "دخولتسجيل",
-        authTextOne: "رائع! لقد ساهمت بإصلاح خطأ في الترجمة!",
-        authTextTwo:
-          "لكي نتمكن من مراجعة اقتراحاتك ، عليك أولاً تسجيل الدخول. إذا لم يكن لديك حساب بعد ، فإن التسجيل سهل للغاية!",
-        areYouSure: "هل أنت واثق؟",
+      ar : {
+        title : "الترجمات متوفرة لهذا المقال!",
+        includeText : "تضمين الترجمة!",
+        notThisTime : "ليس هذه المرة.",
+        translationConsentText :
+            "متصفحك باللغة العربية لذلك اعتقدنا أنك قد ترغب في تضمين ترجمات باللغة العربية لهذه المقالة.",
+        saveChanges : "احفظ التغييرات",
+        cancel : "يلغي",
+        discardChanges : "تجاهل التغييرات",
+        loginRegister : "دخولتسجيل",
+        authTextOne : "رائع! لقد ساهمت بإصلاح خطأ في الترجمة!",
+        authTextTwo :
+            "لكي نتمكن من مراجعة اقتراحاتك ، عليك أولاً تسجيل الدخول. إذا لم يكن لديك حساب بعد ، فإن التسجيل سهل للغاية!",
+        areYouSure : "هل أنت واثق؟",
       },
-      bh: {
-        title: "इस लेख के लिए अनुवाद उपलब्ध हैं!",
-        includeText: "अनुवाद शामिल करें!",
-        notThisTime: "इस समय नहीं।",
-        translationConsentText:
-          "आपका ब्राउज़र हिंदी में है इसलिए हमने सोचा कि आप इस लेख के लिए हिंदी में अनुवाद शामिल करना चाहेंगे।",
-        saveChanges: "परिवर्तनों को सुरक्षित करें",
-        cancel: "रद्द करना",
-        discardChanges: "परिवर्तनों को निरस्त करें",
-        loginRegister: "लॉग इन / रजिस्टर",
-        authTextOne:
-          "बहुत बढ़िया! आपने अनुवाद त्रुटि को ठीक करके योगदान दिया है!",
-        authTextTwo:
-          "हमारे लिए आपके सुझावों की समीक्षा करने के लिए, आपको पहले लॉग इन करना होगा। यदि आपके पास अभी तक कोई खाता नहीं है, तो साइन अप करना बहुत आसान है!",
-        areYouSure: "क्या आपको यकीन है?",
+      bh : {
+        title : "इस लेख के लिए अनुवाद उपलब्ध हैं!",
+        includeText : "अनुवाद शामिल करें!",
+        notThisTime : "इस समय नहीं।",
+        translationConsentText :
+            "आपका ब्राउज़र हिंदी में है इसलिए हमने सोचा कि आप इस लेख के लिए हिंदी में अनुवाद शामिल करना चाहेंगे।",
+        saveChanges : "परिवर्तनों को सुरक्षित करें",
+        cancel : "रद्द करना",
+        discardChanges : "परिवर्तनों को निरस्त करें",
+        loginRegister : "लॉग इन / रजिस्टर",
+        authTextOne : "बहुत बढ़िया! आपने अनुवाद त्रुटि को ठीक करके योगदान दिया है!",
+        authTextTwo :
+            "हमारे लिए आपके सुझावों की समीक्षा करने के लिए, आपको पहले लॉग इन करना होगा। यदि आपके पास अभी तक कोई खाता नहीं है, तो साइन अप करना बहुत आसान है!",
+        areYouSure : "क्या आपको यकीन है?",
       },
-      en: {
-        title: "Translations available for this article!",
-        includeText: "Include translation!",
-        notThisTime: "Not this time.",
-        translationConsentText:
-          "Your browser is in English so we thought you might want to include translations in English for this article.",
-        saveChanges: "Save changes",
-        cancel: "Cancel",
-        discardChanges: "Discard changes",
-        loginRegister: "Login / Register",
-        authTextOne: "Awesome! You contributed by fixing a translation error!",
-        authTextTwo:
-          "In order for us to review your suggestions, you need first to log in. If you do not yet have an account, signing up is very easy!",
-        areYouSure: "Are you sure?",
+      en : {
+        title : "Translations available for this article!",
+        includeText : "Include translation!",
+        notThisTime : "Not this time.",
+        translationConsentText :
+            "Your browser is in English so we thought you might want to include translations in English for this article.",
+        saveChanges : "Save changes",
+        cancel : "Cancel",
+        discardChanges : "Discard changes",
+        loginRegister : "Login / Register",
+        authTextOne : "Awesome! You contributed by fixing a translation error!",
+        authTextTwo :
+            "In order for us to review your suggestions, you need first to log in. If you do not yet have an account, signing up is very easy!",
+        areYouSure : "Are you sure?",
       },
-      fr: {
-        title: "Des traductions sont disponibles pour cet article !",
-        includeText: "Inclure la traduction !",
-        notThisTime: "Pas cette fois.",
-        translationConsentText:
-          "Votre navigateur est en français, nous avons donc pensé que vous voudriez peut-être inclure des traductions en français pour cet article.",
-        saveChanges: "Sauvegarder les modifications",
-        cancel: "Annuler",
-        discardChanges: "Annuler les modifications",
-        loginRegister: "Connexion ou Inscription",
-        authTextOne:
-          "Impressionnant! Vous avez contribué en corrigeant une erreur de traduction !",
-        authTextTwo:
-          "Pour que nous puissions examiner vos suggestions, vous devez d'abord vous connecter. Si vous n'avez pas encore de compte, l'inscription est très simple !",
-        areYouSure: "Êtes-vous sûr?",
+      fr : {
+        title : "Des traductions sont disponibles pour cet article !",
+        includeText : "Inclure la traduction !",
+        notThisTime : "Pas cette fois.",
+        translationConsentText :
+            "Votre navigateur est en français, nous avons donc pensé que vous voudriez peut-être inclure des traductions en français pour cet article.",
+        saveChanges : "Sauvegarder les modifications",
+        cancel : "Annuler",
+        discardChanges : "Annuler les modifications",
+        loginRegister : "Connexion ou Inscription",
+        authTextOne :
+            "Impressionnant! Vous avez contribué en corrigeant une erreur de traduction !",
+        authTextTwo :
+            "Pour que nous puissions examiner vos suggestions, vous devez d'abord vous connecter. Si vous n'avez pas encore de compte, l'inscription est très simple !",
+        areYouSure : "Êtes-vous sûr?",
       },
-      hr: {
-        title: "Prijevodi su dostupni za ovaj članak!",
-        includeText: "Uključi prijevod!",
-        notThisTime: "Ne ovaj put.",
-        translationConsentText:
-          "Vaš preglednik je na hrvatskom pa smo mislili da biste mogli uključiti prijevode na hrvatski za ovaj članak.",
-        saveChanges: "Spremi promjene",
-        cancel: "Otkazati",
-        discardChanges: "Odbaciti promjene",
-        loginRegister: "Prijavite se ili se registrirajte",
-        authTextOne:
-          "Super! Doprinijeli ste ispravljanjem pogreške u prijevodu!",
-        authTextTwo:
-          "Kako bismo mogli pregledati vaše prijedloge, morate se prvo prijaviti. Ako još nemate račun, prijava je vrlo jednostavna!",
-        areYouSure: "Jesi li siguran?",
+      hr : {
+        title : "Prijevodi su dostupni za ovaj članak!",
+        includeText : "Uključi prijevod!",
+        notThisTime : "Ne ovaj put.",
+        translationConsentText :
+            "Vaš preglednik je na hrvatskom pa smo mislili da biste mogli uključiti prijevode na hrvatski za ovaj članak.",
+        saveChanges : "Spremi promjene",
+        cancel : "Otkazati",
+        discardChanges : "Odbaciti promjene",
+        loginRegister : "Prijavite se ili se registrirajte",
+        authTextOne :
+            "Super! Doprinijeli ste ispravljanjem pogreške u prijevodu!",
+        authTextTwo :
+            "Kako bismo mogli pregledati vaše prijedloge, morate se prvo prijaviti. Ako još nemate račun, prijava je vrlo jednostavna!",
+        areYouSure : "Jesi li siguran?",
       },
-      ro: {
-        title: "Sunt disponibile traduceri pentru acest articol!",
-        includeText: "Includeți traducerea!",
-        notThisTime: "Nu de data asta.",
-        translationConsentText:
-          "Browserul dvs. este în limba română, așa că ne-am gândit că ați dori să includeți traduceri în limba română pentru acest articol.",
-        saveChanges: "Salvează modificările",
-        cancel: "Anulare",
-        discardChanges: "Renunțați la modificări",
-        loginRegister: "Autentificați-vă sau înregistrați-vă",
-        authTextOne:
-          "Minunat! Ai contribuit prin remedierea unei erori de traducere!",
-        authTextTwo:
-          "Pentru ca noi să examinăm sugestiile dvs., trebuie mai întâi să vă conectați. Dacă nu aveți încă un cont, înregistrarea este foarte ușoară!",
-        areYouSure: "Esti sigur?",
+      ro : {
+        title : "Sunt disponibile traduceri pentru acest articol!",
+        includeText : "Includeți traducerea!",
+        notThisTime : "Nu de data asta.",
+        translationConsentText :
+            "Browserul dvs. este în limba română, așa că ne-am gândit că ați dori să includeți traduceri în limba română pentru acest articol.",
+        saveChanges : "Salvează modificările",
+        cancel : "Anulare",
+        discardChanges : "Renunțați la modificări",
+        loginRegister : "Autentificați-vă sau înregistrați-vă",
+        authTextOne :
+            "Minunat! Ai contribuit prin remedierea unei erori de traducere!",
+        authTextTwo :
+            "Pentru ca noi să examinăm sugestiile dvs., trebuie mai întâi să vă conectați. Dacă nu aveți încă un cont, înregistrarea este foarte ușoară!",
+        areYouSure : "Esti sigur?",
       },
-      ru: {
-        title: "Для этой статьи доступны переводы!",
-        includeText: "Включите перевод!",
-        notThisTime: "Не в этот раз.",
-        translationConsentText:
-          "Ваш браузер на русском языке, поэтому мы подумали, что вы, возможно, захотите включить русский перевод для этой статьи.",
-        saveChanges: "Сохранить изменения",
-        cancel: "Отмена",
-        discardChanges: "Отменить изменения",
-        loginRegister: "Войдите или зарегистрируйтесь",
-        authTextOne:
-          "Потрясающий! Вы внесли свой вклад, исправив ошибку перевода!",
-        authTextTwo:
-          "Чтобы мы рассмотрели ваши предложения, вам необходимо сначала войти в систему. Если у вас еще нет учетной записи, зарегистрироваться очень просто!",
-        areYouSure: "Ты уверен?",
+      ru : {
+        title : "Для этой статьи доступны переводы!",
+        includeText : "Включите перевод!",
+        notThisTime : "Не в этот раз.",
+        translationConsentText :
+            "Ваш браузер на русском языке, поэтому мы подумали, что вы, возможно, захотите включить русский перевод для этой статьи.",
+        saveChanges : "Сохранить изменения",
+        cancel : "Отмена",
+        discardChanges : "Отменить изменения",
+        loginRegister : "Войдите или зарегистрируйтесь",
+        authTextOne :
+            "Потрясающий! Вы внесли свой вклад, исправив ошибку перевода!",
+        authTextTwo :
+            "Чтобы мы рассмотрели ваши предложения, вам необходимо сначала войти в систему. Если у вас еще нет учетной записи, зарегистрироваться очень просто!",
+        areYouSure : "Ты уверен?",
       },
-      sr: {
-        title: "Преводи су доступни за овај чланак!",
-        includeText: "Укључи превод!",
-        notThisTime: "Не овог пута.",
-        translationConsentText:
-          "Ваш претраживач је на српском, па смо мислили да бисте могли да укључите преводе на српски за овај чланак.",
-        saveChanges: "Сачувај измене",
-        cancel: "Поништити, отказати",
-        discardChanges: "Одбаците промене",
-        loginRegister: "Пријавите се или региструјте",
-        authTextOne: "Сјајно! Ви сте допринели исправљањем грешке у преводу!",
-        authTextTwo:
-          "Да бисмо прегледали ваше предлоге, прво се морате пријавити. Ако још увек немате налог, регистрација је веома лака!",
-        areYouSure: "Да ли сте сигурни?",
+      sr : {
+        title : "Преводи су доступни за овај чланак!",
+        includeText : "Укључи превод!",
+        notThisTime : "Не овог пута.",
+        translationConsentText :
+            "Ваш претраживач је на српском, па смо мислили да бисте могли да укључите преводе на српски за овај чланак.",
+        saveChanges : "Сачувај измене",
+        cancel : "Поништити, отказати",
+        discardChanges : "Одбаците промене",
+        loginRegister : "Пријавите се или региструјте",
+        authTextOne : "Сјајно! Ви сте допринели исправљањем грешке у преводу!",
+        authTextTwo :
+            "Да бисмо прегледали ваше предлоге, прво се морате пријавити. Ако још увек немате налог, регистрација је веома лака!",
+        areYouSure : "Да ли сте сигурни?",
       },
-      tr: {
-        title: "Bu makale için çeviriler mevcuttur!",
-        includeText: "Çeviri dahil!",
-        notThisTime: "Bu sefer değil.",
-        translationConsentText:
-          "Tarayıcınız Türkçe olduğu için bu makaleye Türkçe çeviriler eklemek isteyebileceğinizi düşündük.",
-        saveChanges: "Değişiklikleri Kaydet",
-        cancel: "İptal",
-        discardChanges: "Değişiklikleri gözardı et",
-        loginRegister: "Giriş yap veya kaydol",
-        authTextOne:
-          "Mükemmel! Bir çeviri hatasını düzelterek katkıda bulundunuz!",
-        authTextTwo:
-          "Önerilerinizi inceleyebilmemiz için öncelikle giriş yapmanız gerekiyor. Henüz bir hesabınız yoksa üye olmak çok kolay!",
-        areYouSure: "Emin misin?",
+      tr : {
+        title : "Bu makale için çeviriler mevcuttur!",
+        includeText : "Çeviri dahil!",
+        notThisTime : "Bu sefer değil.",
+        translationConsentText :
+            "Tarayıcınız Türkçe olduğu için bu makaleye Türkçe çeviriler eklemek isteyebileceğinizi düşündük.",
+        saveChanges : "Değişiklikleri Kaydet",
+        cancel : "İptal",
+        discardChanges : "Değişiklikleri gözardı et",
+        loginRegister : "Giriş yap veya kaydol",
+        authTextOne :
+            "Mükemmel! Bir çeviri hatasını düzelterek katkıda bulundunuz!",
+        authTextTwo :
+            "Önerilerinizi inceleyebilmemiz için öncelikle giriş yapmanız gerekiyor. Henüz bir hesabınız yoksa üye olmak çok kolay!",
+        areYouSure : "Emin misin?",
       },
-      uk: {
-        title: "Для цієї статті доступні переклади!",
-        includeText: "Включіть переклад!",
-        notThisTime: "Не цього разу.",
-        translationConsentText:
-          "Ваш веб-переглядач україномовний, тому ми подумали, що ви можете включити переклад українською для цієї статті.",
-        saveChanges: "Зберегти зміни",
-        cancel: "Скасувати",
-        discardChanges: "Скасувати зміни",
-        loginRegister: "Увійти або зареєструватися",
-        authTextOne:
-          "Чудово! Ви зробили свій внесок, виправивши помилку перекладу!",
-        authTextTwo:
-          "Щоб ми могли розглянути ваші пропозиції, вам потрібно спочатку ввійти. Якщо у вас ще немає облікового запису, зареєструватися дуже просто!",
-        areYouSure: "Ти впевнений?",
+      uk : {
+        title : "Для цієї статті доступні переклади!",
+        includeText : "Включіть переклад!",
+        notThisTime : "Не цього разу.",
+        translationConsentText :
+            "Ваш веб-переглядач україномовний, тому ми подумали, що ви можете включити переклад українською для цієї статті.",
+        saveChanges : "Зберегти зміни",
+        cancel : "Скасувати",
+        discardChanges : "Скасувати зміни",
+        loginRegister : "Увійти або зареєструватися",
+        authTextOne :
+            "Чудово! Ви зробили свій внесок, виправивши помилку перекладу!",
+        authTextTwo :
+            "Щоб ми могли розглянути ваші пропозиції, вам потрібно спочатку ввійти. Якщо у вас ще немає облікового запису, зареєструватися дуже просто!",
+        areYouSure : "Ти впевнений?",
       },
     };
 
@@ -513,184 +520,176 @@ var newbly = {
       // This function provides translations of the Newbly Modal depending on
       // the shortLang, like fr, en, sr, ru
 
-      let newblyUIModalLang = newblyUIModalLanguages,
-        newblyModalTitle,
-        newblyModalIncludeText,
-        newblyModalCancelText,
-        newblyTranslationConsentText,
-        saveChanges,
-        cancel,
-        discardChanges,
-        loginRegister,
-        authTextOne,
-        authTextTwo,
-        areYouSure;
+      let newblyUIModalLang = newblyUIModalLanguages, newblyModalTitle,
+          newblyModalIncludeText, newblyModalCancelText,
+          newblyTranslationConsentText, saveChanges, cancel, discardChanges,
+          loginRegister, authTextOne, authTextTwo, areYouSure;
 
       switch (getShortBrowserLanguage()) {
-        case "ar":
-          longLang = "Arabic";
-          newblyModalTitle = newblyUIModalLang.ar.title;
-          newblyModalIncludeText = newblyUIModalLang.ar.includeText;
-          newblyModalCancelText = newblyUIModalLang.ar.notThisTime;
-          newblyTranslationConsentText =
+      case "ar":
+        longLang = "Arabic";
+        newblyModalTitle = newblyUIModalLang.ar.title;
+        newblyModalIncludeText = newblyUIModalLang.ar.includeText;
+        newblyModalCancelText = newblyUIModalLang.ar.notThisTime;
+        newblyTranslationConsentText =
             newblyUIModalLang.ar.translationConsentText;
-          saveChanges = newblyUIModalLang.ar.saveChanges;
-          cancel = newblyUIModalLang.ar.cancel;
-          discardChanges = newblyUIModalLang.ar.discardChanges;
-          loginRegister = newblyUIModalLang.ar.loginRegister;
-          authTextOne = newblyUIModalLang.ar.authTextOne;
-          authTextTwo = newblyUIModalLang.ar.authTextTwo;
-          areYouSure = newblyUIModalLang.ar.areYouSure;
-          break;
-        case "bh":
-          longLang = "Bihari";
-          newblyModalTitle = newblyUIModalLang.bh.title;
-          newblyModalIncludeText = newblyUIModalLang.bh.includeText;
-          newblyModalCancelText = newblyUIModalLang.bh.notThisTime;
-          newblyTranslationConsentText =
+        saveChanges = newblyUIModalLang.ar.saveChanges;
+        cancel = newblyUIModalLang.ar.cancel;
+        discardChanges = newblyUIModalLang.ar.discardChanges;
+        loginRegister = newblyUIModalLang.ar.loginRegister;
+        authTextOne = newblyUIModalLang.ar.authTextOne;
+        authTextTwo = newblyUIModalLang.ar.authTextTwo;
+        areYouSure = newblyUIModalLang.ar.areYouSure;
+        break;
+      case "bh":
+        longLang = "Bihari";
+        newblyModalTitle = newblyUIModalLang.bh.title;
+        newblyModalIncludeText = newblyUIModalLang.bh.includeText;
+        newblyModalCancelText = newblyUIModalLang.bh.notThisTime;
+        newblyTranslationConsentText =
             newblyUIModalLang.bh.translationConsentText;
-          saveChanges = newblyUIModalLang.bh.saveChanges;
-          cancel = newblyUIModalLang.bh.cancel;
-          discardChanges = newblyUIModalLang.bh.discardChanges;
-          loginRegister = newblyUIModalLang.bh.loginRegister;
-          authTextOne = newblyUIModalLang.bh.authTextOne;
-          authTextTwo = newblyUIModalLang.bh.authTextTwo;
-          areYouSure = newblyUIModalLang.bh.areYouSure;
-          break;
-        case "en":
-          longLang = "English";
-          newblyModalTitle = newblyUIModalLang.en.title;
-          newblyModalIncludeText = newblyUIModalLang.en.includeText;
-          newblyModalCancelText = newblyUIModalLang.en.notThisTime;
-          newblyTranslationConsentText =
+        saveChanges = newblyUIModalLang.bh.saveChanges;
+        cancel = newblyUIModalLang.bh.cancel;
+        discardChanges = newblyUIModalLang.bh.discardChanges;
+        loginRegister = newblyUIModalLang.bh.loginRegister;
+        authTextOne = newblyUIModalLang.bh.authTextOne;
+        authTextTwo = newblyUIModalLang.bh.authTextTwo;
+        areYouSure = newblyUIModalLang.bh.areYouSure;
+        break;
+      case "en":
+        longLang = "English";
+        newblyModalTitle = newblyUIModalLang.en.title;
+        newblyModalIncludeText = newblyUIModalLang.en.includeText;
+        newblyModalCancelText = newblyUIModalLang.en.notThisTime;
+        newblyTranslationConsentText =
             newblyUIModalLang.en.translationConsentText;
-          saveChanges = newblyUIModalLang.en.saveChanges;
-          cancel = newblyUIModalLang.en.cancel;
-          discardChanges = newblyUIModalLang.en.discardChanges;
-          loginRegister = newblyUIModalLang.en.loginRegister;
-          authTextOne = newblyUIModalLang.en.authTextOne;
-          authTextTwo = newblyUIModalLang.en.authTextTwo;
-          areYouSure = newblyUIModalLang.en.areYouSure;
-          break;
-        case "fr":
-          longLang = "French";
-          newblyModalTitle = newblyUIModalLang.fr.title;
-          newblyModalIncludeText = newblyUIModalLang.fr.includeText;
-          newblyModalCancelText = newblyUIModalLang.fr.notThisTime;
-          newblyTranslationConsentText =
+        saveChanges = newblyUIModalLang.en.saveChanges;
+        cancel = newblyUIModalLang.en.cancel;
+        discardChanges = newblyUIModalLang.en.discardChanges;
+        loginRegister = newblyUIModalLang.en.loginRegister;
+        authTextOne = newblyUIModalLang.en.authTextOne;
+        authTextTwo = newblyUIModalLang.en.authTextTwo;
+        areYouSure = newblyUIModalLang.en.areYouSure;
+        break;
+      case "fr":
+        longLang = "French";
+        newblyModalTitle = newblyUIModalLang.fr.title;
+        newblyModalIncludeText = newblyUIModalLang.fr.includeText;
+        newblyModalCancelText = newblyUIModalLang.fr.notThisTime;
+        newblyTranslationConsentText =
             newblyUIModalLang.fr.translationConsentText;
-          saveChanges = newblyUIModalLang.fr.saveChanges;
-          cancel = newblyUIModalLang.fr.cancel;
-          discardChanges = newblyUIModalLang.fr.discardChanges;
-          loginRegister = newblyUIModalLang.fr.loginRegister;
-          authTextOne = newblyUIModalLang.fr.authTextOne;
-          authTextTwo = newblyUIModalLang.fr.authTextTwo;
-          areYouSure = newblyUIModalLang.fr.areYouSure;
-          break;
-        case "hr":
-          longLang = "Croatian";
-          newblyModalTitle = newblyUIModalLang.hr.title;
-          newblyModalIncludeText = newblyUIModalLang.hr.includeText;
-          newblyModalCancelText = newblyUIModalLang.hr.notThisTime;
-          newblyTranslationConsentText =
+        saveChanges = newblyUIModalLang.fr.saveChanges;
+        cancel = newblyUIModalLang.fr.cancel;
+        discardChanges = newblyUIModalLang.fr.discardChanges;
+        loginRegister = newblyUIModalLang.fr.loginRegister;
+        authTextOne = newblyUIModalLang.fr.authTextOne;
+        authTextTwo = newblyUIModalLang.fr.authTextTwo;
+        areYouSure = newblyUIModalLang.fr.areYouSure;
+        break;
+      case "hr":
+        longLang = "Croatian";
+        newblyModalTitle = newblyUIModalLang.hr.title;
+        newblyModalIncludeText = newblyUIModalLang.hr.includeText;
+        newblyModalCancelText = newblyUIModalLang.hr.notThisTime;
+        newblyTranslationConsentText =
             newblyUIModalLang.hr.translationConsentText;
-          saveChanges = newblyUIModalLang.hr.saveChanges;
-          cancel = newblyUIModalLang.hr.cancel;
-          discardChanges = newblyUIModalLang.hr.discardChanges;
-          loginRegister = newblyUIModalLang.hr.loginRegister;
-          authTextOne = newblyUIModalLang.hr.authTextOne;
-          authTextTwo = newblyUIModalLang.hr.authTextTwo;
-          areYouSure = newblyUIModalLang.hr.areYouSure;
-          break;
-        case "ro":
-          longLang = "Romanian";
-          newblyModalTitle = newblyUIModalLang.ro.title;
-          newblyModalIncludeText = newblyUIModalLang.ro.includeText;
-          newblyModalCancelText = newblyUIModalLang.ro.notThisTime;
-          newblyTranslationConsentText =
+        saveChanges = newblyUIModalLang.hr.saveChanges;
+        cancel = newblyUIModalLang.hr.cancel;
+        discardChanges = newblyUIModalLang.hr.discardChanges;
+        loginRegister = newblyUIModalLang.hr.loginRegister;
+        authTextOne = newblyUIModalLang.hr.authTextOne;
+        authTextTwo = newblyUIModalLang.hr.authTextTwo;
+        areYouSure = newblyUIModalLang.hr.areYouSure;
+        break;
+      case "ro":
+        longLang = "Romanian";
+        newblyModalTitle = newblyUIModalLang.ro.title;
+        newblyModalIncludeText = newblyUIModalLang.ro.includeText;
+        newblyModalCancelText = newblyUIModalLang.ro.notThisTime;
+        newblyTranslationConsentText =
             newblyUIModalLang.ro.translationConsentText;
-          saveChanges = newblyUIModalLang.ro.saveChanges;
-          cancel = newblyUIModalLang.ro.cancel;
-          discardChanges = newblyUIModalLang.ro.discardChanges;
-          loginRegister = newblyUIModalLang.ro.loginRegister;
-          authTextOne = newblyUIModalLang.ro.authTextOne;
-          authTextTwo = newblyUIModalLang.ro.authTextTwo;
-          areYouSure = newblyUIModalLang.ro.areYouSure;
-          break;
-        case "ru":
-          longLang = "Russian";
-          newblyModalTitle = newblyUIModalLang.ru.title;
-          newblyModalIncludeText = newblyUIModalLang.ru.includeText;
-          newblyModalCancelText = newblyUIModalLang.ru.notThisTime;
-          newblyTranslationConsentText =
+        saveChanges = newblyUIModalLang.ro.saveChanges;
+        cancel = newblyUIModalLang.ro.cancel;
+        discardChanges = newblyUIModalLang.ro.discardChanges;
+        loginRegister = newblyUIModalLang.ro.loginRegister;
+        authTextOne = newblyUIModalLang.ro.authTextOne;
+        authTextTwo = newblyUIModalLang.ro.authTextTwo;
+        areYouSure = newblyUIModalLang.ro.areYouSure;
+        break;
+      case "ru":
+        longLang = "Russian";
+        newblyModalTitle = newblyUIModalLang.ru.title;
+        newblyModalIncludeText = newblyUIModalLang.ru.includeText;
+        newblyModalCancelText = newblyUIModalLang.ru.notThisTime;
+        newblyTranslationConsentText =
             newblyUIModalLang.ru.translationConsentText;
-          saveChanges = newblyUIModalLang.ru.saveChanges;
-          cancel = newblyUIModalLang.ru.cancel;
-          discardChanges = newblyUIModalLang.ru.discardChanges;
-          loginRegister = newblyUIModalLang.ru.loginRegister;
-          authTextOne = newblyUIModalLang.ru.authTextOne;
-          authTextTwo = newblyUIModalLang.ru.authTextTwo;
-          areYouSure = newblyUIModalLang.ru.areYouSure;
-          break;
-        case "sr":
-          longLang = "Serbian";
-          newblyModalTitle = newblyUIModalLang.sr.title;
-          newblyModalIncludeText = newblyUIModalLang.sr.includeText;
-          newblyModalCancelText = newblyUIModalLang.sr.notThisTime;
-          newblyTranslationConsentText =
+        saveChanges = newblyUIModalLang.ru.saveChanges;
+        cancel = newblyUIModalLang.ru.cancel;
+        discardChanges = newblyUIModalLang.ru.discardChanges;
+        loginRegister = newblyUIModalLang.ru.loginRegister;
+        authTextOne = newblyUIModalLang.ru.authTextOne;
+        authTextTwo = newblyUIModalLang.ru.authTextTwo;
+        areYouSure = newblyUIModalLang.ru.areYouSure;
+        break;
+      case "sr":
+        longLang = "Serbian";
+        newblyModalTitle = newblyUIModalLang.sr.title;
+        newblyModalIncludeText = newblyUIModalLang.sr.includeText;
+        newblyModalCancelText = newblyUIModalLang.sr.notThisTime;
+        newblyTranslationConsentText =
             newblyUIModalLang.sr.translationConsentText;
-          saveChanges = newblyUIModalLang.sr.saveChanges;
-          cancel = newblyUIModalLang.sr.cancel;
-          discardChanges = newblyUIModalLang.sr.discardChanges;
-          loginRegister = newblyUIModalLang.sr.loginRegister;
-          authTextOne = newblyUIModalLang.sr.authTextOne;
-          authTextTwo = newblyUIModalLang.sr.authTextTwo;
-          areYouSure = newblyUIModalLang.sr.areYouSure;
-          break;
-        case "tr":
-          longLang = "Turkish";
-          newblyModalTitle = newblyUIModalLang.tr.title;
-          newblyModalIncludeText = newblyUIModalLang.tr.includeText;
-          newblyModalCancelText = newblyUIModalLang.tr.notThisTime;
-          newblyTranslationConsentText =
+        saveChanges = newblyUIModalLang.sr.saveChanges;
+        cancel = newblyUIModalLang.sr.cancel;
+        discardChanges = newblyUIModalLang.sr.discardChanges;
+        loginRegister = newblyUIModalLang.sr.loginRegister;
+        authTextOne = newblyUIModalLang.sr.authTextOne;
+        authTextTwo = newblyUIModalLang.sr.authTextTwo;
+        areYouSure = newblyUIModalLang.sr.areYouSure;
+        break;
+      case "tr":
+        longLang = "Turkish";
+        newblyModalTitle = newblyUIModalLang.tr.title;
+        newblyModalIncludeText = newblyUIModalLang.tr.includeText;
+        newblyModalCancelText = newblyUIModalLang.tr.notThisTime;
+        newblyTranslationConsentText =
             newblyUIModalLang.tr.translationConsentText;
-          saveChanges = newblyUIModalLang.uk.saveChanges;
-          cancel = newblyUIModalLang.uk.cancel;
-          discardChanges = newblyUIModalLang.uk.discardChanges;
-          loginRegister = newblyUIModalLang.uk.loginRegister;
-          authTextOne = newblyUIModalLang.uk.authTextOne;
-          authTextTwo = newblyUIModalLang.uk.authTextTwo;
-          areYouSure = newblyUIModalLang.tr.areYouSure;
-          break;
-        case "uk":
-          longLang = "Ukrainian";
-          newblyModalTitle = newblyUIModalLang.uk.title;
-          newblyModalIncludeText = newblyUIModalLang.uk.includeText;
-          newblyModalCancelText = newblyUIModalLang.uk.notThisTime;
-          newblyTranslationConsentText =
+        saveChanges = newblyUIModalLang.uk.saveChanges;
+        cancel = newblyUIModalLang.uk.cancel;
+        discardChanges = newblyUIModalLang.uk.discardChanges;
+        loginRegister = newblyUIModalLang.uk.loginRegister;
+        authTextOne = newblyUIModalLang.uk.authTextOne;
+        authTextTwo = newblyUIModalLang.uk.authTextTwo;
+        areYouSure = newblyUIModalLang.tr.areYouSure;
+        break;
+      case "uk":
+        longLang = "Ukrainian";
+        newblyModalTitle = newblyUIModalLang.uk.title;
+        newblyModalIncludeText = newblyUIModalLang.uk.includeText;
+        newblyModalCancelText = newblyUIModalLang.uk.notThisTime;
+        newblyTranslationConsentText =
             newblyUIModalLang.uk.translationConsentText;
-          saveChanges = newblyUIModalLang.uk.saveChanges;
-          cancel = newblyUIModalLang.uk.cancel;
-          discardChanges = newblyUIModalLang.uk.discardChanges;
-          loginRegister = newblyUIModalLang.uk.loginRegister;
-          authTextOne = newblyUIModalLang.uk.authTextOne;
-          authTextTwo = newblyUIModalLang.uk.authTextTwo;
-          areYouSure = newblyUIModalLang.uk.areYouSure;
-          break;
-        default:
-          longLang = "English";
-          newblyModalTitle = newblyUIModalLang.en.title;
-          newblyModalIncludeText = newblyUIModalLang.en.includeText;
-          newblyModalCancelText = newblyUIModalLang.en.notThisTime;
-          newblyTranslationConsentText =
+        saveChanges = newblyUIModalLang.uk.saveChanges;
+        cancel = newblyUIModalLang.uk.cancel;
+        discardChanges = newblyUIModalLang.uk.discardChanges;
+        loginRegister = newblyUIModalLang.uk.loginRegister;
+        authTextOne = newblyUIModalLang.uk.authTextOne;
+        authTextTwo = newblyUIModalLang.uk.authTextTwo;
+        areYouSure = newblyUIModalLang.uk.areYouSure;
+        break;
+      default:
+        longLang = "English";
+        newblyModalTitle = newblyUIModalLang.en.title;
+        newblyModalIncludeText = newblyUIModalLang.en.includeText;
+        newblyModalCancelText = newblyUIModalLang.en.notThisTime;
+        newblyTranslationConsentText =
             newblyUIModalLang.en.translationConsentText;
-          saveChanges = newblyUIModalLang.en.saveChanges;
-          cancel = newblyUIModalLang.en.cancel;
-          discardChanges = newblyUIModalLang.en.discardChanges;
-          loginRegister = newblyUIModalLang.en.loginRegister;
-          authTextOne = newblyUIModalLang.en.authTextOne;
-          authTextTwo = newblyUIModalLang.en.authTextTwo;
-          areYouSure = newblyUIModalLang.en.areYouSure;
+        saveChanges = newblyUIModalLang.en.saveChanges;
+        cancel = newblyUIModalLang.en.cancel;
+        discardChanges = newblyUIModalLang.en.discardChanges;
+        loginRegister = newblyUIModalLang.en.loginRegister;
+        authTextOne = newblyUIModalLang.en.authTextOne;
+        authTextTwo = newblyUIModalLang.en.authTextTwo;
+        areYouSure = newblyUIModalLang.en.areYouSure;
       }
 
       newblyUIModalLang = longLang;
@@ -715,7 +714,7 @@ var newbly = {
     }
 
     var append = {
-      appendNewblyPromptModal: function () {
+      appendNewblyPromptModal : function() {
         const newblyPromptModal = `
         <div class="newbly-translation--ui-modal" id="newbly-translation--ui-modal">
               <div class="newbly-translation--ui-modal__title" id="newbly-translation--ui-modal__title"></div>
@@ -733,7 +732,7 @@ var newbly = {
         document.body.innerHTML += newblyPromptModal;
       },
 
-      appendNewblyTextarea: function (contentIndex, content) {
+      appendNewblyTextarea : function(contentIndex, content) {
         const textarea = `
           <div class="enhance-newbly modal-wrapper" id="newbly-textarea-modal-wrapper">
             <div class="enhance-newbly modal" id="">
@@ -741,7 +740,8 @@ var newbly = {
                 <div class="enhance-newbly edit-section">
                   <textarea
                   dir=${getTextDirection()}
-                  class="enhance-newbly" spellcheck="false" id="enhance-translations">${content}</textarea>
+                  class="enhance-newbly" spellcheck="false" id="enhance-translations">${
+            content}</textarea>
                   <div class="enhance-newbly edit-buttons" id="">
                     <button class="enhance-newbly disabled" id="save-suggested-changes"></button>
                     <button class="enhance-newbly" id="cancel-changes"></button>
@@ -756,16 +756,15 @@ var newbly = {
 
         // If shortBrowserLanguage is "ar", then add class ".arabic" to  modal
         if (getShortBrowserLanguage() === "ar") {
-          document
-            .getElementById("newbly-textarea-modal-wrapper")
-            .classList.add("arabic");
+          document.getElementById("newbly-textarea-modal-wrapper")
+              .classList.add("arabic");
         }
 
         // Add content depending on user's browser language
         document.getElementById("save-suggested-changes").innerText =
-          getLongBrowserLanguage().saveChanges;
+            getLongBrowserLanguage().saveChanges;
         document.getElementById("cancel-changes").innerText =
-          getLongBrowserLanguage().cancel;
+            getLongBrowserLanguage().cancel;
 
         /*
          * Initialize the modal buttons
@@ -776,12 +775,11 @@ var newbly = {
 
         // Display the translationConsentText depending on user's browser
         // language
-        document.getElementById(
-          "newbly-translation--ui-modal__text"
-        ).innerText = getLongBrowserLanguage().newblyTranslationConsentText;
+        document.getElementById("newbly-translation--ui-modal__text")
+            .innerText = getLongBrowserLanguage().newblyTranslationConsentText;
       },
 
-      appendNewblyConfirmationModal: function (contentIndex, content) {
+      appendNewblyConfirmationModal : function(contentIndex, content) {
         const confirmationPrompt = `
           <!-- Confirmation modal -->
           <div class="enhance-newbly modal-wrapper" id="newbly-enhance-confirmation-modal">
@@ -802,28 +800,26 @@ var newbly = {
 
         // If shortBrowserLanguage is "ar", then add class ".arabic" to  modal
         if (getShortBrowserLanguage() === "ar") {
-          document
-            .getElementById("newbly-enhance-confirmation-modal")
-            .classList.add("arabic");
+          document.getElementById("newbly-enhance-confirmation-modal")
+              .classList.add("arabic");
         }
 
         // Add content depending on user's browser language
         document.getElementById("are-you-sure").innerText =
-          getLongBrowserLanguage().areYouSure;
+            getLongBrowserLanguage().areYouSure;
         document.getElementById("close-newbly-enhance-textarea").innerText =
-          getLongBrowserLanguage().discardChanges;
+            getLongBrowserLanguage().discardChanges;
         document.getElementById("close-newbly-modal").innerText =
-          getLongBrowserLanguage().cancel;
+            getLongBrowserLanguage().cancel;
 
-        document.getElementById(
-          "newbly-enhance-confirmation-modal"
-        ).style.display = "flex";
+        document.getElementById("newbly-enhance-confirmation-modal")
+            .style.display = "flex";
 
         // Initialize the buttons waiting for corresponding actions
         initModalBtns.newblyConfirmationBtns(contentIndex, content);
       },
 
-      appendNewblyAuthenticationModal: function () {
+      appendNewblyAuthenticationModal : function() {
         const authPrompt = `
           <!-- Authentication modal -->
           <div class="enhance-newbly modal-wrapper" id="enhance-newbly-auth-wrapper">
@@ -848,22 +844,21 @@ var newbly = {
         document.body.innerHTML += authPrompt;
 
         document.getElementById("enhance-newbly-auth-wrapper").style.display =
-          "flex";
+            "flex";
 
         // If shortBrowserLanguage is "ar", then add class ".arabic" to  modal
         if (getShortBrowserLanguage() === "ar") {
-          document
-            .getElementById("enhance-newbly-auth-wrapper")
-            .classList.add("arabic");
+          document.getElementById("enhance-newbly-auth-wrapper")
+              .classList.add("arabic");
         }
 
         // Add content depending on user's browser language
         document.getElementById("enhance-newbly-auth-text-one").innerText =
-          getLongBrowserLanguage().authTextOne;
+            getLongBrowserLanguage().authTextOne;
         document.getElementById("enhance-newbly-auth-text-two").innerText =
-          getLongBrowserLanguage().authTextTwo;
+            getLongBrowserLanguage().authTextTwo;
         document.getElementById("enhance-newbly-auth-button").innerText =
-          getLongBrowserLanguage().loginRegister;
+            getLongBrowserLanguage().loginRegister;
 
         // Initialize the buttons waiting for corresponding actions
         initModalBtns.newblyAuthModalBtns();
@@ -877,7 +872,7 @@ var newbly = {
     append.appendNewblyPromptModal();
 
     var enhanceNewbly = {
-      editIconContainer: function (index, translatedText) {
+      editIconContainer : function(index, translatedText) {
         handleEditIconBtn(index, translatedText);
 
         /*
@@ -886,7 +881,8 @@ var newbly = {
          */
         const editIcon = `
           <!-- Edit icons -->
-          <span class="newbly-translated-text edit-icon" id="edit-icon-${index}">
+          <span class="newbly-translated-text edit-icon" id="edit-icon-${
+            index}">
             <img src="${editIconLink}" alt="Edit">
           </span>
           <!-- Edit icons -->
@@ -897,36 +893,35 @@ var newbly = {
     };
 
     var hideModals = {
-      textareaModal: function () {
+      textareaModal : function() {
         document.getElementById("newbly-textarea-modal-wrapper").style.display =
-          "none";
+            "none";
       },
 
-      confirmationModal: function () {
-        document.getElementById(
-          "newbly-enhance-confirmation-modal"
-        ).style.display = "none";
+      confirmationModal : function() {
+        document.getElementById("newbly-enhance-confirmation-modal")
+            .style.display = "none";
       },
 
-      authenticationModal: function () {
+      authenticationModal : function() {
         document.getElementById("enhance-newbly-auth-wrapper").style.display =
-          "none";
+            "none";
       },
 
-      NewblyTranslatorUIModal: function () {
+      NewblyTranslatorUIModal : function() {
         // Hide #newbly-translation--ui-modal"
         document.getElementById("newbly-translation--ui-modal").style.display =
-          "none";
+            "none";
       },
     };
 
-    var handleTextareaChange = function (translatedTextIndex, translatedText) {
+    var handleTextareaChange = function(translatedTextIndex, translatedText) {
       const textarea = document.getElementById("enhance-translations");
       const saveBtn = document.getElementById("save-suggested-changes");
       var isTextChange = false;
       let currentTextareaContent;
 
-      textarea.addEventListener("input", function (e) {
+      textarea.addEventListener("input", function(e) {
         currentTextareaContent = e.target.value;
 
         if (currentTextareaContent !== translatedText) {
@@ -947,7 +942,7 @@ var newbly = {
       return isTextChange;
     };
 
-    var displayNewblyTextarea = function (translatedTextIndex, translatedText) {
+    var displayNewblyTextarea = function(translatedTextIndex, translatedText) {
       /*
        * Call the appendNewblyTextarea function to append the Newbly textarea to
        * the document Note that there is display: none in the styles for
@@ -957,12 +952,12 @@ var newbly = {
 
       // Change display styles to flex
       document.getElementById("newbly-textarea-modal-wrapper").style.display =
-        "flex";
+          "flex";
 
       handleTextareaChange(translatedTextIndex, translatedText);
     };
 
-    var handleEditIconBtn = function (translatedTextIndex, translatedText) {
+    var handleEditIconBtn = function(translatedTextIndex, translatedText) {
       let editIconId;
 
       if (translatedTextIndex === null) {
@@ -978,24 +973,21 @@ var newbly = {
       }
 
       setTimeout(() => {
-        document
-          .getElementById(editIconId)
-          .addEventListener("click", function (e) {
-            /*
-             * Call displayNewblyTextarea in 1s to allow appending of editIcon
-             * to the document when the edit icon is clicked So we can attach
-             * an even to it
-             */
+        document.getElementById(editIconId)
+            .addEventListener("click", function(e) {
+              /*
+               * Call displayNewblyTextarea in 1s to allow appending of editIcon
+               * to the document when the edit icon is clicked So we can attach
+               * an even to it
+               */
 
-            displayNewblyTextarea(translatedTextIndex, translatedText);
-          });
+              displayNewblyTextarea(translatedTextIndex, translatedText);
+            });
       }, 1000);
     };
 
     function replaceTranslationWithCorrectedTranslation(
-      contentIndex,
-      currentTextareaContent
-    ) {
+        contentIndex, currentTextareaContent) {
       const textId = `newbly-translated-text-${contentIndex}`;
 
       document.getElementById(textId).innerHTML = currentTextareaContent;
@@ -1023,7 +1015,7 @@ var newbly = {
         URLHasNLangParam = false;
       }
 
-      return { targetLanguage, URLHasNLangParam };
+      return {targetLanguage, URLHasNLangParam};
     }
 
     function isNewblyTranslationAvailable() {
@@ -1033,30 +1025,27 @@ var newbly = {
       let isTranslationAvailable;
 
       for (let i = 0; i < newBlyAvailableLanguageTranslations.length; i++) {
-        if (
-          newBlyAvailableLanguageTranslations[i] === getShortBrowserLanguage()
-        ) {
+        if (newBlyAvailableLanguageTranslations[i] ===
+            getShortBrowserLanguage()) {
           isTranslationAvailable = true;
-          console.log(
-            "Newbly translation is available for: " +
-            getLongBrowserLanguage().longLang
-          );
+          console.log("Newbly translation is available for: " +
+                      getLongBrowserLanguage().longLang);
         }
       }
 
       return isTranslationAvailable;
     }
 
-    var getFirstBrowserLanguage = function () {
+    var getFirstBrowserLanguage = function() {
       var nav = window.navigator,
-        browserLanguagePropertyKeys = [
-          "language",
-          "browserLanguage",
-          "systemLanguage",
-          "userLanguage",
-        ],
-        i,
-        language;
+          browserLanguagePropertyKeys =
+              [
+                "language",
+                "browserLanguage",
+                "systemLanguage",
+                "userLanguage",
+              ],
+          i, language;
 
       // support for HTML 5.1 "navigator.languages"
       if (Array.isArray(nav.languages)) {
@@ -1096,7 +1085,7 @@ var newbly = {
     }
 
     function setLanguage(shortLang, longLang) {
-      let value = { code: shortLang, name: longLang, native: longLang };
+      let value = {code : shortLang, name : longLang, native : longLang};
 
       localStorage.setItem("@language", JSON.stringify(value));
     }
@@ -1109,41 +1098,36 @@ var newbly = {
       return JSON.parse(localStorage.getItem("@suggestionsSent"));
     }
 
-    var displayNewblyTranslatorUIModal = function () {
+    var displayNewblyTranslatorUIModal = function() {
       // Instantiate the isNewblyTranslatorUIDisplayed variable
       let isNewblyTranslatorUIDisplayed;
 
       // If targetLanguage is not specified in the URL query params, and if
       // Newbly translation is available, the display the translator modal
-      if (
-        !getTargetLanguage().URLHasNLangParam &&
-        isNewblyTranslationAvailable()
-      ) {
+      if (!getTargetLanguage().URLHasNLangParam &&
+          isNewblyTranslationAvailable()) {
         // Set the display property of #newbly-translation--ui-modal to "block"
         document.getElementById("newbly-translation--ui-modal").style.display =
-          "block";
+            "block";
 
         // If shortBrowserLanguage is "ar", then add class ".arabic" to Newbly
         // consent modal
         if (getShortBrowserLanguage() === "ar") {
-          document
-            .getElementById("newbly-translation--ui-modal")
-            .classList.add("arabic");
+          document.getElementById("newbly-translation--ui-modal")
+              .classList.add("arabic");
         }
 
         // Display the translationConsentText depending on user's browser
         // language
-        document.getElementById(
-          "newbly-translation--ui-modal__text"
-        ).innerText = getLongBrowserLanguage().newblyTranslationConsentText;
+        document.getElementById("newbly-translation--ui-modal__text")
+            .innerText = getLongBrowserLanguage().newblyTranslationConsentText;
 
-        document.getElementById(
-          "newbly-translation--ui-modal__title"
-        ).innerText = getLongBrowserLanguage().newblyModalTitle;
+        document.getElementById("newbly-translation--ui-modal__title")
+            .innerText = getLongBrowserLanguage().newblyModalTitle;
         document.getElementById("include-translation").innerText =
-          getLongBrowserLanguage().newblyModalIncludeText;
+            getLongBrowserLanguage().newblyModalIncludeText;
         document.getElementById("cancel-translation").innerText =
-          getLongBrowserLanguage().newblyModalCancelText;
+            getLongBrowserLanguage().newblyModalCancelText;
 
         // Initialize buttons on the Newbly translator prompt
         initNewblyTranslatorUIBtns.includeTranslation();
@@ -1154,9 +1138,8 @@ var newbly = {
         // If Newbly translation is not available for the browser language, then
         // log the error in the console
         console.error(
-          "Newbly translation is not currently available for this page. Browser language is: " +
-          getFirstBrowserLanguage()
-        );
+            "Newbly translation is not currently available for this page. Browser language is: " +
+            getFirstBrowserLanguage());
 
         isNewblyTranslatorUIDisplayed = false;
       }
@@ -1165,12 +1148,11 @@ var newbly = {
     };
 
     var initNewblyTranslatorUIBtns = {
-      includeTranslation: function () {
-        var includeTranslationBtn = document.getElementById(
-          "include-translation"
-        );
+      includeTranslation : function() {
+        var includeTranslationBtn =
+            document.getElementById("include-translation");
 
-        includeTranslationBtn.addEventListener("click", function (e) {
+        includeTranslationBtn.addEventListener("click", function(e) {
           /*
            * THIS FUNCTION IS RESPONSIBLE FOR THE TRANSLATION
            * ----------------------------------------------------------------
@@ -1194,11 +1176,11 @@ var newbly = {
         }); // Translation started
       },
 
-      cancelTranslations: function () {
+      cancelTranslations : function() {
         var cancelTranslationBtn =
-          document.getElementById("cancel-translation");
+            document.getElementById("cancel-translation");
 
-        cancelTranslationBtn.addEventListener("click", function (e) {
+        cancelTranslationBtn.addEventListener("click", function(e) {
           console.info("Newbly translation cancelled");
 
           // Hide the Newbly translation modal prompt
@@ -1227,27 +1209,16 @@ var newbly = {
 
           // Query string specified in URL
 
-          if (
-            nLangContainedURL.includes(
-              `&nLang=${getTargetLanguage().targetLanguage}`
-            )
-          ) {
+          if (nLangContainedURL.includes(
+                  `&nLang=${getTargetLanguage().targetLanguage}`)) {
             strippedURL = nLangContainedURL.replace(
-              `&nLang=${getTargetLanguage().targetLanguage}`,
-              ""
-            );
-          } else if (
-            nLangContainedURL.includes(
-              `?nLang=${getTargetLanguage().targetLanguage}`
-            )
-          ) {
+                `&nLang=${getTargetLanguage().targetLanguage}`, "");
+          } else if (nLangContainedURL.includes(
+                         `?nLang=${getTargetLanguage().targetLanguage}`)) {
             strippedURL = nLangContainedURL.replace(
-              `?nLang=${getTargetLanguage().targetLanguage}`,
-              ""
-            );
-          } else if (
-            nLangContainedURL === `nLang=${getTargetLanguage().targetLanguage}`
-          ) {
+                `?nLang=${getTargetLanguage().targetLanguage}`, "");
+          } else if (nLangContainedURL ===
+                     `nLang=${getTargetLanguage().targetLanguage}`) {
             strippedURL = "";
           } else {
             strippedURL = nLangContainedURL;
@@ -1278,11 +1249,12 @@ var newbly = {
 
       if (!getTargetLanguage().URLHasNLangParam) {
         API_URL = "https://api.newb.ly/articles/?language=" +
-          getLongBrowserLanguage().longLang.toLowerCase() + "&url=" +
-          getURLToBackend();
+                  getLongBrowserLanguage().longLang.toLowerCase() +
+                  "&url=" + getURLToBackend();
       } else {
         API_URL = "https://api.newb.ly/articles/?language=" +
-          getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
+                  getTargetLanguage().targetLanguage +
+                  "&url=" + getURLToBackend()
       }
 
       return API_URL;
@@ -1296,7 +1268,7 @@ var newbly = {
      */
     var enhanceNewblyModalActions = {
       // cancel button
-      handleTextareaCancelBtn: function (contentIndex, content) {
+      handleTextareaCancelBtn : function(contentIndex, content) {
         hideModals.textareaModal();
 
         /*
@@ -1309,67 +1281,61 @@ var newbly = {
       },
 
       // Save changes button
-      handleSaveChangesBtn: async function (contentIndex, content) {
-        let currentTextareaContent = document.getElementById(
-          "enhance-translations"
-        ).value;
+      handleSaveChangesBtn : async function(contentIndex, content) {
+        let currentTextareaContent =
+            document.getElementById("enhance-translations").value;
 
-        replaceTranslationWithCorrectedTranslation(
-          contentIndex,
-          currentTextareaContent
-        );
+        replaceTranslationWithCorrectedTranslation(contentIndex,
+                                                   currentTextareaContent);
 
         /*
          * Call the setLocalStorageArticleContent to set the corresponding
          * currentTextareaContent to localStorage
          */
-        await setLocalStorageArticleContent(
-          contentIndex,
-          currentTextareaContent
-        );
+        await setLocalStorageArticleContent(contentIndex,
+                                            currentTextareaContent);
 
         /*
          * Hide the textarea modal once button is clicked
          */
         hideModals.textareaModal();
 
-        keycloak
-          .init({ onLoad: "check-sso", flow: "implicit" })
-          .then(function (authenticated) {
-            /*
-             * Use Keycloak to check if user is authenticated
-             * If authenticated, call saveSuggestion()
-             * else call appendNewblyAuthenticationModal()
-             */
-
-            if (authenticated) {
+        keycloak.init({onLoad : "check-sso", flow : "implicit"})
+            .then(function(authenticated) {
               /*
-               * Check if this suggestion has not already been sent to backend
-               * If suggestion has not been sent,
-               * Then call the saveSuggestion function to send a PATCH reques
-               * Else do not call saveSuggestion function
+               * Use Keycloak to check if user is authenticated
+               * If authenticated, call saveSuggestion()
+               * else call appendNewblyAuthenticationModal()
                */
 
-              if (!isSuggestionsSentToBackend()) {
-                saveSuggestion(contentIndex, currentTextareaContent);
+              if (authenticated) {
+                /*
+                 * Check if this suggestion has not already been sent to backend
+                 * If suggestion has not been sent,
+                 * Then call the saveSuggestion function to send a PATCH reques
+                 * Else do not call saveSuggestion function
+                 */
+
+                if (!isSuggestionsSentToBackend()) {
+                  saveSuggestion(contentIndex, currentTextareaContent);
+                }
+              } else {
+                /*
+                 * Call appendNewblyAuthenticationModal() to append the
+                 * authModal since user is not authenticated
+                 */
+
+                append.appendNewblyAuthenticationModal();
               }
-            } else {
-              /*
-               * Call appendNewblyAuthenticationModal() to append the
-               * authModal since user is not authenticated
-               */
-
-              append.appendNewblyAuthenticationModal();
-            }
-          })
-          .catch(function () {
-            console.error("Failed to initialize Keycloak");
-            toastr.error("Failed to initialize Keycloak");
-          });
+            })
+            .catch(function() {
+              console.error("Failed to initialize Keycloak");
+              toastr.error("Failed to initialize Keycloak");
+            });
       },
 
       // cancel button in confirmation modal
-      handleCancelConfirmationBtn: function (content) {
+      handleCancelConfirmationBtn : function(content) {
         hideModals.confirmationModal();
 
         displayNewblyTextarea();
@@ -1377,12 +1343,12 @@ var newbly = {
 
       // Discard changes button in confirmation modal upon click, will hide the
       // modal
-      handleDiscardChangesBtn: function () {
+      handleDiscardChangesBtn : function() {
         hideModals.textareaModal();
         hideModals.confirmationModal();
       },
 
-      handleCloseAuthModalBtn: function (e) {
+      handleCloseAuthModalBtn : function(e) {
         // Hide the textarea modal
         hideModals.textareaModal();
 
@@ -1390,11 +1356,11 @@ var newbly = {
         hideModals.authenticationModal();
       },
 
-      handleAuthBtn: function (e) {
+      handleAuthBtn : function(e) {
         // Hide the authentication prompt modal
         hideModals.authenticationModal();
 
-        keycloak.init({ onLoad: "login-required", flow: "implicit" });
+        keycloak.init({onLoad : "login-required", flow : "implicit"});
       },
     };
 
@@ -1405,63 +1371,53 @@ var newbly = {
      */
 
     var initModalBtns = {
-      newblyTextareaBtns: function (contentIndex, content) {
-        document
-          .getElementById("cancel-changes")
-          .addEventListener("click", function (e) {
-            e.preventDefault();
-            enhanceNewblyModalActions.handleTextareaCancelBtn(
-              contentIndex,
-              content
-            );
-          });
+      newblyTextareaBtns : function(contentIndex, content) {
+        document.getElementById("cancel-changes")
+            .addEventListener("click", function(e) {
+              e.preventDefault();
+              enhanceNewblyModalActions.handleTextareaCancelBtn(contentIndex,
+                                                                content);
+            });
 
-        document
-          .getElementById("save-suggested-changes")
-          .addEventListener("click", function (e) {
-            e.preventDefault();
+        document.getElementById("save-suggested-changes")
+            .addEventListener("click", function(e) {
+              e.preventDefault();
 
-            enhanceNewblyModalActions.handleSaveChangesBtn(
-              contentIndex,
-              content
-            );
-          });
+              enhanceNewblyModalActions.handleSaveChangesBtn(contentIndex,
+                                                             content);
+            });
       },
 
-      newblyConfirmationBtns: function (content) {
-        document
-          .getElementById("close-newbly-modal")
-          .addEventListener("click", function (e) {
-            e.preventDefault();
-            enhanceNewblyModalActions.handleCancelConfirmationBtn(content);
-          });
+      newblyConfirmationBtns : function(content) {
+        document.getElementById("close-newbly-modal")
+            .addEventListener("click", function(e) {
+              e.preventDefault();
+              enhanceNewblyModalActions.handleCancelConfirmationBtn(content);
+            });
 
-        document
-          .getElementById("close-newbly-enhance-textarea")
-          .addEventListener("click", function (e) {
-            e.preventDefault();
-            enhanceNewblyModalActions.handleDiscardChangesBtn(content);
-          });
+        document.getElementById("close-newbly-enhance-textarea")
+            .addEventListener("click", function(e) {
+              e.preventDefault();
+              enhanceNewblyModalActions.handleDiscardChangesBtn(content);
+            });
       },
 
-      newblyAuthModalBtns: function () {
-        document
-          .getElementById("enhance-newbly-auth-wrapper-close-button")
-          .addEventListener("click", function (e) {
-            e.preventDefault();
-            enhanceNewblyModalActions.handleCloseAuthModalBtn();
-          });
+      newblyAuthModalBtns : function() {
+        document.getElementById("enhance-newbly-auth-wrapper-close-button")
+            .addEventListener("click", function(e) {
+              e.preventDefault();
+              enhanceNewblyModalActions.handleCloseAuthModalBtn();
+            });
 
-        document
-          .getElementById("enhance-newbly-auth-button")
-          .addEventListener("click", function (e) {
-            e.preventDefault();
-            enhanceNewblyModalActions.handleAuthBtn();
-          });
+        document.getElementById("enhance-newbly-auth-button")
+            .addEventListener("click", function(e) {
+              e.preventDefault();
+              enhanceNewblyModalActions.handleAuthBtn();
+            });
       },
     };
 
-    var startNewblyTranslation = function (fetchURL) {
+    var startNewblyTranslation = function(fetchURL) {
       let result = "";
 
       async function fetchArticleFromBackend(fetchURL) {
@@ -1472,11 +1428,9 @@ var newbly = {
           return data;
         } else {
           console.error(
-            "Something went wrong while contacting the Newbly server. Could not fetch translations."
-          );
+              "Something went wrong while contacting the Newbly server. Could not fetch translations.");
           toastr.error(
-            "Something went wrong while contacting the Newbly server. Could not fetch translations."
-          );
+              "Something went wrong while contacting the Newbly server. Could not fetch translations.");
 
           return false;
         }
@@ -1490,7 +1444,7 @@ var newbly = {
       fetchFnc(newblyBackendAPI());
 
       // Set the fetch data
-      var fetchData = function (data) {
+      var fetchData = function(data) {
         /**
          * We only need to call the function `displayContentsFromBackendOnPage`
          * because we do not have the backend API on our index.html page which
@@ -1507,7 +1461,7 @@ var newbly = {
         return data;
       };
 
-      var fetchArticleTitle = function (articleTitle) {
+      var fetchArticleTitle = function(articleTitle) {
         if (doesTextExist(articleTitle)) {
           findContainerElement(articleTitle);
         }
@@ -1515,7 +1469,7 @@ var newbly = {
         return articleTitle;
       };
 
-      var fetchArticleContent = function (articleContent) {
+      var fetchArticleContent = function(articleContent) {
         for (let i = 0; i < articleContent.length; i++) {
           if (doesTextExist(articleContent[i])) {
             findContainerElement(articleContent[i]);
@@ -1525,7 +1479,7 @@ var newbly = {
         return articleContent;
       };
 
-      var doesTextExist = function (searchString) {
+      var doesTextExist = function(searchString) {
         if (document.body.textContent.includes(searchString)) {
           console.info("Texts exist on page: " + searchString);
 
@@ -1537,7 +1491,7 @@ var newbly = {
         }
       };
 
-      var findContainerElement = function (searchString) {
+      var findContainerElement = function(searchString) {
         // Find the container element where data is coming from and pass the
         // text
 
@@ -1545,28 +1499,9 @@ var newbly = {
         // translatedContent
 
         const elements = [
-          "a",
-          "article",
-          "b",
-          "div",
-          "h1",
-          "h2",
-          "h3",
-          "h4",
-          "h5",
-          "h6",
-          "i",
-          "li",
-          "main",
-          "ol",
-          "p",
-          "q",
-          "section",
-          "span",
-          "strong",
-          "summary",
-          "u",
-          "ul",
+          "a",       "article", "b",      "div",     "h1",   "h2", "h3", "h4",
+          "h5",      "h6",      "i",      "li",      "main", "ol", "p",  "q",
+          "section", "span",    "strong", "summary", "u",    "ul",
         ];
 
         var matches = [];
@@ -1591,29 +1526,26 @@ var newbly = {
         return container, container.innerText;
       };
 
-      var appendTranslation = function (id, container, translatedText) {
+      var appendTranslation = function(id, container, translatedText) {
         /*
          * Use insertAdjacentHTML to insert the translatedText using HTML format
          * right a the articleTitle
          */
 
         container.insertAdjacentHTML(
-          `beforeend`,
-          `<p class='newbly-translated-text' id='newbly-translated-text-${id}'> ${translatedText}</p>`
-        );
+            `beforeend`,
+            `<p class='newbly-translated-text' id='newbly-translated-text-${
+                id}'> ${translatedText}</p>`);
 
         /*
          *  Add RTL stylings if translation target language is arabic
          * This is done by adding the .arabic class
          */
 
-        if (
-          getTargetLanguage().targetLanguage === "arabic" ||
-          getLongBrowserLanguage().longLang.toLowerCase() === "arabic"
-        ) {
-          const arTranslations = document.querySelectorAll(
-            ".newbly-translated-text"
-          );
+        if (getTargetLanguage().targetLanguage === "arabic" ||
+            getLongBrowserLanguage().longLang.toLowerCase() === "arabic") {
+          const arTranslations =
+              document.querySelectorAll(".newbly-translated-text");
 
           for (const arTranslation of arTranslations) {
             arTranslation.classList.add("arabic");
@@ -1621,8 +1553,8 @@ var newbly = {
         }
       };
 
-      var getContainerAndContent = function (container) {
-        var fetchArticleTranslated = function () {
+      var getContainerAndContent = function(container) {
+        var fetchArticleTranslated = function() {
           // For article Title
 
           var articleTitleTranslated = result.articleTitleTranslated;
@@ -1644,9 +1576,8 @@ var newbly = {
              * articleTitleTranslated as parameters to it
              */
             container.insertAdjacentHTML(
-              "beforeend",
-              enhanceNewbly.editIconContainer(null, articleTitleTranslated)
-            );
+                "beforeend",
+                enhanceNewbly.editIconContainer(null, articleTitleTranslated));
           }
 
           // For article Content
@@ -1676,10 +1607,9 @@ var newbly = {
               // Append the editIcon to container and pass the index of the
               // translatedContent and articleContentTranslated[i] as parameters
               // to it
-              container.insertAdjacentHTML(
-                "beforeend",
-                enhanceNewbly.editIconContainer(i, articleContentTranslated[i])
-              );
+              container.insertAdjacentHTML("beforeend",
+                                           enhanceNewbly.editIconContainer(
+                                               i, articleContentTranslated[i]));
             }
           }
         };
@@ -1694,7 +1624,7 @@ var newbly = {
        * translations on the webpage
        */
 
-      keycloak.init({ onLoad: "check-sso", flow: "implicit" }).then(reloadData);
+      keycloak.init({onLoad : "check-sso", flow : "implicit"}).then(reloadData);
 
       // call the function to automatically replace contents on the page with
       // custom suggestions
@@ -1714,8 +1644,7 @@ var newbly = {
     }
 
     console.log(
-      "Newbly translation initialized. Learn more here: https://newb.ly/"
-    );
+        "Newbly translation initialized. Learn more here: https://newb.ly/");
     console.info("Ξunit");
 
     /*
