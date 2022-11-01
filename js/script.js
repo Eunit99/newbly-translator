@@ -83,9 +83,8 @@ var newbly = {
 
       // Initialize these variables depending on if they exist on the local
       // storage
-      let title = localStorageArticleContent?.title;
-      let suggestions = localStorageArticleContent?.suggestions;
-      let content = localStorageArticleContent?.content;
+      let title = localStorageArticleContent.title;
+      let content = localStorageArticleContent.content;
 
       // Replace the title with content from localStorage
       document.getElementById("newbly-translated-text-null").innerHTML = title;
