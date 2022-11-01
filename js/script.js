@@ -89,17 +89,16 @@ var newbly = {
       let content;
 
       if (localStorageArticleContent !== null) {
-        title = localStorageArticleContent.title
+        title = localStorageArticleContent.title;
       } else {
         title = "";
-      };
+      }
 
       if (localStorageArticleContent !== null) {
-        content = localStorageArticleContent.content
+        content = localStorageArticleContent.content;
       } else {
         content = [];
-      };
-
+      }
 
       // Replace the title with content from localStorage
       document.getElementById("newbly-translated-text-null").innerHTML = title;
@@ -155,26 +154,23 @@ var newbly = {
       let content;
       let suggestions;
 
-
-
       if (localStorageArticleContent !== null) {
-        title = localStorageArticleContent.title
+        title = localStorageArticleContent.title;
       } else {
         title = "";
-      };
+      }
 
       if (localStorageArticleContent !== null) {
-        content = localStorageArticleContent.content
+        content = localStorageArticleContent.content;
       } else {
         content = [];
-      };
+      }
 
       if (localStorageArticleContent !== null) {
-        suggestions = localStorageArticleContent.suggestions
+        suggestions = localStorageArticleContent.suggestions;
       } else {
         suggestions = [];
-      };
-
+      }
 
       let value = {
         title: title,
@@ -1045,7 +1041,7 @@ var newbly = {
           isTranslationAvailable = true;
           console.log(
             "Newbly translation is available for: " +
-            getLongBrowserLanguage().longLang
+              getLongBrowserLanguage().longLang
           );
         }
       }
@@ -1161,7 +1157,7 @@ var newbly = {
         // log the error in the console
         console.error(
           "Newbly translation is not currently available for this page. Browser language is: " +
-          getFirstBrowserLanguage()
+            getFirstBrowserLanguage()
         );
 
         isNewblyTranslatorUIDisplayed = false;
@@ -1283,12 +1279,17 @@ var newbly = {
       let API_URL;
 
       if (!getTargetLanguage().URLHasNLangParam) {
-        API_URL = "https://api.newb.ly/articles/?language=" +
-          getLongBrowserLanguage().longLang.toLowerCase() + "&url=" +
+        API_URL =
+          "https://api.newb.ly/articles/?language=" +
+          getLongBrowserLanguage().longLang.toLowerCase() +
+          "&url=" +
           getURLToBackend();
       } else {
-        API_URL = "https://api.newb.ly/articles/?language=" +
-          getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
+        API_URL =
+          "https://api.newb.ly/articles/?language=" +
+          getTargetLanguage().targetLanguage +
+          "&url=" +
+          getURLToBackend();
       }
 
       return API_URL;
@@ -1351,10 +1352,10 @@ var newbly = {
 
               if (authenticated) {
                 /*
-                 * Check if this suggestion has not already been sent to backend
-                 * If suggestion has not been sent,
-                 * Then call the saveSuggestion function to send a PATCH reques
-                 * Else do not call saveSuggestion function
+                 * Check if this suggestion has not already been sent to
+                 * backend If suggestion has not been sent, Then call the
+                 * saveSuggestion function to send a PATCH reques Else do not
+                 * call saveSuggestion function
                  */
 
                 if (!isSuggestionsSentToBackend()) {
@@ -1708,7 +1709,9 @@ var newbly = {
        */
 
       setTimeout(() => {
-        keycloak.init({ onLoad: "check-sso", flow: "implicit" }).then(reloadData);
+        keycloak
+          .init({ onLoad: "check-sso", flow: "implicit" })
+          .then(reloadData);
       }, 3000);
 
       // call the function to automatically replace contents on the page with
