@@ -6,7 +6,7 @@ var newbly = {
      * These are the global variables used.
      */
 
-    const release = "1.0.8"; // Current release version
+    const release = "1.0.9"; // Current release version
     const stylesheet = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/css/style.min.css`; // Link to hosted stylesheet
     const IEScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/js/script.js`; // Link to hosted script compatible with IE
     // 11
