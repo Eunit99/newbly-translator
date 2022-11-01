@@ -87,16 +87,16 @@ var newbly = {
       let content;
 
       if (localStorageArticleContent.title) {
-        title = localStorageArticleContent.title
+        title = localStorageArticleContent.title;
       } else {
         title = "";
-      };
+      }
 
       if (localStorageArticleContent.content) {
-        content = localStorageArticleContent.content
+        content = localStorageArticleContent.content;
       } else {
         content = [];
-      };
+      }
 
       // Replace the title with content from localStorage
       document.getElementById("newbly-translated-text-null").innerHTML = title;
@@ -139,7 +139,7 @@ var newbly = {
       let key = `${getLongBrowserLanguage().longLang.toLowerCase()}_${articleId}`;
 
       return key; // english_wu4Rqww7
-    };
+    }
 
     async function setLocalStorageArticleContent(articleId, articleContent) {
       const key = await localStorageArticleKey();
@@ -153,22 +153,22 @@ var newbly = {
       let suggestions;
 
       if (localStorageArticleContent.title) {
-        title = localStorageArticleContent.title
+        title = localStorageArticleContent.title;
       } else {
         title = "";
-      };
+      }
 
       if (localStorageArticleContent.content) {
-        content = localStorageArticleContent.content
+        content = localStorageArticleContent.content;
       } else {
         content = [];
-      };
+      }
 
       if (localStorageArticleContent.suggestions) {
-        suggestions = localStorageArticleContent.suggestions
+        suggestions = localStorageArticleContent.suggestions;
       } else {
         suggestions = [];
-      };
+      }
 
       let value = {
         title: title,
@@ -1039,7 +1039,7 @@ var newbly = {
           isTranslationAvailable = true;
           console.log(
             "Newbly translation is available for: " +
-            getLongBrowserLanguage().longLang
+              getLongBrowserLanguage().longLang
           );
         }
       }
@@ -1155,7 +1155,7 @@ var newbly = {
         // log the error in the console
         console.error(
           "Newbly translation is not currently available for this page. Browser language is: " +
-          getFirstBrowserLanguage()
+            getFirstBrowserLanguage()
         );
 
         isNewblyTranslatorUIDisplayed = false;
@@ -1277,12 +1277,17 @@ var newbly = {
       let API_URL;
 
       if (!getTargetLanguage().URLHasNLangParam) {
-        API_URL = "https://api.newb.ly/articles/?language=" +
-          getLongBrowserLanguage().longLang.toLowerCase() + "&url=" +
+        API_URL =
+          "https://api.newb.ly/articles/?language=" +
+          getLongBrowserLanguage().longLang.toLowerCase() +
+          "&url=" +
           getURLToBackend();
       } else {
-        API_URL = "https://api.newb.ly/articles/?language=" +
-          getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
+        API_URL =
+          "https://api.newb.ly/articles/?language=" +
+          getTargetLanguage().targetLanguage +
+          "&url=" +
+          getURLToBackend();
       }
 
       return API_URL;
