@@ -6,7 +6,7 @@ var newbly = {
      * These are the global variables used.
      */
 
-    const release = "1.0.8"; // Current release version
+    const release = "1.0.9"; // Current release version
     const stylesheet = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/css/style.min.css`; // Link to hosted stylesheet
     const IEScript = `https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@${release}/lib/js/script.js`; // Link to hosted script compatible with IE
     // 11
@@ -66,17 +66,19 @@ var newbly = {
      * authenticated We use Keycloak to handle auth
      */
 
-    const keycloak = Keycloak({
-      realm: "newbly",
-      "auth-server-url": "https://sso.newb.ly/auth",
-      "ssl-required": "external",
-      resource: "newbly",
-      "public-client": true,
-      "confidential-port": 0,
-      url: `https://sso.newb.ly/auth/realms/newbly/protocol/openid-connect/auth?client_id=newbly-ui&redirect_uri=${getPageURL()}&state=addc88ed-299c-4a1b-b304-555bdffb8909&response_mode=fragment&response_type=code&scope=openid&nonce=e19093ff-fab9-4a80-80a8-99f9a979a836`,
-      clientId: "newbly-api",
-      "enable-cors": true,
-    });
+    setTimeout(() => {
+      const keycloak = Keycloak({
+        realm: "newbly",
+        "auth-server-url": "https://sso.newb.ly/auth",
+        "ssl-required": "external",
+        resource: "newbly",
+        "public-client": true,
+        "confidential-port": 0,
+        url: `https://sso.newb.ly/auth/realms/newbly/protocol/openid-connect/auth?client_id=newbly-ui&redirect_uri=${getPageURL()}&state=addc88ed-299c-4a1b-b304-555bdffb8909&response_mode=fragment&response_type=code&scope=openid&nonce=e19093ff-fab9-4a80-80a8-99f9a979a836`,
+        clientId: "newbly-api",
+        "enable-cors": true,
+      });
+    }, 3000);
 
     async function updateDOMContentWithLocalStorage() {
       let localStorageArticleContent = await getLocalStorageArticleContent();
@@ -87,16 +89,17 @@ var newbly = {
       let content;
 
       if (localStorageArticleContent.title) {
-        title = localStorageArticleContent.title;
+        title = localStorageArticleContent.title
       } else {
         title = "";
-      }
+      };
 
       if (localStorageArticleContent.content) {
-        content = localStorageArticleContent.content;
+        content = localStorageArticleContent.content
       } else {
         content = [];
-      }
+      };
+
 
       // Replace the title with content from localStorage
       document.getElementById("newbly-translated-text-null").innerHTML = title;
@@ -153,22 +156,23 @@ var newbly = {
       let suggestions;
 
       if (localStorageArticleContent.title) {
-        title = localStorageArticleContent.title;
+        title = localStorageArticleContent.title
       } else {
         title = "";
-      }
+      };
 
       if (localStorageArticleContent.content) {
-        content = localStorageArticleContent.content;
+        content = localStorageArticleContent.content
       } else {
         content = [];
-      }
+      };
 
       if (localStorageArticleContent.suggestions) {
-        suggestions = localStorageArticleContent.suggestions;
+        suggestions = localStorageArticleContent.suggestions
       } else {
         suggestions = [];
-      }
+      };
+
 
       let value = {
         title: title,
@@ -1039,7 +1043,7 @@ var newbly = {
           isTranslationAvailable = true;
           console.log(
             "Newbly translation is available for: " +
-              getLongBrowserLanguage().longLang
+            getLongBrowserLanguage().longLang
           );
         }
       }
@@ -1155,7 +1159,7 @@ var newbly = {
         // log the error in the console
         console.error(
           "Newbly translation is not currently available for this page. Browser language is: " +
-            getFirstBrowserLanguage()
+          getFirstBrowserLanguage()
         );
 
         isNewblyTranslatorUIDisplayed = false;
@@ -1214,7 +1218,7 @@ var newbly = {
       let nonQueryPartURL = URLArray[0];
       let queryPartURL = URLArray[1];
 
-      // If no query string (...) is provided, then assign URLToBackend to the
+      // If no query string (?...) is provided, then assign URLToBackend to the
       // first part of the URLArray
       if (!queryPartURL) {
         // No query string specified in URL
@@ -1277,17 +1281,12 @@ var newbly = {
       let API_URL;
 
       if (!getTargetLanguage().URLHasNLangParam) {
-        API_URL =
-          "https://api.newb.ly/articles/?language=" +
-          getLongBrowserLanguage().longLang.toLowerCase() +
-          "&url=" +
+        API_URL = "https://api.newb.ly/articles/?language=" +
+          getLongBrowserLanguage().longLang.toLowerCase() + "&url=" +
           getURLToBackend();
       } else {
-        API_URL =
-          "https://api.newb.ly/articles/?language=" +
-          getTargetLanguage().targetLanguage +
-          "&url=" +
-          getURLToBackend();
+        API_URL = "https://api.newb.ly/articles/?language=" +
+          getTargetLanguage().targetLanguage + "&url=" + getURLToBackend()
       }
 
       return API_URL;
@@ -1338,39 +1337,41 @@ var newbly = {
          */
         hideModals.textareaModal();
 
-        keycloak
-          .init({ onLoad: "check-sso", flow: "implicit" })
-          .then(function (authenticated) {
-            /*
-             * Use Keycloak to check if user is authenticated
-             * If authenticated, call saveSuggestion()
-             * else call appendNewblyAuthenticationModal()
-             */
-
-            if (authenticated) {
+        setTimeout(() => {
+          keycloak
+            .init({ onLoad: "check-sso", flow: "implicit" })
+            .then(function (authenticated) {
               /*
-               * Check if this suggestion has not already been sent to backend
-               * If suggestion has not been sent,
-               * Then call the saveSuggestion function to send a PATCH reques
-               * Else do not call saveSuggestion function
+               * Use Keycloak to check if user is authenticated
+               * If authenticated, call saveSuggestion()
+               * else call appendNewblyAuthenticationModal()
                */
 
-              if (!isSuggestionsSentToBackend()) {
-                saveSuggestion(contentIndex, currentTextareaContent);
+              if (authenticated) {
+                /*
+                 * Check if this suggestion has not already been sent to backend
+                 * If suggestion has not been sent,
+                 * Then call the saveSuggestion function to send a PATCH reques
+                 * Else do not call saveSuggestion function
+                 */
+
+                if (!isSuggestionsSentToBackend()) {
+                  saveSuggestion(contentIndex, currentTextareaContent);
+                }
+              } else {
+                /*
+                 * Call appendNewblyAuthenticationModal() to append the
+                 * authModal since user is not authenticated
+                 */
+
+                append.appendNewblyAuthenticationModal();
               }
-            } else {
-              /*
-               * Call appendNewblyAuthenticationModal() to append the
-               * authModal since user is not authenticated
-               */
-
-              append.appendNewblyAuthenticationModal();
-            }
-          })
-          .catch(function () {
-            console.error("Failed to initialize Keycloak");
-            toastr.error("Failed to initialize Keycloak");
-          });
+            })
+            .catch(function () {
+              console.error("Failed to initialize Keycloak");
+              toastr.error("Failed to initialize Keycloak");
+            });
+        }, 3000);
       },
 
       // cancel button in confirmation modal
@@ -1385,6 +1386,9 @@ var newbly = {
       handleDiscardChangesBtn: function () {
         hideModals.textareaModal();
         hideModals.confirmationModal();
+
+        // TODO Write a function to allow editBtn to still be clicked agin
+        handleEditIconBtn(5, "translatedText");
       },
 
       handleCloseAuthModalBtn: function (e) {
@@ -1399,7 +1403,9 @@ var newbly = {
         // Hide the authentication prompt modal
         hideModals.authenticationModal();
 
-        keycloak.init({ onLoad: "login-required", flow: "implicit" });
+        setTimeout(() => {
+          keycloak.init({ onLoad: "login-required", flow: "implicit" });
+        }, 3000);
       },
     };
 
@@ -1699,7 +1705,9 @@ var newbly = {
        * translations on the webpage
        */
 
-      keycloak.init({ onLoad: "check-sso", flow: "implicit" }).then(reloadData);
+      setTimeout(() => {
+        keycloak.init({ onLoad: "check-sso", flow: "implicit" }).then(reloadData);
+      }, 3000);
 
       // call the function to automatically replace contents on the page with
       // custom suggestions
