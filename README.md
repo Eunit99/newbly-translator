@@ -27,14 +27,17 @@ In the end, all paragraphs of an article have the translated version of it under
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sample website</title>
-  </head>
 
-  <body>
+    <!-- NOTE: Script link must be place in the <head> of the document -->
     <!-- Link to Newbly Translator script (self-hosted) -->
     <script src="lib/js/script.min.js"></script>
 
     <!-- Link to Newbly Translator script (CDN) -->
-    <script src="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.10/lib/js/script.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.11/lib/js/script.min.js"></script>
+  </head>
+
+  <body>
+
   </body>
 </html>
 ```
