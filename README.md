@@ -28,7 +28,7 @@ In the end, all paragraphs of an article have the translated version of it under
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sample website</title>
 
-    <!-- NOTE: Script link must be place in the <head> of the document -->
+    <!-- NOTE: Script link must be placed in the <head> of the document -->
     <!-- Link to Newbly Translator script (self-hosted) -->
     <script src="lib/js/script.min.js"></script>
 
