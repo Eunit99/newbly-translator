@@ -36,8 +36,6 @@ In the end, all paragraphs of an article have the translated version of it under
     <script src="https://cdn.jsdelivr.net/gh/eunit99/newbly-translator@1.0.11/lib/js/script.min.js"></script>
   </head>
 
-  <body>
-
-  </body>
+  <body></body>
 </html>
 ```
